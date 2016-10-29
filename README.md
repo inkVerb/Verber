@@ -1,2 +1,2 @@
-# Verber™
-Web/Email server app engine for Vubuntu™ Hosting
+# Verber™ Server
+Web/Email Server app engine for Vubuntu™ Hosting
