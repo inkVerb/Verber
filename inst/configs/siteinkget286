@@ -1,0 +1,6 @@
+#!/bin/sh
+## This is a config file for the method used by the inkget serf
+
+INKGET_METHOD="USE_WGET"
+INKGET_REPO="NOT_SET"
+

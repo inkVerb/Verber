@@ -1,0 +1,48 @@
+#!/bin/sh
+# inkVerb serf, verb.ink
+
+# This prepares the server settings for an email service tld other than .email
+## Run this BEFORE installrc or installpostfix, if you whish to change it
+## Running this file is not necessary for a stan-alone server or if the FQDN is for .email
+## Previous to running this, the default is .email
+
+# How to use:
+## ./make-verbemail [tld]
+
+# Eg:
+## ./make-verbemail kiwi
+
+
+# Include the config file
+. /var/local/verb/configs/sitenameip
+
+VERBEMAIL=$1
+
+# Delete former Apache files according to current config
+rm /etc/apache2/sites-available/mail.${SITENAME}.verb.${SITEEMAILTLD}.conf
+rm /etc/apache2/sites-available/boxes.${SITENAME}.verb.${SITEEMAILTLD}.conf
+rm /etc/apache2/sites-available/rc.${SITENAME}.verb.${SITEEMAILTLD}.conf
+rm /etc/apache2/sites-enabled/mail.${SITENAME}.verb.${SITEEMAILTLD}.conf
+rm /etc/apache2/sites-enabled/boxes.${SITENAME}.verb.${SITEEMAILTLD}.conf
+rm /etc/apache2/sites-enabled/rc.${SITENAME}.verb.${SITEEMAILTLD}.conf
+
+# Copy and set new Apache files
+cp /var/local/verb/inst/make-email/mail.name286.verb.email286.conf /etc/apache2/sites-available/
+cp /var/local/verb/inst/make-email/boxes.name286.verb.email286.conf /etc/apache2/sites-available/
+cp /var/local/verb/inst/make-email/rc.name286.verb.email286.conf /etc/apache2/sites-available/
+sed -i "s/email286/${VERBEMAIL}/g" /etc/apache2/sites-available/mail.name286.verb.email286.conf
+sed -i "s/email286/${VERBEMAIL}/g" /etc/apache2/sites-available/boxes.name286.verb.email286.conf
+sed -i "s/email286/${VERBEMAIL}/g" /etc/apache2/sites-available/rc.name286.verb.email286.conf
+sed -i "s/name286/${SITENAME}/g" /etc/apache2/sites-available/boxes.name286.verb.email286.conf
+sed -i "s/name286/${SITENAME}/g" /etc/apache2/sites-available/mail.name286.verb.email286.conf
+sed -i "s/name286/${SITENAME}/g" /etc/apache2/sites-available/rc.name286.verb.email286.conf
+mv /etc/apache2/sites-available/mail.name286.verb.email286.conf /etc/apache2/sites-available/mail.${SITENAME}.verb.${VERBEMAIL}.conf
+mv /etc/apache2/sites-available/boxes.name286.verb.email286.conf /etc/apache2/sites-available/boxes.${SITENAME}.verb.${VERBEMAIL}.conf
+mv /etc/apache2/sites-available/rc.name286.verb.email286.conf /etc/apache2/sites-available/rc.${SITENAME}.verb.${VERBEMAIL}.conf
+
+
+# Set the config to the new email tld
+sed -i "s/SITEEMAILTLD=.*/SITEEMAILTLD=${VERBEMAIL}/g" /var/local/verb/configs/sitenameip
+
+# Finish
+echo "The server has now been set to use ${SITENAME}.verb.${VERBEMAIL} for email service. Ready for installemail, installpostfix, etc."

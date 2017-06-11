@@ -1,0 +1,20 @@
+#!/bin/sh
+## This is a config file for other verb scripts
+
+# Determine which site tlds are active on the server, all are on by default
+
+INKblog="NOT_YET"
+INKbb="NOT_YET"
+REDodoo="NOT_YET"
+REDmagento="NOT_YET"
+VERBemail=true
+VERBone=true
+VERBink=true
+VERBblue=true
+VERBguru=true
+VERBkiwi=true
+VERBpink=true
+VERBred=true
+VERBrocks=true
+VERBuno=true
+

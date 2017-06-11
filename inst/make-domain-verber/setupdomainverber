@@ -1,0 +1,114 @@
+#!/bin/sh
+# $0 is the script name, $1 id the first ARG, $2 is second...
+
+# This permanently changes the base of inkVerb from verb.tld to tld.yourdomain.new as defined in configs/sitedomainverb
+## Prerequesite: setdomainverb
+## This must be run before setupverb
+## This should be run after all updates
+## THIS IS NOT FINISHED
+## To Do:
+	# This should Auto-mod serfs/makeverbsub and make-apache/makepreverbsub
+	# Make sed statements apply to all files
+	# Make apache mv statements apply wildcards to unknown domains.
+
+# DEV NOTES:
+## Eventually, this needs to be in /configs/conflab/mods/domainverber/...
+
+# How to use:
+## ./setupdomainverb [domain]
+
+# Make executable by typing:
+## chmod +x setupdomainverb
+
+# Include the config file
+. /var/local/verb/configs/sitedomainverb
+
+# Change all file and filename contents accordingly:
+# verb.ink > ink.domain.new
+# verb.one > one.domain.new
+# verb.email > email.domain.new
+# verb.blue > blue.domain.new
+# verb.guru > guru.domain.new
+# verb.kiwi > kiwi.domain.new
+# verb.pink > pink.domain.new
+# verb.red > red.domain.new
+# verb.rocks > rocks.domain.new
+# verb.uno > uno.domain.new
+# verb.tld286 > tld286.domain.new
+# verb.emailtld286 > emailtld286.domain.new
+
+# Settings files
+. /var/local/verb/configs/sitedomainverber
+sed -i "g/VTYPE=DOMAIN_READY/VTYPE=DOMAIN_VERBER/g" /var/local/verb/inklists/verberverno
+## The set domain is now using the variable: ${DOMAINVERB} and the Verber already thinks it is domain-based
+
+Other searchables:
+name286.verb.tld286
+${SITENAME}.verb.${SITETLD}
+${SITENAME}.verb.ink
+${SITENAME}.verb.email
+${SITENAME}.verb.one
+${SITENAME}.verb.blue
+${SITENAME}.verb.guru
+${SITENAME}.verb.kiwi
+${SITENAME}.verb.red
+${SITENAME}.verb.rocks
+${SITENAME}.verb.uno
+${VNAME}.verb.ink
+${VNAME}.verb.email
+${VNAME}.verb.one
+${VNAME}.verb.blue
+${VNAME}.verb.guru
+${VNAME}.verb.kiwi
+${VNAME}.verb.pink
+${VNAME}.verb.red
+${VNAME}.verb.rocks
+${VNAME}.verb.uno
+
+${VNAME}.verb.${SITEEMAILTLD}
+${SITENAME}.verb.${SITEEMAILTLD}
+
+sed -i "s/verb\.ink/ink\.${DOMAINVERB}/g"
+sed -i "s/verb\.one/one\.${DOMAINVERB}/g"
+sed -i "s/verb\.email/email\.${DOMAINVERB}/g"
+sed -i "s/verb\.blue/blue\.${DOMAINVERB}/g"
+sed -i "s/verb\.guru/guru\.${DOMAINVERB}/g"
+sed -i "s/verb\.kiwi/kiwi\.${DOMAINVERB}/g"
+sed -i "s/verb\.pink/pink\.${DOMAINVERB}/g"
+sed -i "s/verb\.red/red\.${DOMAINVERB}/g"
+sed -i "s/verb\.rocks/rocks\.${DOMAINVERB}/g"
+sed -i "s/verb\.uno/uno\.${DOMAINVERB}/g"
+sed -i "s/verb\.tld286/tld286\.${DOMAINVERB}/g"
+sed -i "s/verb\.emailtld286/emailtld286\.${DOMAINVERB}/g"
+* Also change this to work with wildcars as ${TLD286} may appear in an install script
+
+# Apache configs
+mv verb.ink ink.${DOMAINVERB}
+mv verb.one one.${DOMAINVERB}
+mv verb.email email.${DOMAINVERB}
+mv verb.blue blue.${DOMAINVERB}
+mv verb.guru guru.${DOMAINVERB}
+mv verb.kiwi kiwi.${DOMAINVERB}
+mv verb.pink pink.${DOMAINVERB}
+mv verb.red red.${DOMAINVERB}
+mv verb.rocks rocks.${DOMAINVERB}
+mv verb.uno uno.${DOMAINVERB}
+mv verb.tld286 tld286.${DOMAINVERB}
+mv verb.emailtld286 emailtld286.${DOMAINVERB}
+
+# inkNet
+sed -i "s/${SITENAME}\.verb\.${SITETLD}/${SITETLD}\.${DOMAINVERB}" inknetmakeclient
+sed -i "s/${SITENAME}_verb_${SITETLD}/${SITETLD}\.${DOMAINVERB}" inknetmakeclient
+sed -i "s/${SITENAME}\.verb\.${SITETLD}/${SITETLD}\.${DOMAINVERB}" inknetmakeca
+sed -i "s/${SITENAME}_verb_${SITETLD}/${SITETLD}\.${DOMAINVERB}" inknetmakeca
+sed -i "s/${ADDNAME}\.verb\.${ADDTLD}/${SITETLD}\.${DOMAINVERB}" inknetsetcainker
+sed -i "s/${ADDNAME}_inker_${ADDTLD}/${SITETLD}\.${DOMAINVERB}" inknetsetcainker
+sed -i "s/${ADDNAME}\.verb\.${ADDTLD}/${SITETLD}\.${DOMAINVERB}" inknetaddverberclient
+sed -i "s/${ADDNAME}_inker_${ADDTLD}/${SITETLD}\.${DOMAINVERB}" inknetaddverberclient
+
+
+# inkCert
+## Combine all cli-ini domain files into one "domains" line
+#sed ...remove all non-domains lines
+#cat all cli-ini files together into one
+
