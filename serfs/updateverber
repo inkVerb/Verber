@@ -12,13 +12,13 @@ set -e
 
 # Download and unpack the latest checked version from the Inkver repo
 cd /var/local/verb/
-/var/local/verb/serfs/inkget verber.update.current
-unzip -q verber.update.current.zip
-rm -f verber.update.current.zip
+/var/local/verb/serfs/inkget verb-update
+unzip -q verb-update.zip
+rm -f verb-update.zip
 
 # Run the update script
-/var/local/verb/verber.update.current/update
+/var/local/verb/verb-update/update
 
 # Remove the entire updater
-rm -rf /var/local/verb/verber.update.current
+rm -rf /var/local/verb/verb-update
 
