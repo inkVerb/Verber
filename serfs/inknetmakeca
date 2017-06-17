@@ -132,8 +132,9 @@ mkdir -p /var/local/verb/configs/inknet/verber
 echo "### Below added by inkVerb's inkNet ###" >> /etc/ssh/sshd_config
 ## Change the location of user keys (to avoid locations such as www-data/.ssh)
 mkdir -p /etc/ssh/authorized_keys
-### For root, so as not to interfere with other system functions
-ln -sfn ~/.ssh/authorized_keys /etc/ssh/authorized_keys/root
+### For root and current user (if different), so as not to interfere with other system functions
+ln -sfn /root/.ssh/authorized_keys /etc/ssh/authorized_keys/root
+ln -sfn ~/.ssh/authorized_keys /etc/ssh/authorized_keys/${USER}
 ### In case the user is not root
 cp ~/.ssh/authorized_keys /etc/ssh/authorized_keys/${USER}
 ### Change the setting to recognize the new location
