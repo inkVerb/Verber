@@ -12,7 +12,7 @@ set -e
 DOMAIN=$1
 
 # Check to see if "fixalias" has already been added
-if grep -Fxq "INKALIASFIX=fixed" /etc/apache2/sites-available/${DOMAIN}.conf
+if grep -q "INKALIASFIX=fixed" /etc/apache2/sites-available/${DOMAIN}.conf
 then
 service apache2 reload
 	echo "${DOMAIN} already has the alias fix. The server was just reloaded so the site should work."

@@ -36,9 +36,6 @@ fi
 # Swap
 /var/local/verb/serfs/setswapsize ${SWAPSIZEMAKE}
 
-# Useful tools
-apt install -y bc
-
 # Snakeoil Cert
 apt install -y ssl-cert
 make-ssl-cert generate-default-snakeoil --force-overwrite
