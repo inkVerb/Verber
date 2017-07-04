@@ -84,6 +84,9 @@ This has a few advantages to the webmaster, saves money, and pays the bills.
 		2. setupdomainverb
 		* Then, the site will be permanently changed and even remain changed after updates
 
+## Note on Updates
+Note: Update version numbers reference the framework. Ongoing updates continue for the serfs, etc job scripts. Framework needs rated, sequential alteration, which is why "version" numbers apply to them. Any update will update job scripts, regardless of the current version number.
+
 ## File Structure Basics (for geeks and Star Trek fans)
 ### Note that terms like "serf" and "donjon" and others use categories that are consistent with each other, but won't conflict with other programming categories, for both art and clarity.
 
