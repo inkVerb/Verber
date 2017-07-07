@@ -3,10 +3,6 @@
 
 # Determine which site tlds are active on the server, all are on by default
 
-INKblog="NOT_YET"
-INKbb="NOT_YET"
-REDodoo="NOT_YET"
-REDmagento="NOT_YET"
 VERBemail=true
 VERBone=true
 VERBink=true

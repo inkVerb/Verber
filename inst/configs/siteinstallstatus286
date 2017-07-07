@@ -2,20 +2,8 @@
 # inkVerb config, verb.ink
 # This keeps the status of the blog.namespace.verb.ink blog
 
-INKblog=NOT_YET
-INKbb=NOT_YET
-REDodoo=NOT_YET
-REDmagento=NOT_YET
-VERBemail=true
-VERBone=true
-VERBink=true
-VERBblue=true
-VERBguru=true
-VERBkiwi=true
-VERBred=true
-VERBrocks=true
-VERBuno=true
-
-VERBpink=true
-VERBpink=true
+INKblog="NOT_YET"
+INKbb="NOT_YET"
+REDodoo="NOT_YET"
+REDmagento="NOT_YET"
 
