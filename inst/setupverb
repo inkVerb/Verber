@@ -9,9 +9,9 @@
 ## This creates a sudo user with login AND a MySQL superuser by the same name and password
 
 # How to use:
-## ./setupverb [host - should be namespace or FQDN tld, unless you want to be strange] [inkVerb namespace (purchased)] [FQDN tld, should be 'ink' except multiple servers for namespace] [server IP] [SSL email - used for Letsencrypt and the like] [php file upload limit] [php upload size in MB] [php timezone region] [php timezone city] [new port number for ssh/terminal login] [new "boss" sudo user] [boss user password]
+## ./setupverb [host - should be namespace or FQDN tld, unless you want to be strange] [inkVerb namespace (purchased)] [FQDN tld, should be 'ink' except multiple servers for namespace] [server IP] [SSL email - used for Letsencrypt and the like] [php file upload limit] [php upload size in MB] [php timezone region] [php timezone city] [new port number for ssh/terminal login] [new "boss" sudo user] [boss user password] [verb-update-dev - optional]
 # Simple how to use:
-## ./setupverb [host] [namespace] [tld] [serverIP] [SSLemail] [php.file-limit] [php.up-size] [php.region] [php.city] [new-port] [new-boss] [boss-pass]
+## ./setupverb [host] [namespace] [tld] [serverIP] [SSLemail] [php.file-limit] [php.up-size] [php.region] [php.city] [new-port] [new-boss] [boss-pass] [update-repo - optional]
 
 # IMPORTANT: Choose a hostname that is: 1. short, 2. unique, 3. memorable, and 4. has only numbers and lower-case letters.
 ## You will see this name in terminal tabs and window titles when you connect to your Verber via command line.
@@ -22,7 +22,7 @@
 # Eg:
 ## ./setupverb ink johnny ink 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 22 boss bosspassword
 ## ./setupverb johnny johnny ink 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 867 boss bosspassword
-## ./setupverb ikick johnny ink 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 5290 boss bosspassword
+## ./setupverb ikick johnny ink 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 5290 boss bosspassword verb-update-dev
 
 ## PHP timezone can't use third option of state or country such as America/Argentina/San_Juan or America/Indiana/Knox, only such as America/Chicago
 ## Get PHP timezone list at: http://php.net/manual/en/timezones.php
@@ -40,7 +40,16 @@ PHPCITY=$9
 NEWPORT=${10}
 NEWBOSS=${11}
 NEWBOSSPASS=${12}
+VUPREPO=${13}
 #GREATERTHANNINE=${10}
+
+if [ -z "${13}" ]; then
+VUPREPO=verb-update
+fi
+
+if [ -z "${12}" ]; then
+echo "You must set all variables."
+exit 22; fi
 
 # Locale (incase a VPS deleted it after make-verber-preserver)
 echo "LANG="en_US.UTF-8"
@@ -81,6 +90,7 @@ sed -i "s/tld286/${SERVERTLD}/g" /var/local/verb/configs/sitenameip
 sed -i "s/ip286/${SERVERIP}/g" /var/local/verb/configs/sitenameip
 sed -i "s/timeregion286/${PHPREGION}/g" /var/local/verb/configs/sitenameip
 sed -i "s/timecity286/${PHPCITY}/g" /var/local/verb/configs/sitenameip
+sed -i "s/updaterepo286/${VUPREPO}/g" /var/local/verb/configs/sitenameip
 sed -i "s/inkcertemail286/${SSLEMAIL}/g" /var/local/verb/configs/inkcert/inkcertstatus
 ## Copy other config files with pre-install status
 mv /var/local/verb/configs/sitemailpath286 /var/local/verb/configs/sitemailpath
