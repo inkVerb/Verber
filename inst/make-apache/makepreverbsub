@@ -20,19 +20,21 @@ SUBDOMAIN=$2
 
 # Include the config file
 . /var/local/verb/configs/sitenameip
+. /var/local/verb/configs/siteurilist
 
 # Prepare the dir
-mkdir sites-available
+mkdir -p sites-available
 
 # Copy the file
-cp sub286.${SITENAME}.verb.tld286.conf sites-available/${SUBDOMAIN}.${SITENAME}.verb.${TLD}.conf
+cp sub286.tldURI286.conf sites-available/${SUBDOMAIN}.${tldURI}.conf
 
 # Replace
-sed -i "s/sub286/${SUBDOMAIN}/g" /etc/apache2/sites-available/${SUBDOMAIN}.${SITENAME}.verb.${TLD}.conf
-sed -i "s/tld286/${TLD}/g" /etc/apache2/sites-available/${SUBDOMAIN}.${SITENAME}.verb.${TLD}.conf
+sed -i "s/sub286/${SUBDOMAIN}/g" sites-available/${SUBDOMAIN}.${tldURI}.conf
+sed -i "s/tldURI286/${tldURI}/g" sites-available/${SUBDOMAIN}.${tldURI}.conf
+sed -i "s/tld286/${TLD}/g" sites-available/${SUBDOMAIN}.${tldURI}.conf
 
 ##### NEED TO PUT INKCERT CLI-INI FILES HERE
-echo "incomplete, read inst/makepreverbsub file"
+echo "Incomplete, needs html and cli.ini files still. Read inst/makepreverbsub file"
 ##### NEED TO PUT SITETLDSTATUS STATEMENT HERE
 
 

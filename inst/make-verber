@@ -13,19 +13,24 @@
 ## Should the MySQL root password become necessary it is a headache if lost. Hence, it is saved in this one location and you don't need to keep track of it.
 
 # How to use:
-## ./make-verber [swap-size, choose GB: 1, 2, 4, 8, 16, 32, 64]
+## ./make-verber [swap-size, choose GB: 1, 2, 4, 8, 16, 32, 64] [mysql root password - optional]
 
 # Eg:
 ## ./make-verber 1 mysqlrootpass
-## ./make-verber 4 1620 bossy chewcud62 mysqlroot82
+## ./make-verber 4 1620roots
+## ./make-verber 2 chewcud62
 
 
 # Install pwgen
 apt install -y pwgen
 
 SWAPSIZEMAKE=$1
-MYSQLPASS=$(pwgen -0 -1 -A -B 11)
 MYSQLBOSSPASS=$(pwgen -s -1 10)
+if [ -z "$2" ]; then
+MYSQLPASS=$(pwgen -0 -1 -A -B 11)
+else
+MYSQLPASS=$2
+fi
 
 # Verify SSH Directory
 cd ~
@@ -91,114 +96,7 @@ cp /var/local/verb/inst/config/etc/apache2/mods-available/ssl.conf /etc/apache2/
 cp /var/local/verb/inst/config/etc/apache2/conf-available/security.conf /etc/apache2/conf-available/
 a2enmod deflate expires headers rewrite ssl && a2ensite 000-default default-ssl && service apache2 restart
 
-#### If the install goes correctly, remove all commented below #########################################################
-##### Below is replaced by serfs/updatehtmlverbs #######################################################################
-# Web folders
-## Create the default folders
-#cp -R /var/local/verb/inst/config/html /var/www/
-#cp -R /var/local/verb/inst/config/html /var/local/verb/inst/configs/conflab/
-## Create the temporary destination html/.. folders
-#/var/local/verb/serfs/updatehtmlverbs
 
-#### If the install goes correctly, remove all commented below #########################################################
-##### Below is replaced by serfs/updatehtmlverbs #######################################################################
-#cd /var/www/html
-#mkdir 0ne
-#echo "<?php header(\"Location: http://name286.verb.ink\"); die(); ?>" > /var/www/html/0ne/index.php
-#cp -R 0ne email
-#cp -R 0ne one
-#cp -R 0sitedefaultInProgress ink
-#cp -R 0ne ink.ask
-#cp -R 0ne ink.bb
-#cp -R 0ne ink.blog
-#cp -R 0ne ink.code
-#cp -R 0ne ink.home
-#cp -R 0ne ink.pen
-#cp -R 0ne ink.shop
-#cp -R 0ne ink.sn
-#cp -R 0ne ink.wiki
-#cp -R 0ne blue
-#cp -R 0ne blue.owncloud
-#cp -R 0ne blue.pydio
-#cp -R 0ne blue.seafile
-#cp -R 0ne guru
-#cp -R 0ne guru.cgi
-#cp -R 0ne guru.ftp
-#cp -R 0ne guru.files
-#cp -R 0ne guru.fossil
-#cp -R 0ne guru.sql
-#cp -R 0ne guru.net2ftp
-#cp -R 0ne guru.repo
-#cp -R 0ne kiwi
-#cp -R 0ne kiwi.ampache
-#cp -R 0ne kiwi.art
-#cp -R 0ne kiwi.gallery
-#cp -R 0ne kiwi.media
-#cp -R 0ne kiwi.podcast
-#cp -R 0ne kiwi.studio
-#cp -R 0ne pink
-#cp -R 0ne red
-#cp -R 0ne red.act
-#cp -R 0ne red.crm
-#cp -R 0ne red.erp
-#cp -R 0ne red.hrm
-#cp -R 0ne red.odoo
-#cp -R 0ne red.scm
-#cp -R 0ne rocks
-#cp -R 0ne uno
-### Set subdomain pointers
-#mkdir email.email
-#mkdir one.one
-#mkdir ink.ink
-#mkdir blue.blue
-#mkdir guru.guru
-#mkdir kiwi.kiwi
-#mkdir red.red
-#mkdir rocks.rocks
-#mkdir uno.uno
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.email\"); die(); ?>" > /var/www/html/email.email/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.one\"); die(); ?>" > /var/www/html/one.one/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.ink\"); die(); ?>" > /var/www/html/ink.ink/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.blue\"); die(); ?>" > /var/www/html/blue.blue/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.guru\"); die(); ?>" > /var/www/html/guru.guru/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.kiwi\"); die(); ?>" > /var/www/html/kiwi.kiwi/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.red\"); die(); ?>" > /var/www/html/red.red/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.rocks\"); die(); ?>" > /var/www/html/rocks.rocks/index.php
-#echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://name286.verb.uno\"); die(); ?>" > /var/www/html/uno.uno/index.php
-### Create pointink, pointguru, pointone, and pointuno source files
-#echo "<?php header(\"Location: http://name286.verb.ink\"); die(); ?>" > /var/www/html/one/index-one.php
-#echo "<?php header(\"Location: http://newonesub.name286.verb.one\"); die(); ?>" > /var/www/html/one/index-newonesub.php
-#echo "<?php header(\"Location: http://owncloud.name286.verb.blue\"); die(); ?>" > /var/www/html/blue/index-owncloud.php
-#echo "<?php header(\"Location: http://pydio.name286.verb.blue\"); die(); ?>" > /var/www/html/blue/index-pydio.php
-#echo "<?php header(\"Location: http://seafile.name286.verb.blue\"); die(); ?>" > /var/www/html/blue/index-seafile.php
-#echo "<?php header(\"Location: http://name286.verb.blue\"); die(); ?>" > /var/www/html/blue/index-blue.php
-#echo "<?php header(\"Location: http://hrm.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-guru.php
-#echo "<?php header(\"Location: http://newgurusub.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-newgurusub.php
-#echo "<?php header(\"Location: http://cgi.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-cgi.php
-#echo "<?php header(\"Location: http://ftp.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-ftp.php
-#echo "<?php header(\"Location: http://files.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-files.php
-#echo "<?php header(\"Location: http://fossil.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-fossil.php
-#echo "<?php header(\"Location: http://sql.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-sql.php
-#echo "<?php header(\"Location: http://net2ftp.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-net2ftp.php
-#echo "<?php header(\"Location: http://repo.name286.verb.guru\"); die(); ?>" > /var/www/html/guru/index-repo.php
-#echo "<?php header(\"Location: http://ampache.name286.verb.kiwi\"); die(); ?>" > /var/www/html/kiwi/index-ampache.php
-#echo "<?php header(\"Location: http://art.name286.verb.kiwi\"); die(); ?>" > /var/www/html/kiwi/index-art.php
-#echo "<?php header(\"Location: http://gallery.name286.verb.kiwi\"); die(); ?>" > /var/www/html/kiwi/index-gallery.php
-#echo "<?php header(\"Location: http://media.name286.verb.kiwi\"); die(); ?>" > /var/www/html/kiwi/index-media.php
-#echo "<?php header(\"Location: http://podcast.name286.verb.kiwi\"); die(); ?>" > /var/www/html/kiwi/index-podcast.php
-#echo "<?php header(\"Location: http://studio.name286.verb.kiwi\"); die(); ?>" > /var/www/html/kiwi/index-studio.php
-#echo "<?php header(\"Location: http://name286.verb.ink\"); die(); ?>" > /var/www/html/kiwi/index-kiwi.php
-#echo "<?php header(\"Location: http://act.name286.verb.red\"); die(); ?>" > /var/www/html/red/index-act.php
-#echo "<?php header(\"Location: http://crm.name286.verb.red\"); die(); ?>" > /var/www/html/red/index-crm.php
-#echo "<?php header(\"Location: http://erp.name286.verb.red\"); die(); ?>" > /var/www/html/red/index-erp.php
-#echo "<?php header(\"Location: http://hrm.name286.verb.red\"); die(); ?>" > /var/www/html/red/index-hrm.php
-#echo "<?php header(\"Location: http://odoo.name286.verb.red\"); die(); ?>" > /var/www/html/red/index-odoo.php
-#echo "<?php header(\"Location: http://scm.name286.verb.red\"); die(); ?>" > /var/www/html/red/index-scm.php
-#echo "<?php header(\"Location: http://name286.verb.ink\"); die(); ?>" > /var/www/html/red/index-red.php
-#echo "<?php header(\"Location: http://name286.verb.ink\"); die(); ?>" > /var/www/html/rocks/index-rocks.php
-#echo "<?php header(\"Location: http://name286.verb.ink\"); die(); ?>" > /var/www/html/uno/index-uno.php
-#echo "<?php header(\"Location: http://newunosub.name286.verb.uno\"); die(); ?>" > /var/www/html/uno/index-newunosub.php
-########################################################################################################################
 ## Create vsftp web mod directories for guru
 mkdir /srv/guru
 mkdir /srv/guru/_domains
@@ -240,7 +138,6 @@ apt install -y memcached
 #service apache2 restart
 #########################################################
 
-
 # MySQL superuser to auto-create databases
 mysql -uroot -p${MYSQLPASS} -e "
 CREATE USER mysqlboss@localhost;
@@ -277,13 +174,6 @@ cp /var/local/verb/inst/config/etc/monit/monitrc.d/mysql /etc/monit/monitrc.d/
 cp /var/local/verb/inst/config/etc/monit/monitrc.d/openssh-server /etc/monit/monitrc.d/
 cp /var/local/verb/inst/config/etc/monit/monitrc.d/sshd /etc/monit/monitrc.d/
 service monit restart
-
-# Host names
-## Set /etc/hostname
-echo "host286.name286.verb.tld286" > /etc/hostname
-## Set /etc/hosts
-sed -i "s/127\.0\.1\.1.*/127\.0\.1\.1 host286.name286.verb.tld286 host286/g" /etc/hosts
-sed -i "s/127\.0\.0\.1.*/127\.0\.0\.1 host286.name286.verb.tld286 localhost/g" /etc/hosts
 
 # Delete the Diffie-Helman Group security file to prevent security risks
 rm -f /etc/ssl/private/dhparams.pem

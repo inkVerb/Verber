@@ -31,14 +31,14 @@ smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
 smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
  
 # Uncomment if using a purchased SSL certificate.
-# smtpd_tls_cert_file=/etc/inkcert/live/name286.verb.email286/cert.pem
-# smtpd_tls_key_file=/etc/inkcert/live/name286.verb.email286/privkey.pem
+# smtpd_tls_cert_file=/etc/inkcert/live/emailTLDURI286/cert.pem
+# smtpd_tls_key_file=/etc/inkcert/live/emailTLDURI286/privkey.pem
  
 # The snakeoil self-signed certificate has no need for a CA file. But
 # if you are using your own SSL certificate, then you probably have
 # a CA certificate bundle from your provider. The path to that goes
 # here.
-# smtpd_tls_CAfile=/etc/inkcert/live/name286.verb.email286/chain.pem
+# smtpd_tls_CAfile=/etc/inkcert/live/emailTLDURI286/chain.pem
  
 # Ensure we're not using no-longer-secure protocols.
 smtpd_tls_mandatory_protocols=!SSLv2,!SSLv3
@@ -149,7 +149,7 @@ disable_vrfy_command = yes
 # General host and delivery info
 # ----------------------------------
  
-myhostname = host286.name286.verb.tld286
+myhostname = hostURI286
 myorigin = /etc/hostname
 # Some people see issues when setting mydestination explicitly to the server
 # subdomain, while leaving it empty generally doesn't hurt. So it is left empty here.

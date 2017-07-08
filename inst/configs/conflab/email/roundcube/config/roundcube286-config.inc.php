@@ -97,7 +97,7 @@ $config['skin_logo'] = 'verbink_logo.png';
 $config['username_domain'] = '%t';
 
 // Name your service. This is displayed on the login screen and in the window title
-$config['product_name'] = 'name286.verb.tld286 Webmail';
+$config['product_name'] = 'nameURI286 Webmail';
 
 // inkVerb to limit mail sending rates
 // How many seconds must pass between emails sent by a user

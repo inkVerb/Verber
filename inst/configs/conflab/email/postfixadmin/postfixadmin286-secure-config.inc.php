@@ -5,7 +5,7 @@ $CONF['configured'] = true;
 $CONF['setup_password'] = 'changeme';
 
 
-$CONF['postfix_admin_url'] = 'https://boxes.name286.verb.email286/pfafolder286';
+$CONF['postfix_admin_url'] = 'https://boxes.emailTLDURI286/pfafolder286';
 
 $CONF['default_language'] = 'en';
 
@@ -34,7 +34,7 @@ $CONF['database_tables'] = array (
 	'quota2' => 'quota2',
 );
 
-$CONF['admin_email'] = 'admin@name286.verb.tld286';
+$CONF['admin_email'] = 'admin@nameURI286';
 
 $CONF['smtp_server'] = 'localhost';
 $CONF['smtp_port'] = '25';
@@ -59,10 +59,10 @@ $CONF['show_password'] = 'NO';
 $CONF['page_size'] = '500';
 
 $CONF['default_aliases'] = array (
-    'abuse' => 'abuse@name286.verb.tld286',
-    'hostmaster' => 'hostmaster@name286.verb.tld286',
-    'postmaster' => 'postmaster@name286.verb.tld286',
-    'webmaster' => 'webmaster@name286.verb.tld286'
+    'abuse' => 'abuse@nameURI286',
+    'hostmaster' => 'hostmaster@nameURI286',
+    'postmaster' => 'postmaster@nameURI286',
+    'webmaster' => 'webmaster@nameURI286'
 );
 
 $CONF['domain_path'] = 'YES';
@@ -95,7 +95,7 @@ $CONF['transport_default'] = 'virtual';
 
 $CONF['vacation'] = 'YES';
 
-$CONF['vacation_domain'] = 'away.name286.verb.tld286';
+$CONF['vacation_domain'] = 'away.nameURI286';
 
 $CONF['vacation_control'] ='YES';
 
@@ -130,11 +130,11 @@ $CONF['fetchmail'] = 'NO';
 $CONF['fetchmail_extra_options'] = 'NO';
 
 $CONF['show_header_text'] = 'YES';
-$CONF['header_text'] = 'name286.verb.tld286 email accounts & settings';
+$CONF['header_text'] = 'nameURI286 email accounts & settings';
 
 $CONF['show_footer_text'] = 'YES';
 $CONF['footer_text'] = 'Login to inkVerb webmail';
-$CONF['footer_link'] = 'https://rc.name286.verb.email286/rcfolder286';
+$CONF['footer_link'] = 'https://rc.emailTLDURI286/rcfolder286';
 
 $CONF['motd_user'] = 'Ink is a verb. So, get inking!';
 $CONF['motd_admin'] = 'Ink is a verb. So, get inking!';
@@ -146,7 +146,7 @@ Welcome to inkVerb email! This is real-deal email.
 To set up this email address in Gmail: (usually to send 'from' another email)
 Go to: Settings > Accounts and Import > Send mail as: > Add another email address you own...
 Enter your email address ('Treat as alias' can be either option)...
-On the page with SMTP settings, choose Port 465, SSL, and the password you set in your account at name286.verb.email286.
+On the page with SMTP settings, choose Port 465, SSL, and the password you set in your account at emailTLDURI286.
 
 - If you change your password you'll also have to change it in this Gmail setting.
 To change the Gmail settings later: Settings > Accounts and Import > Send mail as: > [your email] - "edit info"
@@ -155,8 +155,8 @@ To change the Gmail settings later: Settings > Accounts and Import > Send mail a
 
 - If you set up this email with other email clients, such as Outlook or Thunderbird, you may need to approve the SSL security Certificate before receiving or sending (approve it two times). This is for security.
 
-- This email's settings can be administered at boxes.name286.verb.email286/???
-The password and forwarding addresses can be changed both by the administrator via boxes.name286.verb.email286/??? and by the user in rc.name286.verb.email286/???, but the password can never be viewed.
+- This email's settings can be administered at boxes.emailTLDURI286/???
+The password and forwarding addresses can be changed both by the administrator via boxes.emailTLDURI286/??? and by the user in rc.emailTLDURI286/???, but the password can never be viewed.
 IMPORTANT NOTE ABOUT FORWARD ADDRESSES: If you want to use one email box to send mail "From" a separate forwarding address, the "From" address must be the same domain and must forward to the sending address. Otherwise, your server will reject the send request, which can cause errors in services such as Gmail. For example. If you use "forwards@inkisaverb.com" to send mail via SMTP, but you want to use the "From" identity address as "jimmy@inkisaverb.com", then in Alias/Forwarding settings, "jimmy@inkisaverb.com" must be set to forward emails to "forwards@inkisaverb.com".
 
 - We recommend Thunderbird for a desktop email client since we use it to test our servers, but other clients should also work. For desktop email clients, use IMAP if you want your emails left on the server as "backup" or to sync with email clients on more than one computers; this will count against your space on the server. If you use POP instead, then your email client can delete email from the server (it's in settings) so those emails won't count against your inbox space on the email server, but there will be no backup of your email and you can't sync those emails to any other email client. POP and IMAP can both be good choices, depending on your needs. 
@@ -171,13 +171,13 @@ PS Here are the email client settings if you are ever asked:
 * Accept all "certificates" (for security questions)
 * STARTTLS is preferred; SSL/TLS doesn't work (SSL and TLS conflict, use SSL or TLS)
 
-IMAP:   imap.name286.verb.email286   Port: 143/STARTTLS 143/TLS 993/SSL (choose)
-POP3:   pop3.name286.verb.email286   Port: 110/STARTTLS 110/TLS 995/SSL (choose)
-SMTP:   smtp.name286.verb.email286   Port: 25/STARTTLS 25/TLS 465/SSL (choose)
+IMAP:   imap.emailTLDURI286   Port: 143/STARTTLS 143/TLS 993/SSL (choose)
+POP3:   pop3.emailTLDURI286   Port: 110/STARTTLS 110/TLS 995/SSL (choose)
+SMTP:   smtp.emailTLDURI286   Port: 25/STARTTLS 25/TLS 465/SSL (choose)
 
 Authentication: Normal password
-Username: [your name286.verb.email286 username/email address]
-Password: [your name286.verb.email286 login password]
+Username: [your emailTLDURI286 username/email address]
+Password: [your emailTLDURI286 login password]
 
 EOM;
 
@@ -192,11 +192,11 @@ $CONF['show_status_text']='&nbsp;&nbsp;';
 $CONF['show_undeliverable']='YES';
 $CONF['show_undeliverable_color']='tomato';
 
-$CONF['show_undeliverable_exceptions']=array("unixmail.domain.ext","exchangeserver.domain.ext","name286.verb.tld286","gmail.com","hotmail.com","inkisaverb.com","yahoo.com");
+$CONF['show_undeliverable_exceptions']=array("unixmail.domain.ext","exchangeserver.domain.ext","nameURI286","gmail.com","hotmail.com","inkisaverb.com","yahoo.com");
 $CONF['show_popimap']='YES';
 $CONF['show_popimap_color']='darkgrey';
 
-$CONF['show_custom_domains']=array("name286.verb.tld286");
+$CONF['show_custom_domains']=array("nameURI286");
 $CONF['show_custom_colors']=array("#111111");
 
 $CONF['recipient_delimiter'] = "+";
