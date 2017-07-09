@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# inkVerb donjon asset, verb.ink
+# inkVerbDragon, verb.ink
 
 # Server login client to connect to server port on 4444
 # Based on Python tutorial docs

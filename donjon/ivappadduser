@@ -49,10 +49,8 @@ usermod -a -G ${IVAPPUSERGROUP} ${ADDIVAPPUSERNAME}
 ## Move his home
 usermod -m -d ${IVAPPBASE}/${IVAPPDIR}/${IVAPPGROUPDIR}/${ADDIVAPPUSERNAME} ${ADDIVAPPUSERNAME}
 ## Give him necessary permissions limits
-setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /home
-setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /var
-setfacl -R -m user:${ADDIVAPPUSERNAME}:--- ${IVAPPBASE}
-setfacl -R -m user:${ADDIVAPPUSERNAME}:rwx ${IVAPPBASE}/${IVAPPDIR}/${IVAPPGROUPDIR}/${ADDIVAPPUSERNAME}
+echo "Setting permissions, this may take a moment..."
+/var/local/verb/donjon/ivappsetpermissions.sh ${CONF} ${ADDIVAPPUSERNAME}
 
 # Finish
 echo "The ${MODULENAME} user ${ADDIVAPPUSERNAME} has been added."

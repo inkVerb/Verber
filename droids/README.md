@@ -27,4 +27,4 @@ Start the file with this:
 `## mydroid my-options`
 
 
-...then skip two lines and add whatever you want, one extra line at the end.
+...then skip two lines and add whatever you want.
