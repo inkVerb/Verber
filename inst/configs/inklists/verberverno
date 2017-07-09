@@ -1,6 +1,6 @@
 #!/bin/sh
 # inkVerb Verber™ version information config, verb.ink
 
-VERNO=0.812
+VERNO=0.813
 VTYPE=VERB_VERBER
 
