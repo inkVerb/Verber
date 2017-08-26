@@ -23,6 +23,11 @@ if [ ! -d "/var/local/verb" ]; then
 echo "Put the verb directory at /var/local/verb first, then try again."
 exit 22; fi
 
+# Make scripts executable
+chmod +x /var/local/verb/inst/configs/inkcert/*.sh
+chmod +x /var/local/verb/serfs/*
+chmod +x /var/local/verb/donjon/*
+
 # Since we're starting our work, give root the verb link now: save time right at the next login :-)
 ln -s /var/local/verb /root/
 ln -s /var/local/verb/inst/make-verber /var/local/verb/serfs/
