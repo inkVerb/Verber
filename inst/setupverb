@@ -191,6 +191,10 @@ rename "s/rocksURI286/${rocksURI}/" /etc/apache2/sites-available/*.conf
 rename "s/unoURI286/${unoURI}/" /etc/apache2/sites-available/*.conf
 
 # New site-files
+## Directories
+chmod -R 755 /var/local/verb/configs/site-files/newdomain.tld
+chmod -R 755 /var/local/verb/configs/site-files/newgurusubdir
+chmod -R 755 /var/local/verb/configs/site-files/newonesubdir
 ## Replace
 sed -i "s/emailURI286/${emailURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/oneURI286/${oneURI}/g" /var/local/verb/configs/site-files/conf/*
