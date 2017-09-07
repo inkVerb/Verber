@@ -1,4 +1,37 @@
 # Installation and information for inkVerb's "Verber" web server
+`apt update`
+
+`apt upgrade`
+
+`apt install git`
+
+`cd `
+
+`git clone https://github.com/inkVerb/verb`
+
+`cd inst`
+
+`chmod +x make-verber-preserver make-verber setupverb`
+
+`./make-verber-preserver`
+
+`./make-verber [swap size] [optional MySQL root password]` 
+
+ie `./make-verber 2 chewcud62`
+
+*Now the Verber is ready to be 'setup'. Follow this and get it right...*
+
+`./setupverb [host] [namespace] [tld] [email] [serverIP] [SSLemail] [php.file-limit] [php.up-size] [php.region] [php.city] [new-port] [new-boss] [boss-pass] [update-repo - optional]`
+
+*Normal example for a single-VPS Verber...*
+
+ie `./setupverb johnny johnny ink email 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 867 bossy chewcud`
+
+- A "boss" is a second sudoer, whicy you may use but don't need to.
+- The SSLemail is for Letsencrypt notifications, they can be annoying. Consider letsencrypt@johnny.verb.ink, if you will set up that in email later.
+- tld is the "main" tld of this server, for single-VPS Verbers it is "ink", others are for running multiple VPSs together.
+- email is the "email" tld to control email settings for this server, for single-VPS Verbers it is "email", others are for running multiple VPSs together, such as backup email servers.
+- The namespace is the name you purchased for NAMESPACE.verb.ink
 
 ### Sales-pitch: skip if you're already convinced :-)
 #### Verber is for DIY entrepreneurs and copywriters and/or web geeks with many small-business clients.
