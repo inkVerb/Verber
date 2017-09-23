@@ -72,16 +72,6 @@ $config['smtp_user'] = '%u';
 //$config['smtp_pass'] = '';
 $config['smtp_pass'] = '%p';
 
-// provide an URL where a user can get support for this Roundcube installation
-// PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!
-$config['support_url'] = '';
-
-// replace Roundcube logo with this image
-// specify an URL relative to the document root of this Roundcube installation
-// an array can be used to specify different logos for specific template files, '*' for default logo
-// for example array("*" => "/images/roundcube_logo.png", "messageprint" => "/images/roundcube_logo_print.png")
-$config['skin_logo'] = 'verbink_logo.png';
-
 // Automatically add this domain to user names for login
 // Only for IMAP servers that require full e-mail addresses for login
 // Specify an array with 'host' => 'domain' values to support multiple hosts
@@ -99,6 +89,28 @@ $config['username_domain'] = '%t';
 // Name your service. This is displayed on the login screen and in the window title
 $config['product_name'] = 'nameURI286 Webmail';
 
+// replace Roundcube logo with this image
+// specify an URL relative to the document root of this Roundcube installation
+// an array can be used to specify different logos for specific template files, '*' for default logo
+// for example array("*" => "/images/roundcube_logo.png", "messageprint" => "/images/roundcube_logo_print.png")
+$config['support_url'] = 'http://nameURI286';
+
+// replace Roundcube logo with this image
+// specify an URL relative to the document root of this Roundcube installation
+// an array can be used to specify different logos for specific template files, '*' for default logo
+// for example array("*" => "/images/roundcube_logo.png", "messageprint" => "/images/roundcube_logo_print.png")
+$config['skin_logo'] = 'verbink_logo.png';
+
+// e.g. array( 'localhost:6379' );  array( '192.168.1.1:6379:1:secret' );
+// check client IP in session authorization
+$config['ip_check'] = true;
+
+// this key is used to encrypt the users imap password which is stored
+// in the session record (and the client cookie if remember password is enabled).
+// please provide a string of exactly 24 chars.
+// YOUR KEY MUST BE DIFFERENT THAN THE SAMPLE VALUE FOR SECURITY REASONS
+$config['des_key'] = 'rcemailconfdeskeysalt286';
+
 // inkVerb to limit mail sending rates
 // How many seconds must pass between emails sent by a user
 $config['sendmail_delay'] = 12;
@@ -110,44 +122,9 @@ $config['max_recipients'] = 50;
 // If 'max_recipients' is set this value should be less or equal
 $config['max_group_members'] = 50;
 
-// inkVerb limit end
-
-// this key is used to encrypt the users imap password which is stored
-// in the session record (and the client cookie if remember password is enabled).
-// please provide a string of exactly 24 chars.
-// YOUR KEY MUST BE DIFFERENT THAN THE SAMPLE VALUE FOR SECURITY REASONS
-$config['des_key'] = 'rcemailconfdeskeysalt286';
-
 // List of active plugins (in plugins/ directory)
-$config['plugins'] = array(
-'acl',
-'additional_message_headers',
-'archive',
-'attachment_reminder',
-'authres_status',
-'bruteforcebreaker',
-//'carddav', # broken by 1.2.2 native addressbook
-'chbox',
-'contextmenu',
-'custom_from',
-'filesystem_attachments',
-'forward',
-//'google_addressbook', # broken by 1.2.2 native addressbook
-'hide_blockquote',
-'html5_notifier',
-'identity_select',
-'jqueryui',
-'keyboard_shortcuts',
-'legacy_browser',
-'markasjunk2',
-'newmail_notifier',
-'password',
-//'pfadmin_forwarding', # legacy of forward
-'rememberme',
-'vcard_attachments',
-'virtuser_file',
-'zipdownload'
-);
+$config['plugins'] = array('archive','contextmenu','custom_from','filesystem_attachments','forward','hide_blockquote','html5_notifier','identity_select','jqueryui','keyboard_shortcuts','legacy_browser','markasjunk2','newmail_notifier','rememberme','vcard_attachments','virtuser_file','zipdownload');
+// Omitted: 'password',
 
 // the default locale setting (leave empty for auto-detection)
 // RFC1766 formatted language name like en_US, de_DE, de_CH, fr_FR, pt_BR
@@ -169,9 +146,6 @@ $config['htmleditor'] = 1;
 
 // save compose message every 300 seconds (5min)
 $config['draft_autosave'] = 180;
-
-// default setting if preview pane is enabled
-$config['preview_pane'] = true;
 
 // skin name: folder from skins/
 $config['skin'] = 'larry';

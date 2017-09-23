@@ -17,9 +17,10 @@ htuser='www-data'
 htgroup='www-data'
 rootuser='root'
 
+##NOTE: the "assets" directory breaks the web updater 
 printf "Creating possible missing Directories\n"
 mkdir -p $nxcpath/data
-mkdir -p $nxcpath/assets
+#mkdir -p $nxcpath/assets
 mkdir -p $nxcpath/updater
 
 printf "chmod Files and Directories\n"
@@ -30,7 +31,7 @@ chmod 755 ${nxcpath}
 printf "chown Directories\n"
 chown -R ${rootuser}:${htgroup} ${nxcpath}/
 chown -R ${htuser}:${htgroup} ${nxcpath}/apps/
-chown -R ${htuser}:${htgroup} ${nxcpath}/assets/
+#chown -R ${htuser}:${htgroup} ${nxcpath}/assets/
 chown -R ${htuser}:${htgroup} ${nxcpath}/config/
 chown -R ${htuser}:${htgroup} ${nxcpath}/data/
 chown -R ${htuser}:${htgroup} ${nxcpath}/themes/

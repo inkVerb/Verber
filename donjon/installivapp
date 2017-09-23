@@ -42,6 +42,9 @@ mkdir -p ${IVAPPBASE}/${IVAPPDIR}
 cd ${IVAPPBASE}/${IVAPPDIR}
 mkdir -p ${IVAPPGRPDIRS}
 
+# Directory ownership
+chmod 751 -R ${IVAPPBASE}
+
 # Create the user groups
 echo "${IVUSERGROUPS}" | xargs -n1 groupadd ${g};
 

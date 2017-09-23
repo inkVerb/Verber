@@ -140,7 +140,7 @@ $config['default_port'] = 143;
 
 // IMAP AUTH type (DIGEST-MD5, CRAM-MD5, LOGIN, PLAIN or null to use
 // best server supported one)
-$config['imap_auth_type'] = null;
+$config['imap_auth_type'] = 'PLAIN';
 
 // IMAP socket context options
 // See http://php.net/manual/en/context.ssl.php
@@ -266,7 +266,7 @@ $config['smtp_pass'] = '';
 
 // SMTP AUTH type (DIGEST-MD5, CRAM-MD5, LOGIN, PLAIN or empty to use
 // best server supported one)
-$config['smtp_auth_type'] = '';
+$config['smtp_auth_type'] = 'PLAIN';
 
 // Optional SMTP authentication identifier to be used as authorization proxy
 $config['smtp_auth_cid'] = null;
@@ -676,7 +676,7 @@ $config['date_short'] = 'D H:i';
 // use this format for detailed date/time formatting (derived from date_format and time_format)
 $config['date_long'] = 'Y-m-d H:i';
 
-// added by verbInk for the Archive plugin
+// added by inkVerb for the Archive plugin
 // move messages to this folder when archiving them
 // leaving this blank will temporarily deactivate the plugin until the user creates and assigns the folder manually
 // NOTE: Use folder names with namespace prefix (INBOX. on Courier-IMAP)
@@ -702,7 +702,7 @@ $config['sent_mbox'] = 'Sent';
 $config['trash_mbox'] = 'Trash';
 
 // automatically create the above listed default folders on user login
-// inkVerb: PostfixAdmin may not be able to create the folders until first login, but RC can.
+// inkVerb: PostfixAdmin won't create them for some unknown reason.
 $config['create_default_folders'] = true;
 
 // protect the default folders from renames, deletes, and subscription changes

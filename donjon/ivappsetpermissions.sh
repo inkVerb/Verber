@@ -18,7 +18,10 @@ ADDIVAPPUSERNAME=$2
 
 ### Note: we add " > /dev/null 2>&1" because this may kick output errors that don't matter and filibuster other important messages.
 setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /home > /dev/null 2>&1
-setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /var > /dev/null 2>&1
-setfacl -R -m user:${ADDIVAPPUSERNAME}:--- ${IVAPPBASE} > /dev/null 2>&1
-setfacl -R -m user:${ADDIVAPPUSERNAME}:rwx ${IVAPPBASE}/${IVAPPDIR}/${IVAPPGROUPDIR}/${ADDIVAPPUSERNAME} > /dev/null 2>&1
+setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /var/www > /dev/null 2>&1
+setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/php > /dev/null 2>&1
+setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/apache2 > /dev/null 2>&1
+setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/letsencrypt > /dev/null 2>&1
+setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/inkcert > /dev/null 2>&1
+chmod 751 -R ${IVAPPBASE}
 

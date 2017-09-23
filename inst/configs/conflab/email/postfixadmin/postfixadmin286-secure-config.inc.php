@@ -211,7 +211,9 @@ $CONF['domain_postcreation_script'] = '';
 
 $CONF['domain_postdeletion_script'] = '';
 
-$CONF['create_mailbox_subdirs'] = array();
+// inkVerb note: Dunno why, but this doesn't work.
+$CONF['create_mailbox_subdirs'] = array('Archive','Drafts','Junk','Sent','Trash');
+
 $CONF['create_mailbox_subdirs_host']='localhost';
 
 $CONF['create_mailbox_subdirs_prefix']='';
@@ -223,6 +225,7 @@ $CONF['new_quota_table'] = 'YES';
 $CONF['create_mailbox_subdirs_hostoptions'] = array('');
 
 $CONF['theme_logo'] = 'images/logo-ink.png';
+
 $CONF['theme_css'] = 'css/default.css';
 
 $CONF['theme_custom_css'] = '';

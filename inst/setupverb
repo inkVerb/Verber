@@ -166,6 +166,10 @@ mv /etc/php/7.0/apache2/php.ini /etc/php/7.0/apache2/php.original.ini
 ln -sfn /var/local/verb/configs/php.${VNAME}.ini /etc/php/7.0/apache2/php.ini
 
 # sites-available
+## Directories
+chmod -R 755 /var/local/verb/configs/site-files/newdomain.tld
+chmod -R 755 /var/local/verb/configs/site-files/newgurusubdir
+chmod -R 755 /var/local/verb/configs/site-files/newonesubdir
 ## Replace
 cp /var/local/verb/inst/config/etc/apache2/sites-available/* /etc/apache2/sites-available/
 sed -i "s/emailURI286/${emailURI}/g" /etc/apache2/sites-available/*.conf
@@ -191,10 +195,6 @@ rename "s/rocksURI286/${rocksURI}/" /etc/apache2/sites-available/*.conf
 rename "s/unoURI286/${unoURI}/" /etc/apache2/sites-available/*.conf
 
 # New site-files
-## Directories
-chmod -R 755 /var/local/verb/configs/site-files/newdomain.tld
-chmod -R 755 /var/local/verb/configs/site-files/newgurusubdir
-chmod -R 755 /var/local/verb/configs/site-files/newonesubdir
 ## Replace
 sed -i "s/emailURI286/${emailURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/oneURI286/${oneURI}/g" /var/local/verb/configs/site-files/conf/*
@@ -338,6 +338,9 @@ OR for password with the new boss user,
 
 login using: 'ssh ${NEWBOSS}@${SERVERIP} -p ${NEWPORT}'
 "
+
+# File permissions for configs
+chmod 751 -R /var/local/verb/configs
 
 # Delete this one-time script
 rm -f /var/local/verb/serfs/setupverb

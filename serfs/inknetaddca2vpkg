@@ -6,19 +6,21 @@ set -e
 ## This assumes that the key has been already uploaded to the CA, signed, downloaded from the CA, and put on this Verber in the www/guru folder
 
 # How to use:
-## ./inknetaddcavpkg [sec path code from CA Verber - optional, will prompt if not entered here]
+## ./inknetaddca2vpkg [CA2 Host/Name] [sec path code from CA Verber - optional, will prompt if not entered here]
 
-
-SECPATH=$1
+ICA2V=$1
+CA2VNAME="$(echo ${ICA2V} | sed 's/\./_/g')"
+CA2VHOST="$(echo ${ICA2V} | sed 's/\_/./g')"
+SECPATH=$2
 
 # Include the config
-. /var/local/verb/configs/inknet/inker.client.cnf
+. /var/local/verb/configs/inknet/2cav.${CA2VNAME}.cnf
 
 # Verify working home directory
 cd ~/
 
 # If sec path not specified in command line
-if [ -z "$1" ]; then
+if [ -z "$2" ]; then
 echo "Please copy-paste the code the CA Verber gave you, then press Enter."
 read SECPATH
 fi
