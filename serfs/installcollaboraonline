@@ -32,7 +32,7 @@ exit 0; fi
 
 # Install it
 docker pull collabora/code
-                       docker run -t -d -p 127.0.0.1:${PORT}:${PORT} -e "domain=nextcloud.${SITENAME}.verb.blue" --restart always --cap-add MKNOD collabora/code
+                       docker run -t -d -p 127.0.0.1:${PORT}:${PORT} -e "domain=nextcloud.${blueURI}" --restart always --cap-add MKNOD collabora/code
 
 # Firewall
 ufw allow ${PORT}
