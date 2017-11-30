@@ -92,9 +92,10 @@ if [ "${FIRSTINKCERTADD}" = "NOT_YET" ]; then
 sed -i "s/FIRSTINKCERTADD=NOT_YET/FIRSTINKCERTADD=DONE/g" /var/local/verb/configs/inkcert/inkcertstatus
 ## Create the cron job
 ### Add inkCertLE's auto updater to the cron
-echo "3 3 * * * root /var/local/verb/configs/inkcert/inkcert-renew-all.sh" >> /var/local/verb/configs/verbcron
-### Set cron to run the verbcron
-cp /var/local/verb/configs/verbcron /etc/cron.d/verber
+##################inkcert-renew-all.sh DOES NOT EXIST YET!!! inkCert Proper has yet to be created!!
+#echo "3 3 * * * root /var/local/verb/configs/inkcert/inkcert-renew-all.sh > /dev/null 2>&1" >> /var/local/verb/configs/verbcron
+#cp -f /var/local/verb/configs/verbcron /etc/cron.d/verber
+#chmod 644 /etc/cron.d/verber
 fi
 
 # Finish

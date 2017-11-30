@@ -100,10 +100,9 @@ if [ "${FIRSTINKCERTADDLE}" = "NOT_YET" ]; then
 sed -i "s/FIRSTINKCERTADDLE=NOT_YET/FIRSTINKCERTADDLE=DONE/g" /var/local/verb/configs/inkcert/inkcertstatus
 ## Create the cron job
 ### Add inkCertLE's auto updater to the cron
-echo "3 3 * * * root /var/local/verb/configs/inkcert/inkcertle-renew-all.sh" >> /var/local/verb/configs/verbcron
-### Set cron to run the verbcron
-cp /var/local/verb/configs/verbcron /etc/cron.d/verber
-exit 0
+echo "3 3 * * * root /var/local/verb/configs/inkcert/inkcertle-renew-all.sh > /dev/null 2>&1" >> /var/local/verb/configs/verbcron
+cp -f /var/local/verb/configs/verbcron /etc/cron.d/verber
+chmod 644 /etc/cron.d/verber
 fi
 
 # Finish

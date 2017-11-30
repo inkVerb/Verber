@@ -340,7 +340,7 @@ login using: 'ssh ${NEWBOSS}@${SERVERIP} -p ${NEWPORT}'
 "
 
 # File permissions for configs
-chmod 751 -R /var/local/verb/configs
+chmod o-rw -R /var/local/verb/configs
 
 # Delete this one-time script
 rm -f /var/local/verb/serfs/setupverb

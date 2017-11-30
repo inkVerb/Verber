@@ -175,6 +175,10 @@ cp /var/local/verb/inst/config/etc/monit/monitrc.d/openssh-server /etc/monit/mon
 cp /var/local/verb/inst/config/etc/monit/monitrc.d/sshd /etc/monit/monitrc.d/
 service monit restart
 
+# cron
+cp -f /var/local/verb/configs/verbcron /etc/cron.d/verber
+chmod 644 /etc/cron.d/verber
+
 # Delete the Diffie-Helman Group security file to prevent security risks
 rm -f /etc/ssl/private/dhparams.pem
 
