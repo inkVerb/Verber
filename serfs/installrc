@@ -37,6 +37,12 @@ Roundcube is already installed.
 "
 exit 0
 fi
+if [ ${SITEMAILSTATUS} = "EMAIL_NOT_INSTALLED" ]; then
+echo "
+This is a backup email server and Roundcube is not allowed.
+"
+exit 22
+fi
 
 RCFOLDER=$1
 RCPASSGEN=$(pwgen -s -1 5)
@@ -103,7 +109,9 @@ sed -i "s/rcpass286/rcpass${RCPASSGEN}/g" /var/www/email/roundcube/config/config
 sed -i "s/rcpass286/rcpass${RCPASSGEN}/g" /var/www/email/roundcube/config/defaults.inc.php
 sed -i "s/rcemailconfdeskeysalt286/${DESSALTGEN}/g" /var/www/email/roundcube/config/config.inc.php
 # In the event that installpfa was run first
+if [ -e "/var/www/email/postfixadmin/config.inc.php" ]; then
 sed  -i "s/rcfolder286/${RCFOLDER}/g" /var/www/email/postfixadmin/config.inc.php
+fi
 
 # Copy the branding files
 cp /var/local/verb/configs/conflab/email/roundcube/roundcubepics/skins/larry/images/verbink_logo.png /var/www/email/roundcube/skins/larry/images/

@@ -47,7 +47,7 @@ NEWBOSSPASS=${13}
 VUPREPO=${14}
 #GREATERTHANNINE=${10}
 
-if [ -z "${13}" ]; then
+if [ -z "${14}" ]; then
 VUPREPO=verb-update
 fi
 

@@ -144,7 +144,6 @@ sed -i "s/nameURI286/${nameURI}/g" /var/local/verb/configs/conflab/email/postfix
 
 # Grand Restart
 service postfix restart
-systemctl restart postfix
 service spamassassin restart
 service clamav-daemon restart
 service amavis restart

@@ -33,20 +33,23 @@ This has a few advantages to the webmaster, saves money, and pays the bills.
 	ii. Set name subdomains for server IP: NAME.verb.ink NAME.verb.one NAME.verb.email NAME.verb.blue NAME.verb.guru NAME.verb.kiwi NAME.verb.red
 
 2. Copy or git the Verber/verb directories to /var/local/verb
+	`cd /var/local`
+	`git clone https://github.com/inkVerb/verb`
 
 3. Run the scripts
-	i. make-verber-preserver    # prepares the server, mainly for locale
+	`cd /var/local/verb/inst`
+	i. `./make-verber-preserver [ ssh port ]`    # prepares the server, mainly for locale
 		* Follow in-file instructions, has optional parameters, reboot
 		* Choose "y" or "Yes" when prompted
 		* Locale setup may ask for settings, defaults should be okay, US-English is usually the goal.
-	ii. make-verber    # prepares directories, Apache configs, web apps, swap, "boss" users, etc. for installation, but no hostname or IP is defined yet.
+	ii. `./make-verber [ swap size in GB, ie: 2 ]`    # prepares directories, Apache configs, web apps, swap, "boss" users, etc. for installation, but no hostname or IP is defined yet.
 		* Follow in-file instructions, requires parameters, reboot
 		* Now the server is a standard out-of-box inkVerb, ready to setup, can be copied as-is
-	iii. setupverb    # sets hostnames, IP, inkVerb namespace, and other settings across the server and the site goes live
+	iii. `./setupverb [ long list of settings, see instructions inside the file ]`    # sets hostnames, IP, inkVerb namespace, and other settings across the server and the site goes live
 		* Follow in-file instructions, requires parameters
-	iv. installroundcube (unless skipping number 4)
-		* Follow in-file instructions, requires parameters
-	v. installpfa (unless skipping number 4)
+At this point you can install the mail server...
+	`cd ~/verb/serfs`
+	iv. `installemail` (unless skipping number 4)
 
 4. Setup PostFixAdmin and RoundCube
 	i. boxes.NAME.verb.email/setup.php
@@ -237,6 +240,7 @@ IX. Other notes
 		- 44 - failed attempt, such as a file not downloaded or login credentials rejected, thus cannot proceed
 		- 55 - unmet credentials (ie variables for a bash script are incomplete or incorrect)
 		- 66 - catostrophic error (something is wrong that shouldn't be possible, such as a script is messed up or something was changed manually-incorrectly)
+		- 77 - depreciated (you are running a version of something too old)
 	B. If statements, checks, and inclusions
 		1. Scripts are organized to keep file size small and to standardize system-wide jobs, not to be fool-proof for lazy programming or new users.
 		2. Many "if" checks and "usage" messages could be included in serfs, but are not because the user should more or less know what he is doing. Such errors will be in yoemen for easier command line use and a GUI.
