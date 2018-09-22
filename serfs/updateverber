@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This downloads and updates the Verber™ core files, including serfs and inklists
 ## This also runs scripts that make other changes that may affect the Verber
@@ -17,8 +17,9 @@ cd /var/local/verb/
 git clone https://github.com/inkverb/${SITEUPDATEREPO}
 
 # Run the update script
-chmod +x /var/local/verb/${SITEUPDATEREPO}/update
+chmod 750 /var/local/verb/${SITEUPDATEREPO}/update
 /var/local/verb/${SITEUPDATEREPO}/update
+wait
 
 # Remove the entire updater
 rm -rf /var/local/verb/${SITEUPDATEREPO}

@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This downloads and installs WordPress to blog.NAME.verb.ink
 ## WordPress actually resides in www/vapps/wp.inkblog
@@ -31,11 +31,11 @@ exit 0
 fi
 
 # Auto database
-if [ -z $4 ]; then
+if [ -z ${4} ]; then
 DBPASSWORD=$(pwgen -s -1 10); fi
-if [ -z $2 ]; then
+if [ -z ${2} ]; then
 DBASE=${CLEANNAME}$(pwgen -s -1 6); fi
-if [ -z $3 ]; then
+if [ -z ${3} ]; then
 DBUSER=${DBASE}; fi
 
 # Download and establish wordpress in the server to pre-created domain
@@ -43,13 +43,13 @@ cd /var/www/vapps
 wget https://wordpress.org/latest.tar.gz
 if [ ! -f latest.tar.gz ]; then
 echo "Can't download WordPress. I quit."
-exit 44; fi
+exit 4; fi
 tar -xvf latest.tar.gz
 rm -f latest.tar.gz
 mv wordpress ${CVAPPNAME}
 rm -rf /var/www/html/ink.blog
 ln -sfn /var/www/vapps/${CVAPPNAME} /var/www/html/ink.blog
-ln -sfn /var/www/vapps/${CVAPPNAME} /srv/guru/_webapps/
+ln -sfn /var/www/vapps/${CVAPPNAME} /srv/vip/_webapps/
 chown -R www-data:www-data /var/www/html/ink.blog
 chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}
 
@@ -63,10 +63,10 @@ FLUSH PRIVILEGES;"
 echo "#!/bin/sh
 APPDBASE=${DBASE}
 APPDDBUSR=${DBUSER}
-APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/verbapp.${CVAPPNAME}
+APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/vapp.${CVAPPNAME}
 
-# Guru domain
-ln -s /var/www/html/ink.blog /srv/guru/_domains/
+# VIP domain
+ln -s /var/www/html/ink.blog /srv/vip/_domains/
 
 # Put the settings in the WordPress config file
 cd ${CVAPPNAME}
@@ -98,7 +98,7 @@ chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}
 
 # Set up the Apache config
 cp /var/local/verb/configs/site-files/conf/blog.${inkURI}.conf-wpblg /etc/apache2/sites-available/blog.${inkURI}.conf
-service apache2 reload
+apache2ctl graceful
 ## inkCert SSL certs
 ### Not setup
 if grep -Fq "INKCERTED=NO" /var/local/verb/configs/inkcert/cli-ini/siteinkcert.${inkURI}; then
@@ -108,11 +108,13 @@ fi
 if grep -Fq "INKCERTED=DONE_LE" /var/local/verb/configs/inkcert/cli-ini/siteinkcert.${inkURI}; then
 echo "inkCert-LE is already setup for ${inkURI}. Updating the Apache configs..."
 /var/local/verb/serfs/inkcertaddallle ${inkURI}
+wait
 fi
 ### inkCert-IC DONE
 if grep -Fq "INKCERTED=DONE_IC" /var/local/verb/configs/inkcert/cli-ini/siteinkcert.${inkURI}; then
 echo "inkCert-IC is already setup for ${inkURI}. Updating the Apache configs..."
 /var/local/verb/serfs/inkcertadd blog.${inkURI}
+wait
 fi
 
 # Set the site-wide inkblog config

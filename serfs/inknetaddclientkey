@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This adds a Vrk/Verber Client's public SSH key to "authorized_hosts" on the CA Verber
 ## If the key is not included in the initial command, it will be read interactively.
@@ -36,16 +36,16 @@ VCURI="$(echo ${VCHOST} | rev | cut -d'.' -f-3 | rev)"
 fi
 
 if [ "${VTYPE}" != "vrk" ] && [ "${VTYPE}" != "verber" ] ; then
-echo "You need to specify \"vrk\" or \"verber\". Read the instructions."; exit 22; fi
+echo "You need to specify \"vrk\" or \"verber\". Read the instructions."; exit 8; fi
 
 # Check if the Client has been added
 if [ "${VTYPE}" = "vrk" ]; then
  if [ ! -e "/var/local/verb/configs/inknet/vrk/client.vrk.${VCNAME}.cnf" ]; then
- echo "You must add the Client first using: inknetaddvrkclient."; exit 22; fi
+ echo "You must add the Client first using: inknetaddvrkclient."; exit 8; fi
 fi
 if [ "${VTYPE}" = "verber" ]; then
  if [ ! -e "/var/local/verb/configs/inknet/verber/client.verber.${VCNAME}.cnf" ]; then
- echo "You must add the Client first using: inknetaddverberclient."; exit 22; fi
+ echo "You must add the Client first using: inknetaddverberclient."; exit 8; fi
 fi
 
 # Include the configs
@@ -81,7 +81,7 @@ read CPKEY
 VCKEY="${CPKEY}"
 fi
 if [ -z "${VCKEY}" ]; then
-echo "You aren't entering a key. I quit."; exit 55; fi
+echo "You aren't entering a key. I quit."; exit 5; fi
 
 # Add the key
 if [ "${VTYPE}" = "vrk" ]; then
@@ -98,7 +98,7 @@ echo "Success! The Client key for ${CLIENTURI} has been added."
 
 ## Serf message
 echo "
-Now, you need to run inknetzipclientpkg
+Now, you need to run inknetpackclientpkg
 
 Follow the instructions."
 

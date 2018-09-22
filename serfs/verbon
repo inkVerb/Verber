@@ -1,11 +1,11 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This turns on a tld of the verb sites, such as verb.red, but not the other verb.tld sites, all are on until turned off via verboff
 ## This is done through a2ensite
-## For *.verb.one or custom *.verb.guru, this only turns on NAME.verb.one and one.NAME.verb.one
-## All other custom verb.one and custom verb.guru sites must be turned on again via newonesub
+## For *.verb.one or custom *.verb.vip, this only turns on NAME.verb.one and one.NAME.verb.one
+## All other custom verb.one and custom verb.vip sites must be turned on again via newonesub
 
 # How to use:
 ## ./verbon [tld]
@@ -24,17 +24,24 @@ sed -i "s/VERB${SITEON}=.*/VERB${SITEON}=true/g" /var/local/verb/configs/sitetld
 
 if [ "${SITEON}" = "email" ]
 then
-    a2ensite ${emailURI} email.${emailURI} boxes.${emailURI} mail.${emailURI} rc.${emailURI}
-    service apache2 reload
+    a2ensite ${emailURI} email.${emailURI} pfa.${emailURI} mail.${emailURI} rc.${emailURI}
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
 
+if [ "${SITEON}" = "city" ]
+then
+    a2ensite ${cityURI} city.${cityURI} center.${cityURI}
+    apache2ctl graceful
+    echo "Done."
+exit 0
+fi
 
 if [ "${SITEON}" = "one" ]
 then
     a2ensite ${oneURI} one.${oneURI}
-    service apache2 reload
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
@@ -43,7 +50,7 @@ fi
 if [ "${SITEON}" = "ink" ]
 then
     a2ensite ${inkURI} ink.${inkURI} ask.${inkURI} bb.${inkURI} blog.${inkURI} code.${inkURI} home.${inkURI} shop.${inkURI} sn.${inkURI} wiki.${inkURI}
-    service apache2 reload
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
@@ -57,10 +64,10 @@ exit 0
 fi
 
 
-if [ "${SITEON}" = "guru" ]
+if [ "${SITEON}" = "vip" ]
 then
-    a2ensite ${guruURI} guru.${guruURI} cgi.${guruURI} ftp.${guruURI} files.${guruURI} fossil.${guruURI} mysql.${guruURI} net2ftp.${guruURI} repo.${guruURI}
-    service apache2 reload
+    a2ensite ${vipURI} vip.${vipURI} cgi.${vipURI} ftp.${vipURI} files.${vipURI} fossil.${vipURI} mysql.${vipURI} net2ftp.${vipURI} repo.${vipURI}
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
@@ -69,7 +76,7 @@ fi
 if [ "${SITEON}" = "kiwi" ]
 then
     a2ensite ${kiwiURI} kiwi.${kiwiURI} ampache.${kiwiURI} art.${kiwiURI} gallery.${kiwiURI} media.${kiwiURI} podcast.${kiwiURI} studio.${kiwiURI}
-    service apache2 reload
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
@@ -78,7 +85,7 @@ fi
 if [ "${SITEON}" = "pink" ]
 then
     a2ensite ${pinkURI} pink.${pinkURI}
-    service apache2 reload
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
@@ -87,7 +94,7 @@ fi
 if [ "${SITEON}" = "red" ]
 then
     a2ensite ${redURI} red.${redURI} act.${redURI} crm.${redURI} erp.${redURI} hrm.${redURI} odoo.${redURI} scm.${redURI}
-    service apache2 reload
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
@@ -96,7 +103,7 @@ fi
 if [ "${SITEON}" = "rocks" ]
 then
     a2ensite ${rocksURI} rocks.${rocksURI}
-    service apache2 reload
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi
@@ -105,7 +112,7 @@ fi
 if [ "${SITEON}" = "uno" ]
 then
     a2ensite ${unoURI} uno.${unoURI}
-    service apache2 reload
+    apache2ctl graceful
     echo "Done."
 exit 0
 fi

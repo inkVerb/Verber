@@ -1,6 +1,6 @@
 #!/bin/bash
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This requests and gets Letsencrypt certs via inkCert-Letsencrypt for a given domain, including inkVerb namespace domains
 ## It also applies to all subdomains for that domain
@@ -53,7 +53,7 @@ exit 0
 fi
 
 if [ "${INKCERTED}" = "DONE_LE" ]; then
- if [ $2 = "r" ]; then
+ if [ "$2" = "r" ]; then
 echo "Refreshing Let's Encrypt certs to include any subdomains of ${DOMAIN} since the last renewal. Don't do this too often."
  else
 echo "inkCert is already setup for ${DOMAIN} with Letsencrypt.
@@ -68,7 +68,7 @@ fi
 
 # Check for verb domain and status
 ## If verb domain was spelled correctly
-if [[ "${DOMAIN}" =~ ".verb.email" ]] || [[ "${DOMAIN}" =~ ".verb.one" ]] || [[ "${DOMAIN}" =~ ".verb.ink" ]] || [[ "${DOMAIN}" =~ ".verb.blue" ]] || [[ "${DOMAIN}" =~ ".verb.guru" ]] || [[ "${DOMAIN}" =~ ".verb.kiwi" ]] || [[ "${DOMAIN}" =~ ".verb.red" ]] || [[ "${DOMAIN}" =~ ".verb.rocks" ]]; then
+if [[ "${DOMAIN}" =~ ".verb.email" ]] || [[ "${DOMAIN}" =~ ".verb.one" ]] || [[ "${DOMAIN}" =~ ".verb.ink" ]] || [[ "${DOMAIN}" =~ ".verb.blue" ]] || [[ "${DOMAIN}" =~ ".verb.vip" ]] || [[ "${DOMAIN}" =~ ".verb.kiwi" ]] || [[ "${DOMAIN}" =~ ".verb.red" ]] || [[ "${DOMAIN}" =~ ".verb.rocks" ]]; then
  if [[ "${DOMAIN}" != *"${SITENAME}"* ]]; then
 echo "
 Problem: You might have spelled ${DOMAIN} wrong.
@@ -95,6 +95,11 @@ if [ "${DOMAIN}" = "${emailURI}" ]; then
   verbtld_is_off
  fi
 fi
+if [ "${DOMAIN}" = "${cityURI}" ]; then
+ if [[ "${VERBcity}" != true ]]; then
+  verbtld_is_off
+ fi
+fi
 if [ "${DOMAIN}" = "${oneURI}" ]; then
  if [[ "${VERBone}" != true ]]; then
   verbtld_is_off
@@ -110,8 +115,8 @@ if [ "${DOMAIN}" = "${blueURI}" ]; then
   verbtld_is_off
  fi
 fi
-if [ "${DOMAIN}" = "${guruURI}" ]; then
- if [[ "${VERBguru}" != true ]]; then
+if [ "${DOMAIN}" = "${vipURI}" ]; then
+ if [[ "${VERBvip}" != true ]]; then
   verbtld_is_off
  fi
 fi
@@ -142,23 +147,26 @@ if [ "${DOMAIN}" = "${unoURI}" ]; then
 fi
 
 # Stop Apache
-apachectl -k graceful-stop
-## Hard stop in case it doesn't work
-service apache2 stop
+apache2ctl graceful-stop; wait
+systemctl stop apache2; wait
 
 # Get the certs
-## the --quiet / -q option doesn't seem to work
+##NOTE make the system wait before and after Letsencrypt because sometimes LE can stumble over it's own feet.
+sleep 1
 letsencrypt certonly --standalone --expand --keep-until-expiring -c /var/local/verb/configs/inkcert/cli-ini/cli.${DOMAIN}.ini
+sleep 1
+# the --quiet / -q option doesn't seem to work
 # Additional options if not doing certonly: --no-redirect --no-hsts --no-uir
 # https://certbot.eff.org/docs/using.html#command-line
 # https://certbot.eff.org/#ubuntuxenial-apache
 
 # Turn Apache on again
-service apache2 start
+#apache2ctl start; wait
+systemctl start apache2; wait
 
 # Verify the certs
 if [ ! -d /etc/inkcert/le/live/${DOMAIN} ]; then
-echo "Big error! Unable to get the certs from the cert authority. Can't continue."; exit 44
+echo "Big error! Unable to get the certs from the cert authority. Can't continue."; exit 4
 fi
 
 # Finish

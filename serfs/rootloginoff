@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This disables the ability for a root user to login over ssh with a password
 ## This presumes that the ssh .pub keys have already been added to ~/.ssh/authorized_keys
@@ -9,5 +9,5 @@ set -e
 ## ./rootloginoff
 
 sed -i "s/PermitRootLogin.*/PermitRootLogin without-password/g" /etc/ssh/sshd_config
-service ssh reload
+systemctl reload ssh
 

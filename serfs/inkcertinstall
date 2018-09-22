@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This installs the inkCert SSL certificate service
 ## Currently, inkCert uses letsencrypt for main websites with options for "inkCert proper", the non-standard inkVerb CA service.
@@ -31,11 +31,11 @@ mkdir /etc/inkcert/csr
 mkdir /etc/inkcert/req
 ln -sfn /etc/letsencrypt /etc/inkcert/le
 ln -sfn /etc/inkcert/req /var/local/verb/
-ln -sfn /etc/inkcert/req /var/www/guru/
+ln -sfn /etc/inkcert/req /var/www/vip/
 cp /var/local/verb/configs/inkcert/verber-openssl.cnf /etc/inkcert/client/openssl.cnf
 
 # Set configs
-sed -i "s/INKCERTINSTALLED=NOT_YET/INKCERTINSTALLED=DONE/g" /var/local/verb/configs/inkcert/inkcertstatus
+sed -i "s/INKCERTINSTALLED=\"NOT_YET\"/INKCERTINSTALLED=\"DONE\"/g" /var/local/verb/configs/inkcert/inkcertstatus
 
 # Finish
 echo "

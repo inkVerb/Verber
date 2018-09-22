@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This deletes a Verber Client's profile and kills the inkNet JailKit user
 
@@ -14,7 +14,7 @@ KILLVERBCLIENT="$(echo ${KILLHOST} | sed 's/\./_/g')"
 # Chek if it exists
 if [ ! -e "/var/local/verb/configs/inknet/verber/client.verber.${KILLVERBCLIENT}.cnf" ]; then
 echo "That Verber Client doesn't exist here."
-exit 22; fi
+exit 8; fi
 
 # Include the Client's config
 . /var/local/verb/configs/inknet/verber/client.verber.${KILLVERBCLIENT}.cnf

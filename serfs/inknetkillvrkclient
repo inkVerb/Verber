@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This deletes a Vrk Client's profile and kills the inkNet JailKit user
 
@@ -13,13 +13,13 @@ KILLHOST=$2
 KILLMACHINE="$(echo ${KILLHOST} | sed 's/\./_/g')"
 KILLVRKCLIENT="${KILLUSER}_${KILLMACHINE}"
 
-if [ -z "$2" ]; then
-echo "Enter the user, a space, then the machine. Get your machine name with: hostname -f"; exit 55; fi
+if [ -z ${2} ]; then
+echo "Enter the user, a space, then the machine. Get your machine name with: hostname -f"; exit 5; fi
 
 # Chek if it exists
 if [ ! -e "/var/local/verb/configs/inknet/vrk/client.vrk.${KILLVRKCLIENT}.cnf" ]; then
 echo "That Verber Client doesn't exist here."
-exit 22; fi
+exit 8; fi
 
 # Include the Client's config
 . /var/local/verb/configs/inknet/vrk/client.vrk.${KILLVRKCLIENT}.cnf

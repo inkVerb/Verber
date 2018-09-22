@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This downloads and installs OrangeHRM manually from inkisaverb.com/repo and linnks it to ....verb.blue
 
@@ -23,27 +23,26 @@ CLEANNAME=$(echo $CVAPPNAME | sed -e 's/\.//g')
 
 # Check if already installed
 ## Config
-if [ -f /var/local/verb/configs/verbapp.${CVAPPNAME} ]; then
+if [ -f /var/local/verb/configs/vapp.${CVAPPNAME} ]; then
 echo "This is already installed."
 exit 0; fi
 ## Directory
 if [ -d /var/www/vapps/${CVAPPNAME} ]; then
 echo "OrangeHRM already exists in the system. If it isn't working, look deeper on the server. For now, doing nothing."
-exit 22; fi
+exit 8; fi
 
 # Auto database
-if [ -z $3 ]; then
+if [ -z ${3} ]; then
 DBPASSWORD=$(pwgen -s -1 10); fi
-if [ -z $1 ]; then
+if [ -z ${1} ]; then
 DBASE=${CLEANNAME}$(pwgen -s -1 6); fi
-if [ -z $2 ]; then
+if [ -z ${2} ]; then
 DBUSER=${DBASE}; fi
 
 # Download and unpack the latest checked version from inkisaverb.com/repo
 cd /var/www/vapps
-/var/local/verb/serfs/inkget ${CVAPPNAME}.current
-unzip ${CVAPPNAME}.current.zip
-rm -f ${CVAPPNAME}.current.zip
+/var/local/verb/serfs/inkget ${CVAPPNAME}; wait
+/var/local/verb/serfs/vtxzout ${CVAPPNAME}; wait
 mkdir /var/www/vapps/${CVAPPNAME}/lib/logs
 mkdir /var/www/vapps/${CVAPPNAME}/symfony/cache
 mkdir /var/www/vapps/${CVAPPNAME}/symfony/log
@@ -72,7 +71,7 @@ ufw allow 3306
 echo "#!/bin/sh
 APPDBASE=${DBASE}
 APPDDBUSR=${DBUSER}
-APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/verbapp.${CVAPPNAME}
+APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/vapp.${CVAPPNAME}
 
 echo "These are setup:
 

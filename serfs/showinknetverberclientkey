@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This displays the inkNet Client key
 ## This is useful for getting the key to have it signed by the inker
@@ -12,7 +12,7 @@ set -e
 # Check the config
 if [ ! -f /var/local/verb/configs/inknet/inker.client.cnf ]; then
 echo "This is not yet connected to an Inker via inkNet."
-exit 22; fi
+exit 8; fi
 
 # Include the config
 . /var/local/verb/configs/inknet/inker.client.cnf

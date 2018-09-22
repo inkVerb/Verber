@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This copies all original verb folders to www/html if they don't exist
 ## This is used by killvapp and others
@@ -19,11 +19,12 @@ set -e
 cd /var/www/html
 if [ ! -e 0sitedefaultInProgress ]; then
 cp -r /var/local/verb/configs/conflab/html/0sitedefaultInProgress .
-chmod -R 755 0sitedefaultInProgress; fi
+chmod -R 750 0sitedefaultInProgress; fi
+if [ ! -e vsslsitedefault ]; then cp -r 0sitedefaultInProgress vsslsitedefault; fi
 if [ ! -e 0ne ]; then
 mkdir 0ne
 echo "<?php header(\"Location: http://${inkURI}\"); die(); ?>" > /var/www/html/0ne/index.php
-chmod -R 755 0ne; fi
+chmod -R 750 0ne; fi
 
 # Block web folder listing
 echo "Options -Indexes" >> /var/www/html/.htaccess
@@ -33,6 +34,8 @@ echo "Options -Indexes" >> /var/www/html/0sitedefaultInProgress/.htaccess
 # Verb sites
 if [ ! -e ink ]; then cp -r 0sitedefaultInProgress ink; fi
 if [ ! -e email ]; then cp -r 0ne email; fi
+if [ ! -e city ]; then cp -r 0ne city; fi
+if [ ! -e city.center ]; then cp -r 0ne city.center; fi
 if [ ! -e one ]; then cp -r 0ne one
 echo "<?php header(\"Location: http://${inkURI}\"); die(); ?>" > /var/www/html/one/index-one.php
 echo "<?php header(\"Location: http://newonesub.${oneURI}\"); die(); ?>" > /var/www/html/one/index-newonesub.php
@@ -47,40 +50,50 @@ if [ ! -e ink.shop ]; then cp -r 0ne ink.shop; fi
 if [ ! -e ink.sn ]; then cp -r 0ne ink.sn; fi
 if [ ! -e ink.wiki ]; then cp -r 0ne ink.wiki; fi
 if [ ! -e blue ]; then cp -r 0ne blue
+echo "<?php header(\"Location: http://caldav.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-caldav.php
+echo "<?php header(\"Location: http://carddav.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-carddav.php
 echo "<?php header(\"Location: http://chat.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-chat.php
 echo "<?php header(\"Location: http://collabora.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-collabora.php
+echo "<?php header(\"Location: http://dav.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-dav.php
 echo "<?php header(\"Location: http://nextcloud.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-nextcloud.php
 echo "<?php header(\"Location: http://owncloud.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-owncloud.php
 echo "<?php header(\"Location: http://pydio.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-pydio.php
 echo "<?php header(\"Location: http://seafile.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-seafile.php
+echo "<?php header(\"Location: http://webdav.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-webdav.php
 echo "<?php header(\"Location: http://xmpp.${blueURI}\"); die(); ?>" > /var/www/html/blue/index-xmpp.php
 echo "<?php header(\"Location: http://${blueURI}\"); die(); ?>" > /var/www/html/blue/index-blue.php
 fi
+if [ ! -e blue.ccaldavalda ]; then cp -r 0ne blue.caldav; fi
+if [ ! -e blue.carddav ]; then cp -r 0ne blue.carddav; fi
 if [ ! -e blue.chat ]; then cp -r 0ne blue.chat; fi
 if [ ! -e blue.collabora ]; then cp -r 0ne blue.collabora; fi
+if [ ! -e blue.dav ]; then cp -r 0ne blue.dav; fi
 if [ ! -e blue.nextcloud ]; then cp -r 0ne blue.nextcloud; fi
 if [ ! -e blue.owncloud ]; then cp -r 0ne blue.owncloud; fi
 if [ ! -e blue.pydio ]; then cp -r 0ne blue.pydio; fi
 if [ ! -e blue.seafile ]; then cp -r 0ne blue.seafile; fi
+if [ ! -e blue.webdav ]; then cp -r 0ne blue.webdav; fi
 if [ ! -e blue.xmpp ]; then cp -r 0ne blue.xmpp; fi
-if [ ! -e guru ]; then cp -r 0ne guru
-echo "<?php header(\"Location: http://hrm.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-guru.php
-echo "<?php header(\"Location: http://newgurusub.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-newgurusub.php
-echo "<?php header(\"Location: http://cgi.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-cgi.php
-echo "<?php header(\"Location: http://ftp.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-ftp.php
-echo "<?php header(\"Location: http://files.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-files.php
-echo "<?php header(\"Location: http://fossil.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-fossil.php
-echo "<?php header(\"Location: http://net2ftp.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-net2ftp.php
-echo "<?php header(\"Location: http://repo.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-repo.php
-echo "<?php header(\"Location: http://sql.${guruURI}\"); die(); ?>" > /var/www/html/guru/index-sql.php
+if [ ! -e vip ]; then cp -r 0ne vip
+echo "<?php header(\"Location: http://hrm.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-vip.php
+echo "<?php header(\"Location: http://newvipsub.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-newvipsub.php
+echo "<?php header(\"Location: http://cgi.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-cgi.php
+echo "<?php header(\"Location: http://ftp.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-ftp.php
+echo "<?php header(\"Location: http://files.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-files.php
+echo "<?php header(\"Location: http://fossil.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-fossil.php
+echo "<?php header(\"Location: http://ldap.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-ldap.php
+echo "<?php header(\"Location: http://net2ftp.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-net2ftp.php
+echo "<?php header(\"Location: http://repo.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-repo.php
+echo "<?php header(\"Location: http://sql.${vipURI}\"); die(); ?>" > /var/www/html/vip/index-sql.php
 fi
-if [ ! -e guru.cgi ]; then cp -r 0ne guru.cgi; fi
-if [ ! -e guru.ftp ]; then cp -r 0ne guru.ftp; fi
-if [ ! -e guru.files ]; then cp -r 0ne guru.files; fi
-if [ ! -e guru.fossil ]; then cp -r 0ne guru.fossil; fi
-if [ ! -e guru.net2ftp ]; then cp -r 0ne guru.net2ftp; fi
-if [ ! -e guru.repo ]; then cp -r 0ne guru.repo; fi
-if [ ! -e guru.sql ]; then cp -r 0ne guru.sql; fi
+if [ ! -e vip.cgi ]; then cp -r 0ne vip.cgi; fi
+if [ ! -e vip.ftp ]; then cp -r 0ne vip.ftp; fi
+if [ ! -e vip.files ]; then cp -r 0ne vip.files; fi
+if [ ! -e vip.fossil ]; then cp -r 0ne vip.fossil; fi
+if [ ! -e vip.ldap ]; then cp -r 0ne vip.ldap; fi
+if [ ! -e vip.net2ftp ]; then cp -r 0ne vip.net2ftp; fi
+if [ ! -e vip.repo ]; then cp -r 0ne vip.repo; fi
+if [ ! -e vip.sql ]; then cp -r 0ne vip.sql; fi
 if [ ! -e kiwi ]; then cp -r 0ne kiwi
 echo "<?php header(\"Location: http://ampache.${kiwiURI}\"); die(); ?>" > /var/www/html/kiwi/index-ampache.php
 echo "<?php header(\"Location: http://art.${kiwiURI}\"); die(); ?>" > /var/www/html/kiwi/index-art.php
@@ -105,7 +118,7 @@ if [ ! -e kiwi.studio ]; then cp -r 0ne kiwi.studio; fi
 if [ ! -e kiwi.voip ]; then cp -r 0ne kiwi.voip; fi
 if [ ! -e kiwi.webrtc ]; then cp -r 0ne kiwi.webrtc; fi
 if [ ! -e pink ]; then cp -r 0ne pink
-echo "<?php header(\"Location: http://${inkURI}\"); die(); ?>" > /var/www/html/rocks/index-pink.php
+echo "<?php header(\"Location: http://${inkURI}\"); die(); ?>" > /var/www/html/pink/index-pink.php
 fi
 if [ ! -e red ]; then cp -r 0ne red
 echo "<?php header(\"Location: http://act.${redURI}\"); die(); ?>" > /var/www/html/red/index-act.php
@@ -135,6 +148,10 @@ if [ ! -e email.email ]; then
 mkdir email.email
 echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://${emailURI}\"); die(); ?>" > /var/www/html/email.email/index.php
 fi
+if [ ! -e city.city ]; then
+mkdir city.city
+echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://${cityURI}\"); die(); ?>" > /var/www/html/city.city/index.php
+fi
 if [ ! -e one.one ]; then
 mkdir one.one
 echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://${oneURI}\"); die(); ?>" > /var/www/html/one.one/index.php
@@ -147,9 +164,9 @@ if [ ! -e blue.blue ]; then
 mkdir blue.blue
 echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://${blueURI}\"); die(); ?>" > /var/www/html/blue.blue/index.php
 fi
-if [ ! -e guru.guru ]; then
-mkdir guru.guru
-echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://${guruURI}\"); die(); ?>" > /var/www/html/guru.guru/index.php
+if [ ! -e vip.vip ]; then
+mkdir vip.vip
+echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http://${vipURI}\"); die(); ?>" > /var/www/html/vip.vip/index.php
 fi
 if [ ! -e kiwi.kiwi ]; then
 mkdir kiwi.kiwi
@@ -173,11 +190,8 @@ echo "<?php header(\"HTTP/1.1 301 Moved Permanently\"); header(\"Location: http:
 fi
 
 # Own
-## Check to see if web service is installed
-if [ $(grep -c '^www-data:' /etc/passwd) = 1 ]; then
-## Own all the html/ dirs
 chown -R www-data:www-data /var/www/html
-fi
+
 # Finish
 echo "Done. Except for any installed apps, Verber html folders have been set to original setup state."
 

@@ -10,9 +10,9 @@
 ## If using the domain mod (make-dommod), the namespace must be your domain.
 
 # How to use:
+## ./setupverb [host] [namespace] [tld] [email] [serverIPv4] [serverIPv6 - if none use IPv6NA ] [SSLemail] [php.file-limit] [php.up-size] [php.region] [php.city] [new-port] [new-boss] [boss-pass] [update-repo - optional]
+# Elaborate how to use:
 ## ./setupverb [host - should be namespace or FQDN tld, unless you want to be strange] [inkVerb namespace (purchased) || Domain Mod domain] [FQDN tld, should be 'ink' except multiple servers for namespace] [email server tls, should be 'email' except multiple servers for namespace] [server IP] [SSL email - used for Letsencrypt and the like] [php file upload limit] [php upload size in MB] [php timezone region] [php timezone city] [new port number for ssh/terminal login] [new "boss" sudo user] [boss user password] [verb-update-dev - optional]
-# Simple how to use:
-## ./setupverb [host] [namespace] [tld] [email] [serverIP] [SSLemail] [php.file-limit] [php.up-size] [php.region] [php.city] [new-port] [new-boss] [boss-pass] [update-repo - optional]
 
 # IMPORTANT: Choose a hostname that is: 1. short, 2. unique, 3. memorable, and 4. has only numbers and lower-case letters.
 ## You will see this name in terminal tabs and window titles when you connect to your Verber via command line.
@@ -20,12 +20,18 @@
 ## Consider combining your verb.TLD extension with your Verb namespace
 ## Eg: joesbigasphalttrucking.verb.ink = joe1ink OR joesbigasphalttrucking.verb.email joeemail
 
+# Timezone list: http://php.net/manual/en/timezones.php
+
 # Eg:
-## ./setupverb ink johnny ink email 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 22 boss bosspassword
-## ./setupverb johnny johnny ink email 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 867 boss bosspassword
-## ./setupverb ikick johnny pink rocks 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 5290 boss bosspassword verb-update-dev
+## ./setupverb johnny johnny ink email 56.22.108.77 IPv6NA letsencrypt-messages@emaildomain.com 100 1000 Asia Singapore 22 boss bosspassword
+## ./setupverb johnny johnny ink email 56.22.108.77 ffff:894:aad8::821 letsencrypt-messages@emaildomain.com 100 1000 Europe Bucharest 867 boss bosspassword
+## ./setupverb johnny2 johnny pink rocks 56.22.108.77 IPv6NA letsencrypt-messages@emaildomain.com 100 1000 America New_York 5290 boss bosspassword verb-dev-update
+## ./setupverb johnny2 johnny pink rocks 56.22.108.77 ffff:894:aad8::821 letsencrypt-messages@emaildomain.com 100 1000 America Phoenix 5290 boss bosspassword verb-dev-update
+
 ### Domain Mod:
-## ./setupverb itsme inkisaverb.com ink 56.22.108.77 johnny@emaildomain.com 100 1000 America Detroit 22 boss bosspassword
+## ./setupverb itsme inkisaverb.com ink 56.22.108.77 IPv6 letsencrypt-messages@emaildomain.com 100 1000 America Detroit 22 boss bosspassword
+## ./setupverb itsme inkisaverb.com ink 56.22.108.77 ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff letsencrypt-messages@emaildomain.com 100 1000 America Detroit 22 boss bosspassword
+
 
 ## PHP timezone can't use third option of state or country such as America/Argentina/San_Juan or America/Indiana/Knox, only such as America/Chicago
 ## Get PHP timezone list at: http://php.net/manual/en/timezones.php
@@ -36,24 +42,24 @@ VNAME=$2
 SERVERTLD=$3
 SVMAILTLD=$4
 SERVERIP=$5
-SSLEMAIL=$6
-PHPLIMIT=$7
-PHPSIZE=$8
-PHPREGION=$9
-PHPCITY=${10}
-NEWPORT=${11}
-NEWBOSS=${12}
-NEWBOSSPASS=${13}
-VUPREPO=${14}
-#GREATERTHANNINE=${10}
+SERVERIPV6=$6
+SSLEMAIL=$7
+PHPLIMIT=$8
+PHPSIZE=$9
+PHPREGION=${10}
+PHPCITY=${11}
+NEWPORT=${12}
+NEWBOSS=${13}
+NEWBOSSPASS=${14}
+VUPREPO=${15}
 
-if [ -z "${14}" ]; then
+if [ -z "${15}" ]; then
 VUPREPO=verb-update
 fi
 
-if [ -z "${13}" ]; then
+if [ -z "${14}" ]; then
 echo "You must set all variables."
-exit 22; fi
+exit 8; fi
 
 # Locale (incase a VPS deleted it after make-verber-preserver)
 echo "LANG="en_US.UTF-8"
@@ -70,72 +76,32 @@ LC_TELEPHONE="en_US.UTF-8"
 LC_MEASUREMENT="en_US.UTF-8"
 " > /etc/default/locale
 
-# Re-do Snakeoil pair
+# Snakeoil cert
 make-ssl-cert generate-default-snakeoil --force-overwrite
 
-# Re-do the Diffie-Helman Group security file
+# Use OpenSSL to create a unique Diffie-Helman Group file (security)
 rm -f /etc/ssl/private/dhparams.pem
 openssl dhparam -out /etc/ssl/private/dhparams.pem 2048
 chmod 600 /etc/ssl/private/dhparams.pem
-
-# Site URI List
-## domain.mod?
-if [ -f "/var/local/verb/inst/domain.mod.conf" ]; then
-. /var/local/verb/inst/domain.mod.conf
-echo "#!/bin/sh
-## This is a config file for other verb scripts
-# Site URI List, whether they are active or not
-
-baseDOM=${DMODBASE}
-nameURI=${SERVERTLD}.${DMODBASE}
-hostURI=${HNAME}.${SERVERTLD}.${DMODBASE}
-emailTLDURI=${SVMAILTLD}.${DMODBASE}
-emailURI=email.${DMODBASE}
-oneURI=one.${DMODBASE}
-inkURI=ink.${DMODBASE}
-blueURI=blue.${DMODBASE}
-guruURI=guru.${DMODBASE}
-kiwiURI=kiwi.${DMODBASE}
-pinkURI=pink.${DMODBASE}
-redURI=red.${DMODBASE}
-rocksURI=rocks.${DMODBASE}
-unoURI=uno.${DMODBASE}
-" > /var/local/verb/configs/siteurilist
-## Normal verb domains
-else
-echo "#!/bin/sh
-## This is a config file for other verb scripts
-# Site URI List, whether they are active or not
-
-nameURI=${VNAME}.verb.${SERVERTLD}
-hostURI=${HNAME}.${VNAME}.verb.${SERVERTLD}
-emailTLDURI=${VNAME}.verb.${SVMAILTLD}
-emailURI=${VNAME}.verb.email
-oneURI=${VNAME}.verb.one
-inkURI=${VNAME}.verb.ink
-blueURI=${VNAME}.verb.blue
-guruURI=${VNAME}.verb.guru
-kiwiURI=${VNAME}.verb.kiwi
-pinkURI=${VNAME}.verb.pink
-redURI=${VNAME}.verb.red
-rocksURI=${VNAME}.verb.rocks
-unoURI=${VNAME}.verb.uno
-" > /var/local/verb/configs/siteurilist
-fi
-. /var/local/verb/configs/siteurilist
 
 # Site settings
 ## Configs
 cp -R /var/local/verb/inst/configs /var/local/verb/configs
 mv /var/local/verb/inst/mysqlrootpassword /var/local/verb/configs/
 mv /var/local/verb/inst/mysqlboss.cnf /var/local/verb/configs/
-mv /var/local/verb/configs/verbcron286 /var/local/verb/configs/verbcron
 mv /var/local/verb/configs/sitenameip286 /var/local/verb/configs/sitenameip
 mv /var/local/verb/configs/siteport286 /var/local/verb/configs/siteport
 mv /var/local/verb/configs/siteinkget286 /var/local/verb/configs/siteinkget
 mv /var/local/verb/configs/sitemailpath286 /var/local/verb/configs/sitemailpath
 mv /var/local/verb/configs/sitetldstatus286 /var/local/verb/configs/sitetldstatus
 mv /var/local/verb/configs/siteinstallstatus286 /var/local/verb/configs/siteinstallstatus
+## Ensure scripts are executable
+chmod 750 /var/local/verb/configs/inkcert/*.sh
+chmod 750 /var/local/verb/serfs/*
+chmod 750 /var/local/verb/donjon/*
+chmod 750 /var/local/verb/donjon/repoupdate/*
+chmod 750 /var/local/verb/donjon/wpaddsites/*.wpsh
+
 ## Domain Mod?
 if [ -f "/var/local/verb/inst/domain.mod.conf" ]; then
 sed -i "s/name286/\"DOMAIN_MOD-${baseDOM}\"/g" /var/local/verb/configs/sitenameip
@@ -146,6 +112,7 @@ fi
 sed -i "s/host286/${HNAME}/g" /var/local/verb/configs/sitenameip
 sed -i "s/tld286/${SERVERTLD}/g" /var/local/verb/configs/sitenameip
 sed -i "s/ip286/${SERVERIP}/g" /var/local/verb/configs/sitenameip
+sed -i "s/ipv6286/${SERVERIPV6}/g" /var/local/verb/configs/sitenameip
 sed -i "s/timeregion286/${PHPREGION}/g" /var/local/verb/configs/sitenameip
 sed -i "s/timecity286/${PHPCITY}/g" /var/local/verb/configs/sitenameip
 sed -i "s/updaterepo286/${VUPREPO}/g" /var/local/verb/configs/sitenameip
@@ -155,6 +122,54 @@ sed -i "s/inkcertemail286/${SSLEMAIL}/g" /var/local/verb/configs/inkcert/inkcert
 mv /var/local/verb/configs/sitemailpass286 /var/local/verb/configs/sitemailpass
 mv /var/local/verb/configs/siteufwip286 /var/local/verb/configs/siteufwip
 
+# Site URI List
+## domain.mod?
+if [ -f "/var/local/verb/inst/domain.mod.conf" ]; then
+. /var/local/verb/inst/domain.mod.conf
+echo "#!/bin/sh
+## This is a config file for other verb scripts
+# Site URI List, whether they are active or not
+
+baseDOM=\"${DMODBASE}\"
+nameURI=\"${SERVERTLD}.${DMODBASE}\"
+hostURI=\"${HNAME}.${SERVERTLD}.${DMODBASE}\"
+emailTLDURI=\"${SVMAILTLD}.${DMODBASE}\"
+emailURI=\"email.${DMODBASE}\"
+cityURI=\"city.${DMODBASE}\"
+oneURI=\"one.${DMODBASE}\"
+inkURI=\"ink.${DMODBASE}\"
+blueURI=\"blue.${DMODBASE}\"
+vipURI=\"vip.${DMODBASE}\"
+kiwiURI=\"kiwi.${DMODBASE}\"
+pinkURI=\"pink.${DMODBASE}\"
+redURI=\"red.${DMODBASE}\"
+rocksURI=\"rocks.${DMODBASE}\"
+unoURI=\"uno.${DMODBASE}\"
+" > /var/local/verb/configs/siteurilist
+## Normal verb domains
+else
+echo "#!/bin/sh
+## This is a config file for other verb scripts
+# Site URI List, whether they are active or not
+
+nameURI=\"${VNAME}.verb.${SERVERTLD}\"
+hostURI=\"${HNAME}.${VNAME}.verb.${SERVERTLD}\"
+emailTLDURI=\"${VNAME}.verb.${SVMAILTLD}\"
+emailURI=\"${VNAME}.verb.email\"
+cityURI=\"${VNAME}.verb.city\"
+oneURI=\"${VNAME}.verb.one\"
+inkURI=\"${VNAME}.verb.ink\"
+blueURI=\"${VNAME}.verb.blue\"
+vipURI=\"${VNAME}.verb.vip\"
+kiwiURI=\"${VNAME}.verb.kiwi\"
+pinkURI=\"${VNAME}.verb.pink\"
+redURI=\"${VNAME}.verb.red\"
+rocksURI=\"${VNAME}.verb.rocks\"
+unoURI=\"${VNAME}.verb.uno\"
+" > /var/local/verb/configs/siteurilist
+fi
+. /var/local/verb/configs/siteurilist
+
 # PHP ini file
 mv /var/local/verb/configs/php.name286.ini /var/local/verb/configs/php.${VNAME}.ini
 sed -i "s/phplimit286/${PHPLIMIT}/g" /var/local/verb/configs/php.${VNAME}.ini
@@ -162,94 +177,106 @@ sed -i "s/phpsize286M/${PHPSIZE}M/g" /var/local/verb/configs/php.${VNAME}.ini
 sed -i "s/phptimeregion286/${PHPREGION}/g" /var/local/verb/configs/php.${VNAME}.ini
 sed -i "s/phptimecity286/${PHPCITY}/g" /var/local/verb/configs/php.${VNAME}.ini
 sed -i "s/name286/${VNAME}/g" /var/local/verb/configs/php.${VNAME}.ini
-mv /etc/php/7.0/apache2/php.ini /etc/php/7.0/apache2/php.original.ini
-ln -sfn /var/local/verb/configs/php.${VNAME}.ini /etc/php/7.0/apache2/php.ini
+# Get the current PHP version & set php.ini
+phpNum=$(/var/local/verb/serfs/phpver)
+mv /etc/php/${phpNum}/apache2/php.ini /etc/php/${phpNum}/apache2/php.original.ini
+ln -sfn /var/local/verb/configs/php.${VNAME}.ini /etc/php/${phpNum}/apache2/php.ini
 
 # sites-available
 ## Directories
-chmod -R 755 /var/local/verb/configs/site-files/newdomain.tld
-chmod -R 755 /var/local/verb/configs/site-files/newgurusubdir
-chmod -R 755 /var/local/verb/configs/site-files/newonesubdir
+chmod -R 750 /var/local/verb/configs/site-files/newdomain.tld
+chmod -R 750 /var/local/verb/configs/site-files/newvipsubdir
+chmod -R 750 /var/local/verb/configs/site-files/newonesubdir
 ## Replace
 cp /var/local/verb/inst/config/etc/apache2/sites-available/* /etc/apache2/sites-available/
+sed -i "s/pinkURI286/${pinkURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/emailURI286/${emailURI}/g" /etc/apache2/sites-available/*.conf
+sed -i "s/cityURI286/${cityURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/oneURI286/${oneURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/inkURI286/${inkURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/blueURI286/${blueURI}/g" /etc/apache2/sites-available/*.conf
-sed -i "s/guruURI286/${guruURI}/g" /etc/apache2/sites-available/*.conf
+sed -i "s/vipURI286/${vipURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/kiwiURI286/${kiwiURI}/g" /etc/apache2/sites-available/*.conf
-sed -i "s/pinkURI286/${pinkURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/redURI286/${redURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/rocksURI286/${rocksURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/unoURI286/${unoURI}/g" /etc/apache2/sites-available/*.conf
 ## Rename
+rename "s/pinkURI286/${pinkURI}/" /etc/apache2/sites-available/*.conf
 rename "s/emailURI286/${emailURI}/" /etc/apache2/sites-available/*.conf
+rename "s/cityURI286/${cityURI}/" /etc/apache2/sites-available/*.conf
 rename "s/oneURI286/${oneURI}/" /etc/apache2/sites-available/*.conf
 rename "s/inkURI286/${inkURI}/" /etc/apache2/sites-available/*.conf
 rename "s/blueURI286/${blueURI}/" /etc/apache2/sites-available/*.conf
-rename "s/guruURI286/${guruURI}/" /etc/apache2/sites-available/*.conf
+rename "s/vipURI286/${vipURI}/" /etc/apache2/sites-available/*.conf
 rename "s/kiwiURI286/${kiwiURI}/" /etc/apache2/sites-available/*.conf
-rename "s/pinkURI286/${pinkURI}/" /etc/apache2/sites-available/*.conf
 rename "s/redURI286/${redURI}/" /etc/apache2/sites-available/*.conf
 rename "s/rocksURI286/${rocksURI}/" /etc/apache2/sites-available/*.conf
 rename "s/unoURI286/${unoURI}/" /etc/apache2/sites-available/*.conf
 
 # New site-files
 ## Replace
+sed -i "s/pinkURI286/${pinkURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/emailURI286/${emailURI}/g" /var/local/verb/configs/site-files/conf/*
+sed -i "s/cityURI286/${cityURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/oneURI286/${oneURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/inkURI286/${inkURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/blueURI286/${blueURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/guruURI286/${guruURI}/g" /var/local/verb/configs/site-files/conf/*
+sed -i "s/vipURI286/${vipURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/kiwiURI286/${kiwiURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/pinkURI286/${pinkURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/redURI286/${redURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/rocksURI286/${rocksURI}/g" /var/local/verb/configs/site-files/conf/*
 sed -i "s/unoURI286/${unoURI}/g" /var/local/verb/configs/site-files/conf/*
 ## Rename
+rename "s/pinkURI286/${pinkURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/emailURI286/${emailURI}/" /var/local/verb/configs/site-files/conf/*
+rename "s/cityURI286/${cityURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/oneURI286/${oneURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/inkURI286/${inkURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/blueURI286/${blueURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/guruURI286/${guruURI}/" /var/local/verb/configs/site-files/conf/*
+rename "s/vipURI286/${vipURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/kiwiURI286/${kiwiURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/pinkURI286/${pinkURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/redURI286/${redURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/rocksURI286/${rocksURI}/" /var/local/verb/configs/site-files/conf/*
 rename "s/unoURI286/${unoURI}/" /var/local/verb/configs/site-files/conf/*
 
 # inkCert ini and cron files
 ## Replace
+sed -i "s/pinkURI286/${pinkURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
+sed -i "s/sslemail286/${SSLEMAIL}/g" /var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/nameURI286/${nameURI}/g" /var/local/verb/configs/inkcert/verber-openssl.cnf
 sed -i "s/emailURI286/${emailURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
+sed -i "s/cityURI286/${cityURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/oneURI286/${oneURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/inkURI286/${inkURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/blueURI286/${blueURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/guruURI286/${guruURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
+sed -i "s/vipURI286/${vipURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/kiwiURI286/${kiwiURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/pinkURI286/${pinkURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/redURI286/${redURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/rocksURI286/${rocksURI}/g" //var/local/verb/configs/inkcert/cli-ini/*
 sed -i "s/unoURI286/${unoURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
 ## Rename
+rename "s/pinkURI286/${pinkURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/emailURI286/${emailURI}/" /var/local/verb/configs/inkcert/cli-ini/*
+rename "s/cityURI286/${cityURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/oneURI286/${oneURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/inkURI286/${inkURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/blueURI286/${blueURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/guruURI286/${guruURI}/" /var/local/verb/configs/inkcert/cli-ini/*
+rename "s/vipURI286/${vipURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/kiwiURI286/${kiwiURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/pinkURI286/${pinkURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/redURI286/${redURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/rocksURI286/${rocksURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 rename "s/unoURI286/${unoURI}/" /var/local/verb/configs/inkcert/cli-ini/*
 
 # www start indexes
-/var/local/verb/serfs/updatehtmlverbs
+/var/local/verb/serfs/updatehtmlverbs; wait
 
 # Enable sites
 . /var/local/verb/configs/sitetldstatus
 if [ ${VERBemail}=true ]; then
 a2ensite ${emailURI} email.${emailURI}
+fi
+if [ ${VERBcity}=true ]; then
+a2ensite ${cityURI} city.${cityURI} center.${cityURI}
 fi
 if [ ${VERBone}=true ]; then
 a2ensite ${oneURI} one.${oneURI}
@@ -258,10 +285,10 @@ if [ ${VERBink}=true ]; then
 a2ensite ${inkURI} ink.${inkURI} ask.${inkURI} bb.${inkURI} blog.${inkURI} code.${inkURI} home.${inkURI} pen.${inkURI} shop.${inkURI} sn.${inkURI} wiki.${inkURI}
 fi
 if [ ${VERBblue}=true ]; then
-a2ensite ${blueURI} blue.${blueURI} chat.${blueURI} collabora.${blueURI} nextcloud.${blueURI} owncloud.${blueURI} pydio.${blueURI} seafile.${blueURI} xmpp.${blueURI}
+a2ensite ${blueURI} blue.${blueURI} caldav.${blueURI} carddav.${blueURI} chat.${blueURI} collabora.${blueURI} dav.${blueURI} nextcloud.${blueURI} owncloud.${blueURI} pydio.${blueURI} seafile.${blueURI} webdav.${blueURI} xmpp.${blueURI}
 fi
-if [ ${VERBguru}=true ]; then
-a2ensite ${guruURI} guru.${guruURI} cgi.${guruURI} ftp.${guruURI} files.${guruURI} fossil.${guruURI} net2ftp.${guruURI} repo.${guruURI} sql.${guruURI}
+if [ ${VERBvip}=true ]; then
+a2ensite ${vipURI} vip.${vipURI} cgi.${vipURI} ftp.${vipURI} files.${vipURI} fossil.${vipURI} ldap.${vipURI} net2ftp.${vipURI} repo.${vipURI} sql.${vipURI}
 fi
 if [ ${VERBkiwi}=true ]; then
 a2ensite ${kiwiURI} kiwi.${kiwiURI} ampache.${kiwiURI} art.${kiwiURI} ejabberd.${kiwiURI} gallery.${kiwiURI} media.${kiwiURI} podcast.${kiwiURI} prosody.${kiwiURI} studio.${kiwiURI} voip.${kiwiURI} webrtc.${kiwiURI}
@@ -278,7 +305,7 @@ fi
 if [ ${VERBuno}=true ]; then
 a2ensite ${unoURI} uno.${unoURI}
 fi
-service apache2 reload
+systemctl reload apache2
 
 # Create the new boss user
 adduser ${NEWBOSS} --gecos ",,," --disabled-password
@@ -300,17 +327,84 @@ FLUSH PRIVILEGES;"
 # Host name
 hostname ${HNAME}
 hostnamectl set-hostname ${HNAME}
-service hostname restart
+##DEV this restart causes an "is masked" error and may not be necessary with the mandatory reboot after setupverb
+#systemctl restart hostname
 ## Set /etc/hostname
 echo "${HNAME}" > /etc/hostname
 ## Set /etc/hosts
 sed -i "s/127\.0\.1\.1.*/127\.0\.1\.1 ${hostURI} ${HNAME}\n${SERVERIP} ${hostURI} ${HNAME}/g" /etc/hosts
 sed -i "s/127\.0\.0\.1.*/127\.0\.0\.1 localhost.localdomain localhost/g" /etc/hosts
 
-# Port (set to something to avoid attacks)
-sed -i "s/Port.*/Port ${NEWPORT}/g" /etc/ssh/sshd_config
+# Verber DNS records
+## Include config
+. /var/local/verb/configs/sitenameip
+## Set the namespace, TLD, and IP values
+sed -i "s/hostip286/${SITEIP}/g" /var/local/verb/configs/inkdns/zones/*.db
+sed -i "s/hostip286/${SITEIP}/g" /var/local/verb/configs/inkdns/*.db
+sed -i "s/hostipv6286/${SITEIPV6}/g" /var/local/verb/configs/inkdns/zones/*.db
+sed -i "s/hostipv6286/${SITEIPV6}/g" /var/local/verb/configs/inkdns/*.db
+sed -i "s/sitename286/${SITENAME}/g" /var/local/verb/configs/inkdns/zones/*.db
+sed -i "s/sitename286/${SITENAME}/g" /var/local/verb/configs/inkdns/*.db
+sed -i "s/sitetld286/${SITETLD}/g" /var/local/verb/configs/inkdns/zones/*.db
+sed -i "s/sitetld286/${SITETLD}/g" /var/local/verb/configs/inkdns/*.db
+sed -i "s/nameURI286/${nameURI}/g" /var/local/verb/configs/inkdns/zones/*.db
+sed -i "s/nameURI286/${nameURI}/g" /var/local/verb/configs/inkdns/*.db
+sed -i "s/mailURI286/${nameURI}/g" /var/local/verb/configs/inkdns/*.db
+sed -i "s/mailURI286/${nameURI}/g" /var/local/verb/configs/inkdns/zones/*.db
+
+## Set the FQDN host
+echo "; FQDN Host A Records
+${hostURI}.	IN  A		hostip286
+${hostURI}.	IN  AAAA	hostipv6286
+" >> /var/local/verb/configs/inkdns/zones/${SITETLD}.db
+## Populate the Verber domains
+sed -i "s/hostdomain286/${pinkURI}/g" /var/local/verb/configs/inkdns/zones/pink.db
+sed -i "s/hostdomain286/${emailURI}/g" /var/local/verb/configs/inkdns/zones/email.db
+sed -i "s/hostdomain286/${cityURI}/g" /var/local/verb/configs/inkdns/zones/city.db
+sed -i "s/hostdomain286/${oneURI}/g" /var/local/verb/configs/inkdns/zones/one.db
+sed -i "s/hostdomain286/${inkURI}/g" /var/local/verb/configs/inkdns/zones/ink.db
+sed -i "s/hostdomain286/${blueURI}/g" /var/local/verb/configs/inkdns/zones/blue.db
+sed -i "s/hostdomain286/${vipURI}/g" /var/local/verb/configs/inkdns/zones/vip.db
+sed -i "s/hostdomain286/${kiwiURI}/g" /var/local/verb/configs/inkdns/zones/kiwi.db
+sed -i "s/hostdomain286/${redURI}/g" /var/local/verb/configs/inkdns/zones/red.db
+sed -i "s/hostdomain286/${rocksURI}/g" /var/local/verb/configs/inkdns/zones/rocks.db
+sed -i "s/hostdomain286/${unoURI}/g" /var/local/verb/configs/inkdns/zones/uno.db
+## Set the URI names
+mv /var/local/verb/configs/inkdns/zones/pink.db /var/local/verb/configs/inkdns/zones/${pinkURI}.db
+mv /var/local/verb/configs/inkdns/zones/email.db /var/local/verb/configs/inkdns/zones/${emailURI}.db
+mv /var/local/verb/configs/inkdns/zones/city.db /var/local/verb/configs/inkdns/zones/${cityURI}.db
+mv /var/local/verb/configs/inkdns/zones/one.db /var/local/verb/configs/inkdns/zones/${oneURI}.db
+mv /var/local/verb/configs/inkdns/zones/ink.db /var/local/verb/configs/inkdns/zones/${inkURI}.db
+mv /var/local/verb/configs/inkdns/zones/blue.db /var/local/verb/configs/inkdns/zones/${blueURI}.db
+mv /var/local/verb/configs/inkdns/zones/vip.db /var/local/verb/configs/inkdns/zones/${vipURI}.db
+mv /var/local/verb/configs/inkdns/zones/kiwi.db /var/local/verb/configs/inkdns/zones/${kiwiURI}.db
+mv /var/local/verb/configs/inkdns/zones/red.db /var/local/verb/configs/inkdns/zones/${redURI}.db
+mv /var/local/verb/configs/inkdns/zones/rocks.db /var/local/verb/configs/inkdns/zones/${rocksURI}.db
+mv /var/local/verb/configs/inkdns/zones/uno.db /var/local/verb/configs/inkdns/zones/${unoURI}.db
+## Serial Nos
+### Notify the user that this takes a moment...
+echo "This takes a few moments on purpose, about 1 second per domain. Don't be alarmed at all..."
+cd /var/local/verb/configs/inkdns/zones
+for f in *.db; do
+/var/local/verb/serfs/inkdnsserial ${f%.db}
+done
+
+# Firewall
+apt install -y ufw
+## Set for IPV6 (should be set already, but just to be sure)
+sed -i "s/IPV6=.*/IPV6=yes/g" /etc/default/ufw
+## Port (set to something to avoid attacks)
+sed -i "/Port.*/ c\Port ${NEWPORT}" /etc/ssh/sshd_config
 ufw allow ${NEWPORT}
-sed -i "s/SITEPORT.*/SITEPORT=${NEWPORT}/g"  /var/local/verb/configs/siteport
+sed -i "/SITEPORT.*/ c\SITEPORT=${NEWPORT}" /var/local/verb/configs/siteport
+## Reset settings
+ufw allow ssh
+ufw allow http
+ufw allow https
+ufw allow ftp
+
+# File permissions for configs
+chmod o-rwx -R /var/local/verb/configs
 
 # Instructions
 ######################### FIX inkCert instructions #########################
@@ -328,7 +422,7 @@ If you choose to set up email before doinkcert, you will need to make an Advance
 
 You should reboot the server now using:
 
-sudo reboot
+reboot
 
 Then, for SSH,
 
@@ -339,12 +433,12 @@ OR for password with the new boss user,
 login using: 'ssh ${NEWBOSS}@${SERVERIP} -p ${NEWPORT}'
 "
 
-# File permissions for configs
-chmod o-rw -R /var/local/verb/configs
-
-# Delete this one-time script
+# Cleanup
 rm -f /var/local/verb/serfs/setupverb
 rm -f /var/local/verb/inst/setupverb
 rm -f /var/local/verb/inst/preverboff
 rm -f /var/local/verb/inst/preverbon
+rm -f /var/local/verb/inst/make-dommod
+ufw --force enable
+systemctl restart sshd
 

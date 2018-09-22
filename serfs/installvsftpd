@@ -1,9 +1,9 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
-# This installs vsftpd and prepares it for use according to newftpguru, delftpguru, newftpfiler, and delftpfiler scripts
-# This is a prereqisite for ftpgurus and ftpfilers and net2ftp
+# This installs vsftpd and prepares it for use according to newftpvip, delftpvip, newftpfiler, and delftpfiler scripts
+# This is a prereqisite for ftpvips and ftpfilers and net2ftp
 
 ## THIS HAS EXPIRIMENTAL LINES. Remove commented lines if it works.
 
@@ -54,11 +54,11 @@ usermod -d /srv/vsftpd/ftp ftp
 
 # Start the service
 ## This is expirimental
-service vsftpd start
+systemctl start vsftpd
 
 # Restart
 ## Former is commented, new is expirimental and may be redundant
-service vsftpd restart
+systemctl reload vsftpd
 #restart vsftpd
 
 # Set the firewall to allow the site port

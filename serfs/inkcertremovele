@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This script ininstalls the Apache credentials for inkCert-Letsencrypt certs for a domain and replaces the Snakeoil certificate
 ## It also applies to all subdomains for that domain
@@ -23,14 +23,14 @@ echo "Removing inkCert-LE configs from ${DOMAIN}..."
 else
  if grep -Fq "#INKVERB-INKCERT=DONE_IC" /etc/apache2/sites-available/${DOMAIN}.conf ; then
  echo "Apache configs use inkCert Proper. Use: inkcertremove"
- exit 22
+ exit 8
  else
   if grep -Fq "#INKVERB-INKCERT=NO" /etc/apache2/sites-available/${DOMAIN}.conf ; then
   echo "inkCert certs aren't setup. Nothing to do."
   exit 0
   else
   echo "Something's really wrong. No inkCert, no non-inkCert either. I quit."
-  exit 66
+  exit 6
   fi
  fi
 fi
@@ -43,13 +43,14 @@ if [ ! -d /etc/inkcert/le/live/${DOMAIN} ]; then
 sed -i "s/#INKVERB-INKCERT-COMMENT-SSLCertificateFile/SSLCertificateFile/g" /etc/apache2/sites-available/${DOMAIN}.conf
 sed -i "s/#INKVERB-INKCERT-COMMENT-SSLCertificateKeyFile/SSLCertificateKeyFile/g" /etc/apache2/sites-available/${DOMAIN}.conf
 
-## Remove the inkCert cert configs
-sed -i "s/#INKVERB-INKCERT=DONE_LE\n\t\tSSLCertificateFile\t\/etc\/inkcert\/live\/${DOMAIN}\/cert\.pem\n\t\tSSLCertificateKeyFile\t\/etc\/inkcert\/live\/${DOMAIN}\/privkey\.pem\n\t\tSSLCertificateChainFile\t\/etc\/inkcert\/live\/${DOMAIN}\/chain\.pem/#INKVERB-INKCERT=NO_REMOVED_LE/g" /etc/apache2/sites-available/${DOMAIN}.conf
+## Remove the inkCert cert liness
+sed -i '/^#INKVERB-INKCERT=DONE_LE/,/^#INKVERB-INKCERT-stop/{/^#INKVERB-INKCERT=DONE_LE/!{/^#INKVERB-INKCERT-stop/!d}}' /etc/apache2/sites-available/${DOMAIN}.conf
+sed -i '/#INKVERB-INKCERT=DONE_LE/#INKVERB-INKCERT=INK_REMOVED/' /etc/apache2/sites-available/${DOMAIN}.conf
+sed -i '/#INKVERB-INKCERT-stop/d' /etc/apache2/sites-available/${DOMAIN}.conf
+apache2ctl graceful
 
-service apache2 restart
-
-echo "#!/bin/sh
-INKCERT=NO_REMOVED_LE" > /var/local/verb/configs/inkcert/cli-ini/siteinkcert.${DOMAIN}
+## Note to the config
+sed -i "s/INKCERTED=DONE_LE/INKCERT=NO_REMOVED_LE/" /var/local/verb/configs/inkcert/cli-ini/siteinkcert.${DOMAIN}
 
 # Finish
 echo "inkCert has been uninstalled from ${DOMAIN}. Using Snakeoil certs."

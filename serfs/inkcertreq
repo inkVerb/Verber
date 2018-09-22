@@ -1,6 +1,6 @@
 #!/bin/bash
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This requests and gets certs via inkCert Proper for a given domain, including inkVerb namespace domains
 ## It applies only to one domain/subdomain at a time
@@ -52,7 +52,7 @@ fi
 # Include and check the inkCert domain config
 . /var/local/verb/configs/inkcert/cli-ini/siteinkcert.${DOMAIN}
 if [ "${INKCERTED}" = "DONE_IC" ]; then
- if [ $2 = "r" ]; then
+ if [ "$2" = "r" ]; then
 echo "Refreshing inkCert Proper certs to include any subdomains of ${DOMAIN} since the last renewal. Don't do this too often."
  else
 
@@ -76,7 +76,7 @@ fi
 
 # Check for verb domain and status
 ## If verb domain was spelled correctly
-if [[ "${DOMAIN}" =~ ".verb.email" ]] || [[ "${DOMAIN}" =~ ".verb.one" ]] || [[ "${DOMAIN}" =~ ".verb.ink" ]] || [[ "${DOMAIN}" =~ ".verb.blue" ]] || [[ "${DOMAIN}" =~ ".verb.guru" ]] || [[ "${DOMAIN}" =~ ".verb.kiwi" ]] || [[ "${DOMAIN}" =~ ".verb.red" ]] || [[ "${DOMAIN}" =~ ".verb.rocks" ]]; then
+if [[ "${DOMAIN}" =~ ".verb.email" ]] || [[ "${DOMAIN}" =~ ".verb.one" ]] || [[ "${DOMAIN}" =~ ".verb.ink" ]] || [[ "${DOMAIN}" =~ ".verb.blue" ]] || [[ "${DOMAIN}" =~ ".verb.vip" ]] || [[ "${DOMAIN}" =~ ".verb.kiwi" ]] || [[ "${DOMAIN}" =~ ".verb.red" ]] || [[ "${DOMAIN}" =~ ".verb.rocks" ]]; then
  if [[ "${DOMAIN}" != *"${SITENAME}"* ]]; then
 echo "
 Problem: You might have spelled ${DOMAIN} wrong.
@@ -103,6 +103,11 @@ if [ "${DOMAIN}" = "${emailURI}" ]; then
   verbtld_is_off
  fi
 fi
+if [ "${DOMAIN}" = "${cityURI}" ]; then
+ if [[ "${VERBcity}" != true ]]; then
+  verbtld_is_off
+ fi
+fi
 if [ "${DOMAIN}" = "${oneURI}" ]; then
  if [[ "${VERBone}" != true ]]; then
   verbtld_is_off
@@ -118,8 +123,8 @@ if [ "${DOMAIN}" = "${blueURI}" ]; then
   verbtld_is_off
  fi
 fi
-if [ "${DOMAIN}" = "${guruURI}" ]; then
- if [[ "${VERBguru}" != true ]]; then
+if [ "${DOMAIN}" = "${vipURI}" ]; then
+ if [[ "${VERBvip}" != true ]]; then
   verbtld_is_off
  fi
 fi
@@ -158,7 +163,7 @@ fi
 
 # Verify the certs
 if [ ! -d /etc/inkcert/live/${DOMAIN} ]; then
-echo "Big error! Unable to get the certs from the cert authority. Can't continue."; exit 44
+echo "Big error! Unable to get the certs from the cert authority. Can't continue."; exit 4
 fi
 
 # Finish

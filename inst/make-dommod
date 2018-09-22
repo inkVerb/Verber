@@ -13,7 +13,7 @@
 # Check variables
 if [ -z "$1" ]; then
 echo "Set the domain, genius. That's the whole point."
-exit 22; fi
+exit 8; fi
 
 DOMMODBASE=$1
 

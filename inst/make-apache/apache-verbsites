@@ -7,14 +7,14 @@
 ## ./apache-verbsites
 
 # Make executable by typing:
-## chmod +x apache-verbsites
+## chmod ug+x apache-verbsites
 
 # Config files not created because they are unique:
 ## email email.email email.boxes email.rc
 ## one one.one 
 ## ink ink.ink
 ## blue blue.blue blue.owncloud blue.owncloud blue.pydio 
-## guru guru.guru guru.cgi  guru.fossil  guru.repo
+## vip vip.vip vip.cgi  vip.fossil  vip.repo
 ## kiwi kiwi.kiwi
 ## pink pink.pink
 ## red red.red
@@ -30,10 +30,10 @@ sh ./makepreverbsub ink home
 sh ./makepreverbsub ink shop
 sh ./makepreverbsub ink sn
 sh ./makepreverbsub ink wiki
-sh ./makepreverbsub guru files
-sh ./makepreverbsub guru ftp
-sh ./makepreverbsub guru mysql
-sh ./makepreverbsub guru net2ftp
+sh ./makepreverbsub vip files
+sh ./makepreverbsub vip ftp
+sh ./makepreverbsub vip mysql
+sh ./makepreverbsub vip net2ftp
 sh ./makepreverbsub red act
 sh ./makepreverbsub kiwi ampache
 sh ./makepreverbsub kiwi art

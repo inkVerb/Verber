@@ -28,9 +28,22 @@ This has a few advantages to the webmaster, saves money, and pays the bills.
 
 ## Installation:
 
-1. DNS, domains, IP address
+1. DNS, domains, IP address, port, ssh
 	i. Point nameservers to NS1.DIGITALOCEAN.COM NS2.DIGITALOCEAN.COM NS3.DIGITALOCEAN.COM
-	ii. Set name subdomains for server IP: NAME.verb.ink NAME.verb.one NAME.verb.email NAME.verb.blue NAME.verb.guru NAME.verb.kiwi NAME.verb.red
+	ii. Set name subdomains for server IP: NAME.verb.ink NAME.verb.one NAME.verb.email NAME.verb.blue NAME.verb.vip NAME.verb.kiwi NAME.verb.red
+	iii. Set the port and ssh logins (for digitalocean)
+		- Create ssh keys, two ways:
+			1. `ssh-keygen -t rsa -f ~/.ssh/SOME_NAME_YOU MAKE` (passphrase if you want to enter it every time)
+			2. Use vrk: `ssh-craft-key SOME_NAME_YOU MAKE`
+		- Set up your droplet with ssh keys, which you must)
+		- Your-Droplet > Access > <Reset Root Password>, get it from your email...
+		- `ssh root@DROPLETIPADDRESS` (do the password thing, answer 'yes' if asked about establishing authenticity of a host IP key fingerprint and if you're sure you want to continue)
+		- `nano /etc/ssh/sshd_config` "Port 5555" (for example)
+		- ssh-only setup, two ways:
+			1. `nano /etc/ssh/sshd_config` "PermitRootLogin without-password" (only if you set up the ssh keys in digitalocean, which you should)
+			2. Use vrk:
+				a. `ssh-add-key [surfer (server nickname)] [SSH_keyname] [server-password]` (only if you did not add the ssh keys in digitalocean)
+				b. `ssh-keyportserver [surfer (server nickname)] [server-password] [new-port (optional)]`
 
 2. Copy or git the Verber/verb directories to /var/local/verb
 	`cd /var/local`
@@ -38,7 +51,7 @@ This has a few advantages to the webmaster, saves money, and pays the bills.
 
 3. Run the scripts
 	`cd /var/local/verb/inst`
-	i. `./make-verber-preserver [ ssh port ]`    # prepares the server, mainly for locale
+	i. `./make-verber-preserver`    # prepares the server, mainly for locale
 		* Follow in-file instructions, has optional parameters, reboot
 		* Choose "y" or "Yes" when prompted
 		* Locale setup may ask for settings, defaults should be okay, US-English is usually the goal.
@@ -52,9 +65,9 @@ At this point you can install the mail server...
 	iv. `installemail` (unless skipping number 4)
 
 4. Setup PostFixAdmin and RoundCube
-	i. boxes.NAME.verb.email/setup.php
-	ii. Login to boxes.NAME.verb.email
-		* Add NAME.verb.ink domain (no other verb domains will work)
+	i. pfa.NAME.verb.email/setup.php
+	ii. Login to pfa.NAME.verb.email
+		* Add NAME.verb.ink domain (no other verb domains will work if ink is the main server)
 		* Create at least one email inbox for RoundCube installation
 	iii. rc.NAME.verb.email/installer
 		* After, removed the "installer", run: postinstallrc
@@ -89,6 +102,8 @@ At this point you can install the mail server...
 
 ## Note on Updates
 Note: Update version numbers reference the framework. Ongoing updates continue for the serfs, etc job scripts. Framework needs rated, sequential alteration, which is why "version" numbers apply to them. Any update will update job scripts, regardless of the current version number.
+
+The "repo" update list at verb/configs/inklists/repoverlist is updated with each update. To customise this, refer to repolinks in the same directory for versions and hashes, and run setrepocust to have your changes stick.
 
 ## File Structure Basics (for geeks and Star Trek fans)
 ### Note that terms like "serf" and "donjon" and others use categories that are consistent with each other, but won't conflict with other programming categories, for both art and clarity.
@@ -141,7 +156,7 @@ II. "Serfs" (in the 'serfs' directory) are bash scripts that do the chores of th
 		3. Apps namespace appears in config files, vaps/APP directories, install serfs, etc. They are NOT listed anywhere, you have to just notice them.
 	J. Serfs names
 		1. Sefs tend to have unified "surnames" at the front of each surf's name so they sort by: task - app - mod |or| app - task - mod
-		2. Serfs are surnamed this way to keep larger groups organized, usually depending on which surname would be more common
+		2. Serfs are surnamed this way to keep larger groups organized, usually depending on which surname would be more common. This is used by yeo.
 		3. Serfs only use az09 characters so that APIs and terminal power-users can input them easily, they are not intended for noob humans looking them up as if in a phonebook, though, they do cluster somewhat alphabetically to help humans.
 		4. Instructions for serfs exist in each file. THEY ARE NOT NOOB-PROOF! You could destroy your server system if you use a serf incorrectly. Read each file's instructions carefully before using from the command prompt.
 		   * Serfs do not and never will have error-check/help functions and they use sh wherever possible; this is to keep their load and size small. Few (usually inkcert) use functions or bash rather than sh because the alternative would have made the files much larger.
@@ -192,27 +207,27 @@ VI. tools contains common files and special root Serfs and Knights needed for in
 
 VII. Special user services and folders
 	A. Guru
-		1. Guru users are often known as "ftpgurus" created by newftpguru, sharing the srv/guru folder as "home", granting wide access to all other users' spaces
-		2. Guru governs many other special users and folders for FTP, web control, directly managing files for "gurudomains" via the Serf adddomainguru or adddomainfiler
+		1. Guru users are often known as "ftpvips" created by newftpvip, sharing the srv/vip folder as "home", granting wide access to all other users' spaces
+		2. Guru governs many other special users and folders for FTP, web control, directly managing files for "vipdomains" via the Serf adddomainvip or adddomainfiler
 		3. Guru has a direct link into an boss user's home folder, along side serfs and possibly others
-		4. Note the "guru" folder is in srv/guru, with a symlink to /var/www/guru
+		4. Note the "vip" folder is in srv/vip, with a symlink to /var/www/vip
 	B. Jailkit
 		1. Jailkit is considered part of inkNet, with two Serfs: inknetinstalljailkit and inknetaddjailkituser (used by inknetadd Vrk/Verber serfs)
 		2. Jailkit's Serfs can operate and create users that operate independently of inkNet, but it is only used by inkVerb for inkNet intra-verber communication
 		3. Jailkit users have access to "tools", 
-		4. Jailkit's jail is in the srv/guru/ folder, giving Filegurus access to all Jailkit users, as well as the boss
+		4. Jailkit's jail is in the srv/vip/ folder, giving Filevips access to all Jailkit users, as well as the boss
 	C. VSFTP
-		1. VSFTP creates "files", "filegurus", and "ftpusers". See: newftpfiler, newftpguru, and newftpuser for details
+		1. VSFTP creates "files", "filevips", and "ftpusers". See: newftpfiler, newftpvip, and newftpuser for details
 		2. A "domainfiler" is a VSFTP user with access to a hosted domain's folder
 		3. The "_filecabinet" is a global folder shared by "ftpfilers", but not available to ftpusers
-		4. VSFTP's main directory is srv/guru, with some subdirectories for users
+		4. VSFTP's main directory is srv/vip, with some subdirectories for users
 	D. Fossil
 		1. Fossil can create a user specific to a fossil via the Serf: newfossiluser
 		2. Fossil users are not a real user on the system, but uses a Serf to be created.
-		3. Fossil's folder is in srv/guru
+		3. Fossil's folder is in srv/vip
 	E. Bosses
 		1. Bosses are sudoers, but also have special folders via the "verb/boss" box
-		2. The "boss box" includes guru, tools, serfs, and Inker knights (if Inker is installed)
+		2. The "boss box" includes vip, tools, serfs, and Inker knights (if Inker is installed)
 		3. Bosses do not have direct access to config files in their home folders
 		4. The "boss box" is at local/verb/boss, but boss home folders are in home/
 
@@ -233,14 +248,15 @@ IX. Other notes
 	A. Exit codes from bash scripts
 		1. Scripts are ordered to minimize damage if exited from an error. WordPress, for example, will finish the basic install requirements before attempting a plugin download.
 		2. Note: All bash scropts have a "set -e" declaration, so included scripts that exit other than 0 will abort the entire process. Here are some codes:
-		- 0  - non-fatal exit
-		- 11 - already installed dilemma ('already installed' reports 11 only if it would cause a problem to continue, this is a mass-exit to avoid conflict. A benign 'already installed' will exit 0)
-		- 22 - unmet dependency (the basic 'do your homework' message: something else should have been done first, but can't be complete automatically)
-		- 33 - aborted by user at prompt (changed mind, didn't type 'yes', etc.)
-		- 44 - failed attempt, such as a file not downloaded or login credentials rejected, thus cannot proceed
-		- 55 - unmet credentials (ie variables for a bash script are incomplete or incorrect)
-		- 66 - catostrophic error (something is wrong that shouldn't be possible, such as a script is messed up or something was changed manually-incorrectly)
-		- 77 - depreciated (you are running a version of something too old)
+		- 0 - non-fatal exit
+		- 1 - used by Linux
+		- 2 - used by Linux
+		- 3 - aborted by user at prompt (changed mind, didn't type 'yes', etc.)
+		- 4 - failed attempt, such as a file not downloaded or login credentials rejected, thus cannot proceed
+		- 5 - unmet credentials (ie variables for a bash script are incomplete or incorrect)
+		- 6 - catostrophic error (something is wrong that shouldn't be possible, such as a script is messed up or something was changed manually-incorrectly)
+		- 7 - already installed dilemma ('already installed' reports 7 only if it would cause a problem to continue, this is a mass-exit to avoid conflict. A benign 'already installed' will exit 0)
+		- 8 - unmet dependency (the basic 'do your homework' message: something else should have been done first, but can't be complete automatically)
 	B. If statements, checks, and inclusions
 		1. Scripts are organized to keep file size small and to standardize system-wide jobs, not to be fool-proof for lazy programming or new users.
 		2. Many "if" checks and "usage" messages could be included in serfs, but are not because the user should more or less know what he is doing. Such errors will be in yoemen for easier command line use and a GUI.

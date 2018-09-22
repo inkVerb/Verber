@@ -12,7 +12,7 @@
 ## After running, the sites-available directory will be created, containing the output for development purposes
 
 # Make executable by typing:
-## chmod +x makepreverbsub
+## chmod ug+x makepreverbsub
 
 
 TLD=$1

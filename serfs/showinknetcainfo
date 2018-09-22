@@ -1,6 +1,6 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This displays the inkNet CA info to be used by a Client by inknetmakeverberclient
 
@@ -17,13 +17,13 @@ if [ -f /var/local/verb/configs/inknet/ca.verber.cnf ]; then
  echo "This is not a CA. No info to show.
 First run: inknetmakeca
 "
- exit 22
+ exit 8
  fi
 else
 echo "This is not a CA. No info to show.
 First run: inknetmakeca
 "
-exit 22
+exit 8
 fi
 
 # Include the config

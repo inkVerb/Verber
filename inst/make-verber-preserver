@@ -3,53 +3,27 @@
 
 # This prepares the early settings for the name286.verb.ink or custom Domain Mod server necessary to make the Verber
 ## This currently takes no parameters
-## The expirimental IP address limit may be configured via uncomment
 ## The basic purpose is to add the universe repo and configure locale in preparation for make-verber
 
 # How to use:
-## ./make-verber-preserver [MY_IP_ADDRESS - optional for firewall allow-only]
+## ./make-verber-preserver
 
 # Eg:
 ## ./make-verber-preserver
-## ./make-verber-preserver 129.86.777.1
-
-
-## For special IP uncomment:
-#MY_IP_ADDRESS=$2
 
 
 # Directory check
 if [ ! -d "/var/local/verb" ]; then
 echo "Put the verb directory at /var/local/verb first, then try again."
-exit 22; fi
-
-# Make scripts executable
-chmod +x /var/local/verb/inst/configs/inkcert/*.sh
-chmod +x /var/local/verb/serfs/*
-chmod +x /var/local/verb/donjon/*
+exit 8; fi
 
 # Since we're starting our work, give root the verb link now: save time right at the next login :-)
 ln -s /var/local/verb /root/
 ln -s /var/local/verb/inst/make-verber /var/local/verb/serfs/
 
-# Firewall
-apt install -y ufw
-## Set for IPV6 (OPTIONAL)
-#sed -i "s/IPV6.*/IPV6=yes/g" /etc/default/ufw
-## Reset settings
-ufw allow ssh
-ufw enable
-ufw allow http
-ufw allow https
-ufw allow ftp
-
-# For special IP uncomment:
-#ufw allow from ${MY_IP_ADDRESS}
-#/var/local/verb/serfs/setufwip ${MY_IP_ADDRESS}
-
 # Local
-locale-gen en_US en_US.UTF-8 de_AT.UTF-8
-dpkg-reconfigure locales
+locale-gen en_US en_US.UTF-8
+#dpkg-reconfigure locales # This broke the installer with a dialog
 ## Set up locality
 echo "LANG="en_US.UTF-8"
 LANGUAGE="en_US:en"
@@ -69,12 +43,14 @@ LC_MEASUREMENT="en_US.UTF-8"
 add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
 apt update
 apt upgrade -y
+dpkg --configure -a
+apt autoremove -y
 
 # Restart Server and reconnect at the new port
 echo "
 Pre-install is finished and is ready to run make-verber.
 
-Run: sudo reboot
+Run: reboot
 
 Then log back onto the server to run make-verber.
 "

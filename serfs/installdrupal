@@ -1,13 +1,13 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This downloads and installs WordPress as a vapp with www/html/DOMAIN.TLD link from newdomain
 ## Drupal actually resides in www/vapps/drupal.DOMAIN.TLD
 ## This progression is necessary to: 1. keep track of domain contents in www/domains and 2. use standard structure for backups
-## This does not remove any files an ftpguru may have uploaded to the domain's folder
+## This does not remove any files an ftpvip may have uploaded to the domain's folder
 ## Any files conflicting with Drupal will be replaced by the new Drupal installation created by this script
-## Because Drupal is high-maintenance on the developer end, the domain becomes a guru domain and is linked for ftp access in guru/_domains
+## Because Drupal is high-maintenance on the developer end, the domain becomes a vip domain and is linked for ftp access in vip/_domains
 
 # All options after the domain are optional, but are sequential
 
@@ -32,21 +32,21 @@ CLEANNAME=$(echo $DOMAIN | sed -e 's/\.//g')
 
 # Check if already installed
 ## Config
-if [ -f /var/local/verb/configs/verbapp.${CVAPPNAME}.${DOMAIN} ]; then
+if [ -f /var/local/verb/configs/vapp.${CVAPPNAME}.${DOMAIN} ]; then
 echo "This is already installed."
 exit 0; fi
 ## Directory
 if [ -d /var/www/vapps/${CVAPPNAME}.${DOMAIN} ]; then
 echo "That Drupal site already exists in the system. If it isn't working, look deeper on the server. For now, doing nothing."
-exit 22; fi
+exit 8; fi
 
 # Verify that a domain is specified
-if [ -z $1 ]; then
+if [ -z ${1} ]; then
 echo "You must designate a domain."
-exit 22; fi
+exit 8; fi
 
 # Audo Drupal distro
-if [ -z $2 ]; then
+if [ -z ${2} ]; then
 DD="CURRENT_INK_REPO"; fi
 
 # If Drupal version set to "current"
@@ -54,11 +54,11 @@ if [ "$2" = "current" ]; then
 DD="CURRENT_INK_REPO"; fi
 
 # Auto database
-if [ -z $5 ]; then
+if [ -z ${5} ]; then
 DBPASSWORD=$(pwgen -s -1 10); fi
-if [ -z $3 ]; then
+if [ -z ${3} ]; then
 DBASE=drupal$(echo $CLEANNAME | cut -c1-20)$(pwgen -s -1 6); fi
-if [ -z $2 ]; then
+if [ -z ${2} ]; then
 DBUSER=${DBASE}; fi
 
 # Distro settings
@@ -187,14 +187,14 @@ else
  wget https://ftp.drupal.org/files/projects/${DRUPALFILE}.zip
  if [ ! -f ${DRUPALFILE}.zip ]; then
  echo "Can't download Drupal. I quit."
- exit 44; fi
+ exit 4; fi
  unzip ${DRUPALFILE}.zip
  rm -f ${DRUPALFILE}.zip
  mv ${DRUPALFILE} ${CVAPPNAME}.${DOMAIN}
 fi
 rm -f /var/www/html/${DOMAIN}
 ln -sfn /var/www/vapps/${CVAPPNAME}.${DOMAIN} /var/www/html/${DOMAIN}
-ln -sfn /var/www/vapps/${CVAPPNAME}.${DOMAIN} /srv/guru/_webapps/
+ln -sfn /var/www/vapps/${CVAPPNAME}.${DOMAIN} /srv/vip/_webapps/
 chown -R www-data:www-data /var/www/html/${DOMAIN}
 chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}.${DOMAIN}
 
@@ -208,7 +208,7 @@ FLUSH PRIVILEGES;"
 echo "#!/bin/sh
 APPDBASE=${DBASE}
 APPDDBUSR=${DBUSER}
-APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/verbapp.${CVAPPNAME}.${DOMAIN}
+APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/vapp.${CVAPPNAME}.${DOMAIN}
 
 # Reset all permissions
 chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}.${DOMAIN}
@@ -221,7 +221,7 @@ Database name: ${DBASE}
 Database username: ${DBUSER}
 Database password: ${DBPASSWORD}
 
-You also have ftp access to the folder in: guru/_domains/${DOMAIN}
+You also have ftp access to the folder in: vip/_domains/${DOMAIN}
 
 Go to http://${DOMAIN} to install.
 "

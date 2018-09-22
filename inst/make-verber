@@ -13,23 +13,39 @@
 ## Should the MySQL root password become necessary it is a headache if lost. Hence, it is saved in this one location and you don't need to keep track of it.
 
 # How to use:
-## ./make-verber [swap-size, choose GB: 1, 2, 4, 8, 16, 32, 64] [mysql root password - optional]
+## ./make-verber [swap-size, choose GB: 1, 2, 4, 8, 16, 32, 64 - optional (2 default, must be set for root password)] [mysql root password - optional]
 
 # Eg:
 ## ./make-verber 1 mysqlrootpass
-## ./make-verber 4 1620roots
+## ./make-verber 4
 ## ./make-verber 2 chewcud62
 
+
+# Good housekeeping
+chmod 750 /var/local/verb/serfs/*
+
+# Install in small groups to avoid breaking
 
 # Install pwgen
 apt install -y pwgen
 
-SWAPSIZEMAKE=$1
-MYSQLBOSSPASS=$(pwgen -s -1 10)
-if [ -z "$2" ]; then
+# Install zip
+apt install -y zip unzip
+
+# Install tools
+apt install -y rename
+
+if [ -z "$1" ]; then
+SWAPSIZEMAKE="2"
 MYSQLPASS=$(pwgen -0 -1 -A -B 11)
 else
-MYSQLPASS=$2
+SWAPSIZEMAKE=$1
+MYSQLBOSSPASS=$(pwgen -s -1 10)
+ if [ -z "$2" ]; then
+ MYSQLPASS=$(pwgen -0 -1 -A -B 11)
+ else
+ MYSQLPASS=$2
+ fi
 fi
 
 # Verify SSH Directory
@@ -39,21 +55,22 @@ mkdir .ssh
 fi
 
 # Swap
-/var/local/verb/serfs/setswapsize ${SWAPSIZEMAKE}
+/var/local/verb/serfs/setswapsize ${SWAPSIZEMAKE}; wait
+## Enable swap at next startup
+echo "/var/swap.img    none    swap    sw    0    0" >> /etc/fstab
 
-# Snakeoil Cert
+# Snakeoil install
 apt install -y ssl-cert
-make-ssl-cert generate-default-snakeoil --force-overwrite
 
 # Link serfs & tools to boss box
-ln -s /var/local/verb/serfs /var/local/verb/boss/
-ln -s /var/local/verb/tools /var/local/verb/boss/
+ln -sfn /var/local/verb/serfs /var/local/verb/boss/
+ln -sfn /var/local/verb/tools /var/local/verb/boss/
 
 # Link setupverb to serfs
-ln -s /var/local/verb/inst/setupverb /var/local/verb/serfs/
+ln -sfn /var/local/verb/inst/setupverb /var/local/verb/serfs/
 
 # Link verb to root home
-ln -s /var/local/verb /root/
+ln -sfn /var/local/verb /root/
 
 # Record the MySQL root password
 echo "${MYSQLPASS}" > /var/local/verb/inst/mysqlrootpassword
@@ -61,19 +78,30 @@ echo "${MYSQLPASS}" > /var/local/verb/inst/mysqlrootpassword
 # LAMP Server
 apt update
 apt upgrade -y
+dpkg --configure -a
+apt autoremove -y
 ## Set up MySQL password on install before installing LAMP stack
 echo "mysql-server mysql-server/root_password password ${MYSQLPASS}" | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password ${MYSQLPASS}" | debconf-set-selections
 #apt -y install mysql-server
 ## Continue with LAMP Server
 apt install -y lamp-server^
+## Get mcrypt to work as of PHP 7.2
+apt install -y php-dev gcc make autoconf libc-dev pkg-config
+####### mcrypt suspended for testing ###
+#apt install -y \
+#  libmcrypt-dev \
+#  libreadline-dev
+#### Skip the pecl prompt with a new line
+#printf "\n" | pecl install mcrypt-1.0.1
+####### mcrypt ##########################
+## PHP extras
 apt install -y \
-  php7.0-mcrypt \
-  php7.0-curl \
-  php7.0-gd \
-  php7.0-mbstring \
+  php-curl \
+  php-gd \
+  php-mbstring \
   php-apcu \
-  php-xml-parser
+  php-xml
 
 # MySQL conf for Postfix Admin
 echo "##### Added by inkVerb ######
@@ -84,9 +112,11 @@ sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AU
 " >> /etc/mysql/mysql.conf.d/mysqld.cnf
 service mysql restart
 
+# Stop using this to see how everything works
 # Use OpenSSL to create a unique Diffie-Helman Group file (security)
-openssl dhparam -out /etc/ssl/private/dhparams.pem 2048
-chmod 600 /etc/ssl/private/dhparams.pem
+#openssl dhparam -out /etc/ssl/private/dhparams.pem 2048
+#Bug? This is only temporary anyway
+#chmod 600 /etc/ssl/private/dhparams.pem
 
 # Apache
 cp /var/local/verb/inst/config/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/
@@ -94,20 +124,21 @@ cp /var/local/verb/inst/config/etc/apache2/sites-available/default-ssl.conf /etc
 cp /var/local/verb/inst/config/etc/apache2/sites-available/* /etc/apache2/sites-available/
 cp /var/local/verb/inst/config/etc/apache2/mods-available/ssl.conf /etc/apache2/mods-available/
 cp /var/local/verb/inst/config/etc/apache2/conf-available/security.conf /etc/apache2/conf-available/
-a2enmod deflate expires headers rewrite ssl && a2ensite 000-default default-ssl && service apache2 restart
+cp -r /var/local/verb/inst/configs/conflab/html/0sitedefaultInProgress /var/www/html/
+cp -r /var/local/verb/inst/configs/conflab/html/0sitedefaultInProgress /var/www/html/vsslsitedefault
+a2enmod deflate expires headers rewrite ssl && a2ensite 000-default default-ssl && apache2ctl graceful
 
-
-## Create vsftp web mod directories for guru
-mkdir /srv/guru
-mkdir /srv/guru/_domains
-mkdir /srv/guru/_filecabinet
-mkdir /srv/guru/filers
-mkdir /srv/guru/files
-mkdir /srv/guru/repo
-mkdir /srv/guru/_webapps
-mkdir /srv/guru/_subs.guru
-ln -s /srv/guru /var/www/
-ln -s /srv/guru /var/local/verb/boss/
+## Create vsftp web mod directories for vip
+mkdir /srv/vip
+mkdir /srv/vip/_domains
+mkdir /srv/vip/_filecabinet
+mkdir /srv/vip/filers
+mkdir /srv/vip/files
+mkdir /srv/vip/repo
+mkdir /srv/vip/_webapps
+mkdir /srv/vip/_subs.vip
+ln -s /srv/vip /var/www/
+ln -s /srv/vip /var/local/verb/boss/
 ## And the domains directory for hosted domains
 mkdir /var/www/domains
 ## Create inkVerb app directories
@@ -117,11 +148,15 @@ mkdir /var/www/uno
 mkdir /var/www/vapps
 ## Own everything
 chown -R www-data:www-data /var/www
-chown -R www-data:www-data /srv/guru
-service apache2 restart
+chown -R www-data:www-data /srv/vip
+apache2ctl graceful
+
+# inkGet repo
+mkdir -p /var/local/verb/repo
 
 # Blacklist OpenSSL recommended package
-apt install -y openssl-blacklist
+# Package not found
+#apt install -y openssl-blacklist
 
 # Memcached
 apt install -y memcached
@@ -135,7 +170,7 @@ apt install -y memcached
 ########## Besides, this is php7 and may not even be necessary, could relate to using inkCert/Letsencrypt, a jesse/ink discrepancy at the 16 update
 ### Finish php5-imap link
 #ln -sf ../../mods-available/imap.ini /etc/php5/apache2/conf.d/20-imap.ini
-#service apache2 restart
+#apache2ctl graceful
 #########################################################
 
 # MySQL superuser to auto-create databases
@@ -152,9 +187,9 @@ host = localhost" > /var/local/verb/inst/mysqlboss.cnf
 
 # Local Apps (prep, not installed)
 ## Install several tools necessary for Nextcloud
-apt install php-bz2 php-curl php-gd php-imagick php-intl php-mbstring php-xml php-zip
+apt install -y php-bz2 php-curl php-gd php-imagick php-intl php-mbstring php-xml php-zip
 ## Install curl to download Ghost and for repo update Donjon Knights
-apt install curl
+apt install -y curl
 ## Enable port proxy mods for Ghost sites
 a2enmod proxy_http
 ## Create directory for Ghost installs
@@ -173,16 +208,12 @@ cp /var/local/verb/inst/config/etc/monit/monitrc.d/memcached /etc/monit/monitrc.
 cp /var/local/verb/inst/config/etc/monit/monitrc.d/mysql /etc/monit/monitrc.d/
 cp /var/local/verb/inst/config/etc/monit/monitrc.d/openssh-server /etc/monit/monitrc.d/
 cp /var/local/verb/inst/config/etc/monit/monitrc.d/sshd /etc/monit/monitrc.d/
-service monit restart
+systemctl reload monit
 
-# cron
-cp -f /var/local/verb/configs/verbcron /etc/cron.d/verber
-chmod 644 /etc/cron.d/verber
-
-# Delete the Diffie-Helman Group security file to prevent security risks
+# Delete the Diffie-Helman Group security file to prevent security risks (keep this verber unique)
 rm -f /etc/ssl/private/dhparams.pem
 
-# Delete the snakeoil pair to prevent security risks
+# Delete the snakeoil pair to prevent security risks (keep this verber unique)
 rm -f /etc/ssl/certs/ssl-cert-snakeoil.pem
 rm -f /etc/ssl/private/ssl-cert-snakeoil.key
 

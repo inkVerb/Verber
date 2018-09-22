@@ -1,13 +1,13 @@
 #!/bin/sh
 #inkVerbSerf! verb.ink
-set -e
+#set -e
 
 # This downloads and installs Drupal to blog.NAME.verb.ink
 ## Drupal actually resides in www/vapps/drupal.inkblog
 ## This progression is necessary to: 1. keep track of domain contents in www/domains and 2. use standard structure for backups
-## This does not remove any files an ftpguru may have uploaded to the domain's folder
+## This does not remove any files an ftpvip may have uploaded to the domain's folder
 ## Any files conflicting with Drupal will be replaced by the new Drupal installation created by this script
-## Because Drupal is high-maintenance on the developer end, the domain becomes a guru domain and is linked for ftp access in guru/_domains
+## Because Drupal is high-maintenance on the developer end, the domain becomes a vip domain and is linked for ftp access in vip/_domains
 
 # All options are optional, but must are sequential, omit last options first.
 
@@ -36,11 +36,11 @@ exit 0
 fi
 
 # Auto database
-if [ -z $4 ]; then
+if [ -z ${4} ]; then
 DBPASSWORD=$(pwgen -s -1 10); fi
-if [ -z $2 ]; then
+if [ -z ${2} ]; then
 DBASE=${CLEANNAME}$(pwgen -s -1 6); fi
-if [ -z $3 ]; then
+if [ -z ${3} ]; then
 DBUSER=${DBASE}; fi
 
 # Distro settings
@@ -161,13 +161,13 @@ cd /var/www/vapps
 wget https://ftp.drupal.org/files/projects/${DRUPALFILE}.zip
 if [ ! -f ${DRUPALFILE}.zip ]; then
 echo "Can't download Drupal. I quit."
-exit 44; fi
+exit 4; fi
 unzip ${DRUPALFILE}.zip
 rm -f ${DRUPALFILE}.zip
 mv ${DRUPALFILE} ${CVAPPNAME}
 rm -rf /var/www/html/ink.blog
 ln -sfn /var/www/vapps/${CVAPPNAME} /var/www/html/ink.blog
-ln -sfn /var/www/vapps/${CVAPPNAME} /srv/guru/_webapps/
+ln -sfn /var/www/vapps/${CVAPPNAME} /srv/vip/_webapps/
 chown -R www-data:www-data /var/www/html/ink.blog
 chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}
 
@@ -181,14 +181,14 @@ FLUSH PRIVILEGES;"
 echo "#!/bin/sh
 APPDBASE=${DBASE}
 APPDDBUSR=${DBUSER}
-APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/verbapp.${CVAPPNAME}
+APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/vapp.${CVAPPNAME}
 
 # Reset all permissions
 chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}
 
 # Set up the Apache config
 cp /var/local/verb/configs/site-files/conf/blog.${inkURI}.conf-drupal /etc/apache2/sites-available/blog.${inkURI}.conf
-service apache2 reload
+apache2ctl graceful
 ## inkCert SSL certs
 ### Not setup
 if grep -Fq "INKCERTED=NO" /var/local/verb/configs/inkcert/cli-ini/siteinkcert.${inkURI}; then
@@ -216,7 +216,7 @@ Database name: ${DBASE}
 Database username: ${DBUSER}
 Database password: ${DBPASSWORD}
 
-You also have ftp access to the folder in: guru/_domains/ink.blog
+You also have ftp access to the folder in: vip/_domains/ink.blog
 
 Go to http://blog.${inkURI} to install.
 "
