@@ -1,4 +1,9 @@
 # Installation and information for inkVerb's "Verber" web server
+The last number of a stable version (this channel) begins at 0; other numbers are vital updates for security or bugs.
+Numbers in the second group have two digits, address feature improvements, and should occur rarely
+Numbers in the first group are considered major overhauls
+eg:
+stable version: 1.04.0 (main release), 1.04.1 (vital update, no new features), 1.04.2 (vital update, no new features)
 
 ### Sales-pitch: skip if you're already convinced :-)
 #### Verber is for DIY entrepreneurs and copywriters and/or web geeks with many small-business clients.
