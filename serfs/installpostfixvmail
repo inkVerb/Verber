@@ -44,7 +44,7 @@ MAILPASSGEN=$(pwgen -s -1 5)
 # Choose Internet Site options in advance
 echo "postfix postfix/mailname string ${hostURI}" | debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
-#echo "postfix postfix/relayhost string smtp.localdomain" | debconf-set-selections 
+#echo "postfix postfix/relayhost string smtp.localdomain" | debconf-set-selections
 apt install -y mail-server^
 ## Get the PHP version
 phpNum=$(/var/local/verb/serfs/phpver)
@@ -90,13 +90,6 @@ useradd -r -u 150 -g mail -d /var/vmail -s /sbin/nologin -c "Virtual maildir han
 mkdir -p /var/vmail
 chmod 770 /var/vmail
 chown -R vmail:mail /var/vmail
-
-# Postgres Whitelist
-## These were changed to links to keep them up to date
-#cp /etc/postgrey/whitelist_clients /etc/postfix/postgrey_whitelist_clients
-#cp /etc/postgrey/whitelist_recipients /etc/postfix/postgrey_whitelist_recipients
-ln -sfn /etc/postgrey/whitelist_clients /etc/postfix/postgrey_whitelist_clients
-ln -sfn /etc/postgrey/whitelist_recipients /etc/postfix/postgrey_whitelist_recipients
 
 # Dovecot
 ## Sieve for moving spam to Junk
@@ -300,4 +293,3 @@ sed -i "s/SITEMAILSTATUS=.*/SITEMAILSTATUS=\"VMAIL_SERVER\"/g" /var/local/verb/c
 echo "Postfix and friends for inkVerb has been installed.
 
 The email server is https://${emailTLDURI}"
-

@@ -42,7 +42,7 @@ MAILPASSGEN=$(pwgen -s -1 5)
 # Choose Internet Site options in advance
 echo "postfix postfix/mailname string ${hostURI}" | debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
-#echo "postfix postfix/relayhost string smtp.localdomain" | debconf-set-selections 
+#echo "postfix postfix/relayhost string smtp.localdomain" | debconf-set-selections
 apt install -y mail-server^
 apt install -y \
   postfix-mysql \
@@ -204,10 +204,6 @@ chmod 660 inkdkim.private
 chown root:opendkim inkdkim.private
 chown opendkim:opendkim inkdkim.private
 systemctl start opendkim
-
-# Postgres Whitelist
-cp /etc/postgrey/whitelist_clients /etc/postfix/postgrey_whitelist_clients
-cp /etc/postgrey/whitelist_recipients /etc/postfix/postgrey_whitelist_recipients
 
 # Set Apache subdomains
 cp -R /var/www/html/0ne /var/www/html/${SITEEMAILTLD}.boxes
