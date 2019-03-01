@@ -4,14 +4,14 @@
 
 
 # Verify  backup structure
-mkdir -p /var/local/verb/backups
+mkdir -p /opt/verb/backups
 
 # Backup each by vapp
-cd /var/local/verb/configs
+cd /opt/verb/conf
 for f in vapp.*; do
-/var/local/verb/serfs/mysqlvappout $f; wait
-. /var/local/verb/configs/$f
+/opt/verb/serfs/mysqlvappout $f; wait
+. /opt/verb/conf/$f
 mv ${APPDBASE} $f.sql
-cp -f $f.sql /var/local/verb/backups/
+cp -f $f.sql /opt/verb/backups/
 rm -f $f.sql
 done

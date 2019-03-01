@@ -22,8 +22,8 @@ echo "You need to specify a domain. Read the instructions."; exit 0
 fi
 
 # Request and get the certs
-/var/local/verb/serfs/inkcertrevokele ${DOMAIN}
+/opt/verb/serfs/inkcertrevokele ${DOMAIN}
 
 # Install the certs
-/var/local/verb/serfs/inkcertremoveallle ${DOMAIN}
+/opt/verb/serfs/inkcertremoveallle ${DOMAIN}
 

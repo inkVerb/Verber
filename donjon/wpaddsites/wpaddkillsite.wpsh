@@ -12,16 +12,16 @@ set -e
 KILLNAME=$1
 
 # Include the config
-. /var/local/verb/donjon/wpaddsites/wpaddrepo.cnf
+. /opt/verb/donjon/wpaddsites/wpaddrepo.cnf
 
 
 # Remove the site from Apache
-/var/local/verb/serfs/killdomain ${KILLNAME}${WPADDNAMESUFF}.${WPADDDOMAIN}
+/opt/verb/serfs/killdomain ${KILLNAME}${WPADDNAMESUFF}.${WPADDDOMAIN}
 
 # Remove the wpadd credentials
-sed -i "s/${KILLNAME}.*//g" /var/local/verb/donjon/wpaddsites/wpadd.list
-sed -i "s/${KILLNAME}.*//g" /var/local/verb/donjon/wpaddsites/wpadd.human.list
-sed -i "s/*.${KILLNAME}//g" /var/local/verb/donjon/wpaddsites/updatewpaddrepo.sh
+sed -i "s/${KILLNAME}.*//g" /opt/verb/donjon/wpaddsites/wpadd.list
+sed -i "s/${KILLNAME}.*//g" /opt/verb/donjon/wpaddsites/wpadd.human.list
+sed -i "s/*.${KILLNAME}//g" /opt/verb/donjon/wpaddsites/updatewpaddrepo.sh
 
 # Finish
 echo "The ${KILLNAME} wpadd archive has been removed from this Inker repo.

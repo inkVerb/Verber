@@ -23,5 +23,5 @@ setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/php > /dev/null 2>&1
 setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/apache2 > /dev/null 2>&1
 setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/letsencrypt > /dev/null 2>&1
 setfacl -R -m user:${ADDIVAPPUSERNAME}:--- /etc/inkcert > /dev/null 2>&1
-chmod 751 -R ${IVAPPBASE}
+chmod 750 -R ${IVAPPBASE}
 

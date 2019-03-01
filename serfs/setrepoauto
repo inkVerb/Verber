@@ -8,5 +8,5 @@
 ## ./setrepoauto
 
 
-sed -i "s/INKGET_LIST=.*/INKGET_LIST=\"AUTO_UPDATE\"/g" /var/local/verb/configs/siteinkget
+sed -i "s/INKGET_LIST=.*/INKGET_LIST=\"AUTO_UPDATE\"/g" /opt/verb/conf/siteinkget
 

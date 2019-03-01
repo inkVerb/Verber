@@ -13,13 +13,13 @@
 
 
 # Directory check
-if [ ! -d "/var/local/verb" ]; then
-echo "Put the verb directory at /var/local/verb first, then try again."
+if [ ! -d "/opt/verb" ]; then
+echo "Put the verb directory at /opt/verb first, then try again."
 exit 8; fi
 
 # Since we're starting our work, give root the verb link now: save time right at the next login :-)
-ln -s /var/local/verb /root/
-ln -s /var/local/verb/inst/make-verber /var/local/verb/serfs/
+ln -s /opt/verb /root/
+ln -s /opt/verb/inst/make-verber /opt/verb/serfs/
 
 # Local
 locale-gen en_US en_US.UTF-8
@@ -56,5 +56,5 @@ Then log back onto the server to run make-verber.
 "
 
 # Delete this one-time script
-rm /var/local/verb/inst/make-verber-preserver
+rm /opt/verb/inst/make-verber-preserver
 

@@ -11,11 +11,11 @@
 
 
 # Include the config file
-. /var/local/verb/configs/sitenameip
+. /opt/verb/conf/sitenameip
 
 DOMAIN=$1
 
 rm -f /etc/apache2/sites-available/${DOMAIN}.conf
-cp /var/local/verb/configs/site-files/conf/newdomain.tld.conf /etc/apache2/sites-available/${DOMAIN}.conf
+cp /opt/verb/conf/site-files/conf/newdomain.tld.conf /etc/apache2/sites-available/${DOMAIN}.conf
 sed -i "s/newdomain.tld/${DOMAIN}/g" /etc/apache2/sites-available/${DOMAIN}.conf
 apache2ctl graceful

@@ -28,7 +28,7 @@ rm -f /etc/apache2/sites-enabled/*${KILLDOMAIN}.conf
 rm -f /etc/apache2/sites-available/${KILLDOMAIN}.conf
 rm -f /etc/apache2/sites-available/*${KILLDOMAIN}.conf
 apache2ctl graceful
-/var/local/verb/serfs/killdomainshell ${KILLDOMAIN}; wait
+/opt/verb/serfs/killdomainshell ${KILLDOMAIN}; wait
 rm -f /var/www/html/${KILLDOMAIN}
 rm -f /var/www/html/*${KILLDOMAIN}
 rm -rf /var/www/domains/${KILLDOMAIN}

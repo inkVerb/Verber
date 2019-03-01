@@ -15,8 +15,8 @@
 
 
 # Include the configs
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
 
 if [ "$1" = "-h" ]; then
     echo "Usage: ./pointink [subdomin only]
@@ -29,7 +29,7 @@ Examples:
  blue
  chat.blue
  collabora.blue
- nextcloud.blue
+ nc.blue
  owncloud.blue
  pydio.blue
  seafile.blue
@@ -86,8 +86,8 @@ if [ "$1" = "collabora.blue" ]; then
 exit 0
 fi
 
-if [ "$1" = "nextcloud.blue" ]; then
-    cp /var/www/html/blue/index-nextcloud.php /var/www/html/blue/index.php
+if [ "$1" = "nc.blue" ]; then
+    cp /var/www/html/blue/index-nc.php /var/www/html/blue/index.php
     echo "Done."
 exit 0
 fi

@@ -13,7 +13,7 @@
 DOMAIN=$1
 
 # Copy the folder
-cp -R /var/local/verb/configs/conflab/mu-plugins /var/www/html/${DOMAIN}/wp-content
+cp -R /opt/verb/conf/lab/mu-plugins /var/www/html/${DOMAIN}/wp-content
 
 # Own
 chown -R www-data:www-data /var/www/html/${DOMAIN}/wp-content/mu-plugins

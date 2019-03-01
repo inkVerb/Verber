@@ -9,13 +9,14 @@
 
 
 # Include the config file
-. /var/local/verb/configs/sitenameip
+. /opt/verb/conf/sitenameip
 
 # Download and establish wordpress in the server to pre-created domain
-cp /var/local/verb/configs/conflab/mediawiki/resources/assets/verbwiki.png /var/www/vapps/mediawiki/resources/assets/
+cp /opt/verb/conf/lab/mediawiki/resources/assets/verbwiki.png /var/www/vapps/mediawiki/resources/assets/
 sed -i "s/wiki.png/verbwiki.png/g" /var/www/vapps/mediawiki/LocalSettings.php
 # Move from vip/MediaWiki to the settings file
 mv /var/www/vip/LocalSettings.php /var/www/vapps/mediawiki/
+rm -rf /var/www/vapps/mediawiki/mw-config
 
 echo "
 Post install finished."

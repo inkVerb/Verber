@@ -22,7 +22,7 @@
 
 
 # Good housekeeping
-chmod 750 /var/local/verb/serfs/*
+chmod 750 /opt/verb/serfs/*
 
 # Install in small groups to avoid breaking
 
@@ -33,10 +33,10 @@ apt install -y pwgen
 apt install -y zip unzip
 
 # Install tools
-apt install -y rename
+apt install -y rename htop
 
 if [ -z "$1" ]; then
-SWAPSIZEMAKE="2"
+SWAPSIZEMAKE="4"
 MYSQLPASS=$(pwgen -0 -1 -A -B 11)
 else
 SWAPSIZEMAKE=$1
@@ -55,7 +55,7 @@ mkdir .ssh
 fi
 
 # Swap
-/var/local/verb/serfs/setswapsize ${SWAPSIZEMAKE}; wait
+/opt/verb/serfs/setswapsize ${SWAPSIZEMAKE}; wait
 ## Enable swap at next startup
 echo "/var/swap.img    none    swap    sw    0    0" >> /etc/fstab
 
@@ -63,17 +63,17 @@ echo "/var/swap.img    none    swap    sw    0    0" >> /etc/fstab
 apt install -y ssl-cert
 
 # Link serfs & tools to boss box
-ln -sfn /var/local/verb/serfs /var/local/verb/boss/
-ln -sfn /var/local/verb/tools /var/local/verb/boss/
+ln -sfn /opt/verb/serfs /opt/verb/boss/
+ln -sfn /opt/verb/tools /opt/verb/boss/
 
 # Link setupverb to serfs
-ln -sfn /var/local/verb/inst/setupverb /var/local/verb/serfs/
+ln -sfn /opt/verb/inst/setupverb /opt/verb/serfs/
 
 # Link verb to root home
-ln -sfn /var/local/verb /root/
+ln -sfn /opt/verb /root/
 
 # Record the MySQL root password
-echo "${MYSQLPASS}" > /var/local/verb/inst/mysqlrootpassword
+echo "${MYSQLPASS}" > /opt/verb/inst/mysqlrootpassword
 
 # LAMP Server
 apt update
@@ -119,16 +119,16 @@ service mysql restart
 #chmod 600 /etc/ssl/private/dhparams.pem
 
 # Apache
-cp /var/local/verb/inst/config/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/
-cp /var/local/verb/inst/config/etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/
-cp /var/local/verb/inst/config/etc/apache2/sites-available/* /etc/apache2/sites-available/
-cp /var/local/verb/inst/config/etc/apache2/mods-available/ssl.conf /etc/apache2/mods-available/
-cp /var/local/verb/inst/config/etc/apache2/conf-available/security.conf /etc/apache2/conf-available/
-cp -r /var/local/verb/inst/configs/conflab/html/0sitedefaultInProgress /var/www/html/
-cp -r /var/local/verb/inst/configs/conflab/html/0sitedefaultInProgress /var/www/html/vsslsitedefault
+cp /opt/verb/inst/root-config/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/
+cp /opt/verb/inst/root-config/etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/
+cp /opt/verb/inst/root-config/etc/apache2/sites-available/* /etc/apache2/sites-available/
+cp /opt/verb/inst/root-config/etc/apache2/mods-available/ssl.conf /etc/apache2/mods-available/
+cp /opt/verb/inst/root-config/etc/apache2/conf-available/security.conf /etc/apache2/conf-available/
+cp -r /opt/verb/inst/conf/lab/html/0sitedefaultInProgress /var/www/html/
+cp -r /opt/verb/inst/conf/lab/html/0sitedefaultInProgress /var/www/html/vsslsitedefault
 a2enmod deflate expires headers rewrite ssl && a2ensite 000-default default-ssl && apache2ctl graceful
 
-## Create vsftp web mod directories for vip
+## Create vip & vsftp web mod directories
 mkdir /srv/vip
 mkdir /srv/vip/_domains
 mkdir /srv/vip/_filecabinet
@@ -137,14 +137,14 @@ mkdir /srv/vip/files
 mkdir /srv/vip/repo
 mkdir /srv/vip/_webapps
 mkdir /srv/vip/_subs.vip
-ln -s /srv/vip /var/www/
-ln -s /srv/vip /var/local/verb/boss/
+ln -sfn /srv/vip /var/www/
+ln -sfn /srv/vip /opt/verb/boss/
+ln -sfn /srv/vip /root/
 ## And the domains directory for hosted domains
 mkdir /var/www/domains
 ## Create inkVerb app directories
 mkdir /var/www/email
 mkdir /var/www/one
-mkdir /var/www/uno
 mkdir /var/www/vapps
 ## Own everything
 chown -R www-data:www-data /var/www
@@ -152,7 +152,7 @@ chown -R www-data:www-data /srv/vip
 apache2ctl graceful
 
 # inkGet repo
-mkdir -p /var/local/verb/repo
+mkdir -p /opt/verb/repo
 
 # Blacklist OpenSSL recommended package
 # Package not found
@@ -183,7 +183,7 @@ FLUSH PRIVILEGES;"
 echo "[client]
 user = mysqlboss
 password = ${MYSQLBOSSPASS}
-host = localhost" > /var/local/verb/inst/mysqlboss.cnf
+host = localhost" > /opt/verb/inst/mysqlboss.cnf
 
 # Local Apps (prep, not installed)
 ## Install several tools necessary for Nextcloud
@@ -193,21 +193,21 @@ apt install -y curl
 ## Enable port proxy mods for Ghost sites
 a2enmod proxy_http
 ## Create directory for Ghost installs
-mkdir /var/local/ghost
+mkdir /var/www/ghost
 
 # PHP mods
-phpenmod mcrypt
+#phpenmod mcrypt
 
 # Monit
 apt install -y monit
 ## Copy configs (These seem to have precedence, files in /etc/monit seem to conflict with them but may be used instead
 mkdir /etc/monit/monitrc.d
-cp /var/local/verb/inst/config/etc/monit/monitrc.d/acpid /etc/monit/monitrc.d/
-cp /var/local/verb/inst/config/etc/monit/monitrc.d/apache2 /etc/monit/monitrc.d/
-cp /var/local/verb/inst/config/etc/monit/monitrc.d/memcached /etc/monit/monitrc.d/
-cp /var/local/verb/inst/config/etc/monit/monitrc.d/mysql /etc/monit/monitrc.d/
-cp /var/local/verb/inst/config/etc/monit/monitrc.d/openssh-server /etc/monit/monitrc.d/
-cp /var/local/verb/inst/config/etc/monit/monitrc.d/sshd /etc/monit/monitrc.d/
+cp /opt/verb/inst/root-config/etc/monit/monitrc.d/acpid /etc/monit/monitrc.d/
+cp /opt/verb/inst/root-config/etc/monit/monitrc.d/apache2 /etc/monit/monitrc.d/
+cp /opt/verb/inst/root-config/etc/monit/monitrc.d/memcached /etc/monit/monitrc.d/
+cp /opt/verb/inst/root-config/etc/monit/monitrc.d/mysql /etc/monit/monitrc.d/
+cp /opt/verb/inst/root-config/etc/monit/monitrc.d/openssh-server /etc/monit/monitrc.d/
+cp /opt/verb/inst/root-config/etc/monit/monitrc.d/sshd /etc/monit/monitrc.d/
 systemctl reload monit
 
 # Delete the Diffie-Helman Group security file to prevent security risks (keep this verber unique)
@@ -225,7 +225,7 @@ At this point, there is no urgent need to restart the server.
 "
 
 # Delete this one-time script
-rm /var/local/verb/serfs/make-verber
-rm /var/local/verb/inst/make-verber
+rm /opt/verb/serfs/make-verber
+rm /opt/verb/inst/make-verber
 
 

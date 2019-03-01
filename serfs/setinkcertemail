@@ -11,5 +11,5 @@
 
 NEWEMAIL=$1
 
-sed -i "s/INKCERTEMAIL=.*/INKCERTEMAIL=${NEWEMAIL}/g" /var/local/verb/configs/inkcert/inkcertstatus
+sed -i "s/INKCERTEMAIL=.*/INKCERTEMAIL=${NEWEMAIL}/g" /opt/verb/conf/inkcert/inkcertstatus
 

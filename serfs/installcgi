@@ -9,8 +9,8 @@
 
 
 # Include the configs
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
 
 # Prepare the directories
 mkdir /srv/vip/cgi
@@ -20,7 +20,7 @@ chown -R www-data:www-data /var/www
 chown -R www-data:www-data /srv/vip/cgi
 
 # Write the first file
-cp -f /var/local/verb/site-files/cgi-fossil/helloworld.cgi /var/www/vip/cgi/
+cp -f /opt/verb/site-files/cgi-fossil/helloworld.cgi /var/www/vip/cgi/
 chmod 750 /var/www/vip/cgi/helloworld.cgi
 
 echo "

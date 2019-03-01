@@ -14,9 +14,9 @@
 APPNAME=$1
 
 # Include the config
-. /var/local/verb/configs/vapp.${APPNAME}
+. /opt/verb/conf/vapp.${APPNAME}
 
-mysql --defaults-extra-file=/var/local/verb/configs/mysqlboss.cnf -e "
+mysql --defaults-extra-file=/opt/verb/conf/mysqlboss.cnf -e "
 REVOKE ALL PRIVILEGES ON *.* FROM '${APPDDBUSR}'@'localhost';
 REVOKE GRANT OPTION ON *.* FROM '${APPDDBUSR}'@'localhost';
 GRANT ALL PRIVILEGES ON ${APPDBASE}.* TO '${APPDDBUSR}'@'localhost' IDENTIFIED BY '${APPDDBPAS}';

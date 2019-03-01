@@ -20,7 +20,7 @@ WPADDPT=$2
 WPADDSITEDESCRIPT=$3
 
 # Include the config
-. /var/local/verb/donjon/wpaddsites/wpaddrepo.cnf
+. /opt/verb/donjon/wpaddsites/wpaddrepo.cnf
 
 # Check that domain is not installed
 if [ -d /var/www/html/${WPADDNAMESPACE}${WPADDNAMESUFF}.${WPADDDOMAIN} ]; then
@@ -29,15 +29,15 @@ exit 8
 fi
 
 # Create the site
-/var/local/verb/serfs/addsubdomain ${WPADDNAMESPACE}${WPADDNAMESUFF} ${WPADDDOMAIN}
+/opt/verb/serfs/addsubdomain ${WPADDNAMESPACE}${WPADDNAMESUFF} ${WPADDDOMAIN}
 
 # Install WordPress with inkVerb's auto-update MU-plugin
-/var/local/verb/serfs/installwp ${WPADDNAMESPACE}${WPADDNAMESUFF}.${WPADDDOMAIN} wp${WPADDNAMESPACE}${WPADDNAMESUFF} wp${WPADDNAMESPACE}usr ${WPADDNAMESPACE}pass
-/var/local/verb/serfs/wpautoupdate ${WPADDNAMESPACE}${WPADDNAMESUFF}.${WPADDDOMAIN}
+/opt/verb/serfs/installwp ${WPADDNAMESPACE}${WPADDNAMESUFF}.${WPADDDOMAIN} wp${WPADDNAMESPACE}${WPADDNAMESUFF} wp${WPADDNAMESPACE}usr ${WPADDNAMESPACE}pass
+/opt/verb/serfs/wpautoupdate ${WPADDNAMESPACE}${WPADDNAMESUFF}.${WPADDDOMAIN}
 
 # Add the wpadd credentials
-echo "${WPADDNAMESPACE}=\"${WPADDSITEDESCRIPT}\"" >> /var/local/verb/donjon/wpaddsites/wpadd.list
+echo "${WPADDNAMESPACE}=\"${WPADDSITEDESCRIPT}\"" >> /opt/verb/donjon/wpaddsites/wpadd.list
 ## use -e to allow bash escape characters
-echo "${WPADDNAMESPACE}\t${WPADDPT}\t- ${WPADDSITEDESCRIPT}" >> /var/local/verb/donjon/wpaddsites/wpadd.human.list
-echo "/var/local/verb/donjon/wpaddsites/updatewpaddsite ${WPADDNAMESPACE} ${WPADDPT}" >> /var/local/verb/donjon/wpaddsites/updatewpaddrepo.sh
+echo "${WPADDNAMESPACE}\t${WPADDPT}\t- ${WPADDSITEDESCRIPT}" >> /opt/verb/donjon/wpaddsites/wpadd.human.list
+echo "/opt/verb/donjon/wpaddsites/updatewpaddsite ${WPADDNAMESPACE} ${WPADDPT}" >> /opt/verb/donjon/wpaddsites/updatewpaddrepo.sh
 

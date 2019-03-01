@@ -8,5 +8,5 @@
 ## ./mysqlboss
 
 
-mysql --defaults-extra-file=/var/local/verb/configs/mysqlboss.cnf
+mysql --defaults-extra-file=/opt/verb/conf/mysqlboss.cnf
 

@@ -9,5 +9,5 @@
 ## ./inkcertupdatele-all
 
 
-/var/local/verb/configs/inkcert/inkcertle-renew-all.sh
+/opt/verb/conf/inkcert/inkcertle-renew-all.sh
 

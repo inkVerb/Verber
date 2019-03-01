@@ -4,10 +4,10 @@
 
 
 # Check if run previously
-if [ -f /var/local/verb/configs/.nextcloudscript ]; then
+if [ -f /opt/verb/conf/.nextcloudscript ]; then
 echo "Nextcloud settings script was already run previously.
 You shouldn't need to run it again. But, if you do, delete:
-verb/configs/.nextcloudscript"
+verb/conf/.nextcloudscript"
 exit 0
 fi
 
@@ -52,6 +52,6 @@ if [ -f ${nxcpath}/data/.htaccess ]
 fi
 
 # Finish
-touch /var/local/verb/configs/.nextcloudscript
+touch /opt/verb/conf/.nextcloudscript
 echo "Nextcloud settings script completed."
 

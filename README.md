@@ -1,9 +1,9 @@
 # Installation and information for inkVerb's "Verber" web server
-The last number of a stable version (this channel) begins at 0; other numbers are vital updates for security or bugs.
-Numbers in the second group have two digits, address feature improvements, and should occur rarely
-Numbers in the first group are considered major overhauls
+## verb-dev
+DEV version numbers have an extra digit and never end in 0, skipping it. This reserves the final number of the stable channel for vital patches.
 eg:
-stable version: 1.04.0 (main release), 1.04.1 (vital update, no new features), 1.04.2 (vital update, no new features)
+stable version: 1.04.00 (main release), 1.04.01 (vital update, no new features), 1.04.02 (vital update, no new features)
+develp version: 1.04.19, (NEVER 1.04.20), 1.04.21, 1.04.22
 
 ### Sales-pitch: skip if you're already convinced :-)
 #### Verber is for DIY entrepreneurs and copywriters and/or web geeks with many small-business clients.
@@ -50,12 +50,12 @@ This has a few advantages to the webmaster, saves money, and pays the bills.
 				a. `ssh-add-key [surfer (server nickname)] [SSH_keyname] [server-password]` (only if you did not add the ssh keys in digitalocean)
 				b. `ssh-keyportserver [surfer (server nickname)] [server-password] [new-port (optional)]`
 
-2. Copy or git the Verber/verb directories to /var/local/verb
-	`cd /var/local`
+2. Copy or git the Verber/verb directories to /opt/verb
+	`cd /opt`
 	`git clone https://github.com/inkVerb/verb`
 
 3. Run the scripts
-	`cd /var/local/verb/inst`
+	`cd /opt/verb/inst`
 	i. `./make-verber-preserver`    # prepares the server, mainly for locale
 		* Follow in-file instructions, has optional parameters, reboot
 		* Choose "y" or "Yes" when prompted
@@ -259,8 +259,8 @@ IX. Other notes
 		- 3 - aborted by user at prompt (changed mind, didn't type 'yes', etc.)
 		- 4 - failed attempt, such as a file not downloaded or login credentials rejected, thus cannot proceed
 		- 5 - unmet credentials (ie variables for a bash script are incomplete or incorrect)
-		- 6 - catostrophic error (something is wrong that shouldn't be possible, such as a script is messed up or something was changed manually-incorrectly)
-		- 7 - already installed dilemma ('already installed' reports 7 only if it would cause a problem to continue, this is a mass-exit to avoid conflict. A benign 'already installed' will exit 0)
+		- 6 - catostrophic error (something is wrong that shouldn't be possible, such as a script is messed up or something was changed manually-incorrectly, this error status is only for circumstances that creat a problem that didn't exist before, errors that notice a pre-existing problem should exit 0)
+		- 7 - already installed dilemma ('already installed' reports 7 only if it would cause a problem to continue, this is a mass abort exit status to avoid conflict. A benign 'already installed' will exit 0)
 		- 8 - unmet dependency (the basic 'do your homework' message: something else should have been done first, but can't be complete automatically)
 	B. If statements, checks, and inclusions
 		1. Scripts are organized to keep file size small and to standardize system-wide jobs, not to be fool-proof for lazy programming or new users.

@@ -7,5 +7,5 @@
 # How to use:
 ## ./showvbakstatus
 
-ls /etc/cron.d/*-vbak.v
+ls /etc/cron.d/*-vbak
 

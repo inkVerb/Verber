@@ -37,7 +37,7 @@ exit 8; fi
 
 # We've got to fenagle this around in order to make the code readable while also doing this properly
 ## Cleanup the initial install
-/var/local/verb/serfs/wpmusetoff ${WPDOMAIN}
+/opt/verb/serfs/wpmusetoff ${WPDOMAIN}
 ## Make a content file to work with
 cp /var/www/html/${WPDOMAIN}/wp-config.php /var/www/html/${WPDOMAIN}/wp-config.php.Vmu
 ## Sanitize the content file

@@ -10,15 +10,15 @@
 
 
 # Check if already installed
-if [ -f /var/local/verb/configs/dockerinstalled ]; then
+if [ -f /opt/verb/conf/dockerinstalled ]; then
 echo "Docker is already installed."
 exit 0; fi
 
 # Install Docker
-apt install docker.io
+apt install -y docker.io
 
 # Record config
-touch /var/local/verb/configs/dockerinstalled
+touch /opt/verb/conf/dockerinstalled
 
 # Finish
 echo "Docker installed."

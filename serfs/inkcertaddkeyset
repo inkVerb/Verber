@@ -20,7 +20,7 @@ ICTFILENAME=$2
 # Unpack the file
 cd /etc/inkcert
 mv ${ICTFILENAME} ${DOMAIN}.vtxz
-/var/local/verb/serfs/vtxzout ${DOMAIN}
+/opt/verb/serfs/vtxzout ${DOMAIN}
 mv ${DOMAIN} req/
 
 # Move files in place

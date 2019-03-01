@@ -24,7 +24,7 @@ rm -f /etc/apache2/sites-enabled/${KILLSUBDOMAIN}.conf
 apache2ctl graceful
 
 # Remove from inkCert
-sed -i "s/, ${KILLSUBDOMAIN}//g" /var/local/verb/configs/inkcert/cli-ini/cli.${KILLDOMAIN}.ini
+sed -i "s/, ${KILLSUBDOMAIN}//g" /opt/verb/conf/inkcert/cli-ini/cli.${KILLDOMAIN}.ini
 
 # Remove http folder symlinks
 rm -f /var/www/html/${KILLSUBDOMAIN}

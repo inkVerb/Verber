@@ -12,7 +12,7 @@
 SECPATH=$1
 
 # Include the config
-. /var/local/verb/configs/inknet/inker.client.cnf
+. /opt/verb/conf/inknet/inker.client.cnf
 
 # Verify working home directory
 cd ~/
@@ -34,10 +34,10 @@ wget -q https://${CAVERBERHOST}/inknet/${SECPATH}/${CLIENTNAME}.ink --no-check-c
 
 # Unpack
 mv ${CLIENTNAME}.ink ${CLIENTNAME}.vtxz
-/var/local/verb/serfs/vtxzout ${CLIENTNAME}
+/opt/verb/serfs/vtxzout ${CLIENTNAME}
 rm -f ${CLIENTNAME}.vtxz
 . ~/${CLIENTNAME}/verbername
-cp ~/${CLIENTNAME}/client.verber.${CLIENTNAME}.cnf /var/local/verb/configs/inknet/client.${VERBERNAME}.inker.login.cnf
+cp ~/${CLIENTNAME}/client.verber.${CLIENTNAME}.cnf /opt/verb/conf/inknet/client.${VERBERNAME}.inker.login.cnf
 rm -rf ${CLIENTNAME}
 
 # Finish

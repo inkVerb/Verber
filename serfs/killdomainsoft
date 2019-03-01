@@ -27,11 +27,11 @@ rm -f /etc/apache2/sites-available/${KILLDOMAIN}.conf
 apache2ctl graceful
 
 # Remove from inkCert
-sed -i "s/${KILLDOMAIN}, //g" /var/local/verb/configs/inkcert/cli-ini/cli.${KILLDOMAIN}.ini
+sed -i "s/${KILLDOMAIN}, //g" /opt/verb/conf/inkcert/cli-ini/cli.${KILLDOMAIN}.ini
 
 # Remove Root Site Defaults from inkDNS
-sed -i "/; Root Site Defaults/,/;; End Root Site Defaults/d" /var/local/verb/configs/inkdns/zones/${KILLDOMAIN}.db
-echo ";;; Root Site Defauls removed" >> /var/local/verb/configs/inkdns/zones/${KILLDOMAIN}.db
+sed -i "/; Root Site Defaults/,/;; End Root Site Defaults/d" /opt/verb/conf/inkdns/zones/db.${KILLDOMAIN}
+echo ";;; Root Site Defauls removed" >> /opt/verb/conf/inkdns/zones/db.${KILLDOMAIN}
 
 # Remove http folder symlinks
 rm -f /var/www/html/${KILLDOMAIN}

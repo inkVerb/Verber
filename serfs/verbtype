@@ -7,6 +7,6 @@
 # How to use:
 ## ./inkver
 
-. /var/local/verb/configs/inklists/verberverno
+. /opt/verb/conf/inklists/verberverno
 echo "${VTYPE}"
 

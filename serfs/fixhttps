@@ -34,7 +34,7 @@ sed -i '/##inkHTTPstart/d' /etc/apache2/sites-available/${DOMAIN}.conf
 sed -i 's/##inkHTTPstop/##inkHTTPremoved/' /etc/apache2/sites-available/${DOMAIN}.conf
 ### Add the new lines
 #### WordPress?
-if -d /var/www/vapps/wp.${DOMAIN}; then
+if [ -d "/var/www/vapps/wp.${DOMAIN}" ]; then
 sed -i "/WP_SITEURL/d" /var/www/vapps/wp.${DOMAIN}/wp-config.php
 sed -i "/WP_HOME/d" /var/www/vapps/wp.${DOMAIN}/wp-config.php
 echo "define( 'WP_SITEURL', 'https://${DOMAIN}' );
@@ -54,4 +54,3 @@ echo "
 apache2ctl graceful
 	echo "${DOMAIN} now redirects all http traffic to SSL-secure https."
 fi
-

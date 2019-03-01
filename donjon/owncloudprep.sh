@@ -4,10 +4,10 @@
 
 
 # Check if run previously
-if [ -f /var/local/verb/configs/.owncloudscript ]; then
+if [ -f /opt/verb/conf/.owncloudscript ]; then
 echo "ownCloud settings script was already run previously.
 You shouldn't need to run it again. But, if you do, delete:
-verb/configs/.owncloudscript"
+verb/conf/.owncloudscript"
 exit 0
 fi
 
@@ -52,6 +52,6 @@ if [ -f ${owcpath}/data/.htaccess ]
 fi
 
 # Finish
-touch /var/local/verb/configs/.owncloudscript
+touch /opt/verb/conf/.owncloudscript
 echo "ownCloud settings script completed."
 

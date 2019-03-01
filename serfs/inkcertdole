@@ -22,10 +22,10 @@ echo "You need to specify a domain. Read the instructions."; exit 0
 fi
 
 # Request and get the certs
-/var/local/verb/serfs/inkcertreqle ${DOMAIN}; wait
+/opt/verb/serfs/inkcertreqle ${DOMAIN}; wait
 
 # Install the certs
-/var/local/verb/serfs/inkcertaddallle ${DOMAIN}; wait
+/opt/verb/serfs/inkcertaddallle ${DOMAIN}; wait
 
 # Finish
 echo "

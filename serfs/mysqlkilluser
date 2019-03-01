@@ -10,6 +10,6 @@
 
 DBUSER=$1
 
-mysql --defaults-extra-file=/var/local/verb/configs/mysqlboss.cnf -e "
+mysql --defaults-extra-file=/opt/verb/conf/mysqlboss.cnf -e "
 DROP USER ${DBUSER}@localhost;"
 

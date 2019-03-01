@@ -13,5 +13,5 @@
 
 SITEOFF=$1
 
-sed -i "s/VERB${SITEOFF}=.*/VERB${SITEOFF}=false/g" /var/local/verb/inst/configs/sitetldstatus286
+sed -i "s/VERB${SITEOFF}=.*/VERB${SITEOFF}=false/g" /opt/verb/inst/conf/sitetldstatus286
 

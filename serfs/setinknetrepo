@@ -14,5 +14,5 @@
 
 NEWINKCERTREPO=$1
 
-sed -i "s/INKNET_REPO=.*/INKNET_REPO=\"${NEWINKCERTREPO}\"/g" /var/local/verb/configs/inknet/inknetinfo
+sed -i "s/INKNET_REPO=.*/INKNET_REPO=\"${NEWINKCERTREPO}\"/g" /opt/verb/conf/inknet/inknetinfo
 

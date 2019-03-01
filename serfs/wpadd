@@ -29,7 +29,7 @@ fi
 cd /var/www/html/${DOMAIN}/wp-content
 
 # Download and establish wordpress in the server to pre-created domain
-/var/local/verb/serfs/inkget wp.${WPADDNAME}
+/opt/verb/serfs/inkget wp.${WPADDNAME}
 if [ ! -f wp.${WPADDNAME}.zip ]; then
 echo "Can't download wp.${WPADDNAME}.zip. But, not quitting."
 exit 0; fi

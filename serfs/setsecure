@@ -9,5 +9,5 @@
 
 
 # File permissions for configs
-chmod 660 -R /var/local/verb/configs
+chmod 660 -R /opt/verb/conf
 

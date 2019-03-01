@@ -11,26 +11,45 @@
 ## ./installfossil adam adam@verb.ink Adamp4$$w0RD
 
 
+CVAPPNAME=fossil
+
 # Include the configs
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
 
 NEWUSER=$1
 NEWEMAIL=$2
 NEWPASS=$3
 
+
+cd /var/www/vapps
+/opt/verb/serfs/inkget ${CVAPPNAME}; wait
+### Check
+/opt/verb/serfs/inkget ${CVAPPNAME} check
+if [ "$?" = 4 ]; then
+echo "Repo failed to retrieve the file."
+exit 4; fi
+if [ ! -f ${CVAPPNAME}.vtxz ]; then
+echo "Failed to retrieve from the repo."
+exit 4; fi
+
+rm -f ${CVAPPNAME}
+/opt/verb/serfs/vtxzout ${CVAPPNAME}; wait
+
+rm -f /usr/bin/fossil
+mv /var/www/vapps/fossil /usr/bin
+fossil all rebuild
+
 # Install and set up directories
-apt install -y fossil
-mkdir /var/www/vip/fossil
-rm -rf /var/www/html/vip.fossil
-ln -s /var/www/vip/fossil /var/www/html/vip.fossil
-chown -R www-data:www-data  /var/www/html
+mkdir -p /var/www/vip/fossil
+/opt/verb/serfs/setvapplinkon ${CVAPPNAME}
+chown -R www-data:www-data  /var/www/html/vip.fossil
 chown -R www-data:www-data /var/www/vip
 
 # Create the first default fossil
 cd /var/www/vip/fossil
-fossil new index.fossil
-chown www-data:www-data index.fossil
+fossil new index.fossil; wait
+chown www-data:www-data index.fossil; wait
 echo "#!/usr/bin/fossil
 repository: /fossil/index.fossil
 
@@ -47,7 +66,7 @@ repository: /fossil/dinosaur.fossil" > dinosaur.cgi
 chmod 750 dinosaur.cgi
 
 # Final chown to allow database to be writable
-chown -R www-data:www-data /var/www/vip/fossil
+chown -R www-data:www-data /var/www/vip/fossil; wait
 
 # Add the user
 fossil user new ${NEWUSER} ${NEWEMAIL} ${NEWPASS} --repository index.fossil

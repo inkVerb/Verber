@@ -14,5 +14,5 @@
 
 NEWINKREPO=$1
 
-sed -i "s/INKGET_REPO=.*/INKGET_REPO=\"${NEWINKREPO}\"/g" /var/local/verb/configs/siteinkget
+sed -i "s/INKGET_REPO=.*/INKGET_REPO=\"${NEWINKREPO}\"/g" /opt/verb/conf/siteinkget
 

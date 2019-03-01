@@ -12,8 +12,8 @@
 
 
 # Include the configs
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
 
 apt install vsftpd
 
@@ -62,6 +62,6 @@ systemctl reload vsftpd
 #restart vsftpd
 
 # Set the firewall to allow the site port
-. /var/local/verb/configs/siteport
+. /opt/verb/conf/siteport
 ufw allow from any to any port ${SITEPORT}
 

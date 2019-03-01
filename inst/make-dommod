@@ -25,5 +25,5 @@ echo "#!/bin/sh
 # To change this, run make-dommod again.
 
 DMODBASE="${DOMMODBASE}"
-" > /var/local/verb/inst/domain.mod.conf
+" > /opt/verb/inst/domain.mod.conf
 

@@ -13,7 +13,7 @@
 
 
 # Include the config
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/siteurilist
 
 if [ "$1" = "-h" ]
 then

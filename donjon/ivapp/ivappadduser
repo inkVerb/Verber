@@ -48,7 +48,7 @@ echo "${ADDIVAPPUSERNAME}:${ADDIVAPPPASSWORD}" | chpasswd
 usermod -a -G ${IVAPPUSERGROUP} ${ADDIVAPPUSERNAME}
 ## Give him necessary permissions limits
 echo "Setting permissions, this may take a moment..."
-/var/local/verb/donjon/ivapp/ivappsetpermissions.sh ${CONF} ${ADDIVAPPUSERNAME}
+/opt/verb/donjon/ivapp/ivappsetpermissions.sh ${CONF} ${ADDIVAPPUSERNAME}
 ## Own his home
 #### FOR SOME STUPID REASON THIS DOES NOT WORK, ONLY A SERF CAN CHOWN THE FOLDER, SO IT IS OWNED BY inknetivappadduser, WHICH RUNS THIS
 chown -R ${ADDIVAPPUSERNAME}:${ADDIVAPPUSERNAME} ${IVAPPBASE}/${IVAPPDIR}/${IVAPPGROUPDIR}/${ADDIVAPPUSERNAME}

@@ -9,7 +9,7 @@
 
 
 # Include the configs
-. /var/local/verb/configs/sitenameip
+. /opt/verb/conf/sitenameip
 
 rm -f /var/www/vip/*.vbak
 rm -f /var/www/html/${SITETLD}/*.vbak -f

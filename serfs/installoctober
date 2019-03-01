@@ -25,7 +25,7 @@ CLEANNAME=$(echo $DOMAIN | sed -e 's/\.//g')
 
 # Check if already installed
 ## Config
-if [ -f /var/local/verb/configs/vapp.${CVAPPNAME}.${DOMAIN} ]; then
+if [ -f /opt/verb/conf/vapp.${CVAPPNAME}.${DOMAIN} ]; then
 echo "This is already installed."
 exit 0; fi
 ## Directory
@@ -39,6 +39,16 @@ if [ -z ${1} ]; then
 echo "You must designate a domain."
 exit 8; fi
 
+# Include the config file
+. /opt/verb/conf/sitenameip
+
+# Download and establish October in the server to pre-created domain
+cd /var/www/vapps
+git clone https://github.com/octobercms/install
+if [ ! -d install ]; then
+echo "Can't download OctoberCMS. I quit."
+exit 4; fi
+
 # Auto database
 if [ -z ${4} ]; then
 DBPASSWORD=$(pwgen -s -1 10); fi
@@ -47,15 +57,6 @@ DBASE=oct$(echo $CLEANNAME | cut -c1-23)$(pwgen -s -1 6); fi
 if [ -z ${3} ]; then
 DBUSER=${DBASE}; fi
 
-# Include the config file
-. /var/local/verb/configs/sitenameip
-
-# Download and establish October in the server to pre-created domain
-cd /var/www/vapps
-git clone https://github.com/octobercms/install
-if [ ! -d install ]; then
-echo "Can't download OctoberCMS. I quit."
-exit 4; fi
 mv install ${CVAPPNAME}.${DOMAIN}
 
 ## Install main themes and plugins
@@ -136,14 +137,14 @@ wget https://github.com/jacoweb/AgencyTheme/archive/master.zip
 unzip master.zip
 rm -f master.zip
 ## Setup links
-rm -f /var/www/html/${DOMAIN}
-ln -s /var/www/vapps/${CVAPPNAME}.${DOMAIN} /var/www/html/${DOMAIN}
-ln -s /var/www/vapps/${CVAPPNAME}.${DOMAIN} /srv/vip/_webapps/
-chown -R www-data:www-data /var/www/html/${DOMAIN}
-chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}.${DOMAIN}
+rm -f /var/www/html/${DOMAIN}; wait
+ln -s /var/www/vapps/${CVAPPNAME}.${DOMAIN} /var/www/html/${DOMAIN}; wait
+ln -s /var/www/vapps/${CVAPPNAME}.${DOMAIN} /srv/vip/_webapps/; wait
+chown -R www-data:www-data /var/www/html/${DOMAIN}; wait
+chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}.${DOMAIN}; wait
 
 # Create the database and credentials
-mysql --defaults-extra-file=/var/local/verb/configs/mysqlboss.cnf -e "
+mysql --defaults-extra-file=/opt/verb/conf/mysqlboss.cnf -e "
 CREATE DATABASE  ${DBASE};
 GRANT ALL PRIVILEGES ON ${DBASE}.* TO '${DBUSER}'@'localhost' IDENTIFIED BY '${DBPASSWORD}';
 FLUSH PRIVILEGES;"
@@ -154,7 +155,7 @@ FLUSH PRIVILEGES;"
 echo "#!/bin/sh
 APPDBASE=${DBASE}
 APPDDBUSR=${DBUSER}
-APPDDBPAS=${DBPASSWORD}" > /var/local/verb/configs/vapp.${CVAPPNAME}.${DOMAIN}
+APPDDBPAS=${DBPASSWORD}" > /opt/verb/conf/vapp.${CVAPPNAME}.${DOMAIN}
 
 # Reset all permissions
 chown -R www-data:www-data /var/www/vapps/${CVAPPNAME}.${DOMAIN}

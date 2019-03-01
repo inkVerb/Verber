@@ -17,13 +17,13 @@
 
 SERVER=$1
 
-/var/local/verb/serfs/installpostfixvmail
+/opt/verb/serfs/installpostfixvmail
 
 # Config settings
-sed -i "s/RC_NOT_INSTALLED/RC_NOT_ALLOWED/g" /var/local/verb/configs/sitemailpath
-sed -i "s/RC_NOT_INSTALLED/RC_NOT_ALLOWED/g" /var/local/verb/configs/sitemailpass
-sed -i "s/PFA_NOT_INSTALLED/PFA_NOT_ALLOWED/g" /var/local/verb/configs/sitemailpath
-sed -i "s/VMAIL_SERVER/EMAIL_BACKUP_MX/g" /var/local/verb/configs/sitemailpath
+sed -i "s/RC_NOT_INSTALLED/RC_NOT_ALLOWED/g" /opt/verb/conf/sitemailpath
+sed -i "s/RC_NOT_INSTALLED/RC_NOT_ALLOWED/g" /opt/verb/conf/sitemailpass
+sed -i "s/PFA_NOT_INSTALLED/PFA_NOT_ALLOWED/g" /opt/verb/conf/sitemailpath
+sed -i "s/VMAIL_SERVER/EMAIL_BACKUP_MX/g" /opt/verb/conf/sitemailpath
 
 # Finished
 echo "

@@ -12,8 +12,8 @@
 
 
 # Include the configs
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
 
 OLDFOSSIL=$1
 OLDUSER=$2

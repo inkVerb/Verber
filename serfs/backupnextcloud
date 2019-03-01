@@ -7,7 +7,7 @@
 ## This mainly backs up the user files and database, not the app itself.
 
 # How to use:
-## ./backupnextcloud [securename 0-9, a-z, and A-Z only] [-nl for no link, optional]
+## ./backupnextcloud [securename 0-9, a-z, and A-Z only, optional] [-nl for no link, optional dep]
 
 # Eg:
 ## ./backupnextcloud 583
@@ -15,26 +15,37 @@
 ## ./backupnextcloud b
 
 
+if [ -z "$1" ]; then
+SECNAME=$(pwgen -s -1 12)
+else
 SECNAME=$1
+fi
+
+# Check if installed
+if [ -z "/opt/verb/conf/vapp.nextcloud" ]; then
+echo "Nextcloud not installed. Nothing to backup."
+exit 0; fi
 
 # Include the configs
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
-. /var/local/verb/configs/vapp.nextcloud
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
+. /opt/verb/conf/vapp.nextcloud
 
 # Export the database
 cd /var/www/vapps/nextcloud/data
-/var/local/verb/serfs/mysqlvappout vapp.nextcloud; wait
+/opt/verb/serfs/mysqlvappout vapp.nextcloud; wait
+
+# Backup the config
+cp /opt/verb/conf/vapp.nextcloud /var/www/vapps/nextcloud/data/
 
 # Pack the data directory
 cd /var/www/vapps/nextcloud
-/var/local/verb/serfs/vtxzin data
+/opt/verb/serfs/vtxzin data
 mv data.vtxz verb.nextcloud.${SECNAME}.vbak
 mv verb.nextcloud.${SECNAME}.vbak /var/www/vip/
 
 # Finish
-if [ "$3" = "-nl" ]
-then
+if [ "$2" = "-nl" ]; then
 echo "nextcloud has been backed up to the 'vip' folder.
 
 Note that the app remains live.
@@ -42,11 +53,11 @@ Note that the app remains live.
 exit 0
 fi
 
-ln -s /var/www/vip/verb.nextcloud.${SECNAME}.vbak /var/www/html/${SITETLD}/
-chown -R www-data:www-data /var/www/html/${SITETLD}/verb.nextcloud.${SECNAME}.vbak
+ln -s /var/www/vip/verb.nextcloud.${SECNAME}.vbak /var/www/html/${SITESERVE}.serve/${SERVEDIR}/
+chown -R www-data:www-data /var/www/html/${SITESERVE}.serve/${SERVEDIR}/verb.nextcloud.${SECNAME}.vbak
 echo "Nextcloud has been backed up to the 'vip' folder and can also be downloaded at:
 
-http://${nameURI}/verb.nextcloud.${SECNAME}.vbak
+http://${SERVEPATH}/verb.nextcloud.${SECNAME}.vbak
 
 Note that the app remains live.
 "

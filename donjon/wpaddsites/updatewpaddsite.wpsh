@@ -11,22 +11,22 @@ NAME=$1
 PT=$2
 
 # Include the config
-. /var/local/verb/donjon/wpaddsites/wpaddrepo.cnf
-. /var/local/verb/donjon/wpaddsites/wpadd.list
+. /opt/verb/donjon/wpaddsites/wpaddrepo.cnf
+. /opt/verb/donjon/wpaddsites/wpadd.list
 
 # Update -u recursive -r
 cd /var/www/html/${NAME}${WPADDNAMESUFF}.${WPADDDOMAIN}/wp-content
-rm -f /var/local/verb/repo/wp.${NAME}.zip
+rm -f /opt/verb/repo/wp.${NAME}.zip
 
 ## Based on variables
 if [ "${PT}" = "p" ]; then
-zip -r /var/local/verb/repo/wp.${NAME}.zip plugins
+zip -r /opt/verb/repo/wp.${NAME}.zip plugins
 fi
 if [ "${PT}" = "t" ]; then
-zip -r /var/local/verb/repo/wp.${NAME}.zip themes
+zip -r /opt/verb/repo/wp.${NAME}.zip themes
 fi
 if [ "${PT}" = "pt" ]; then
-zip -r /var/local/verb/repo/wp.${NAME}.zip plugins
-zip -r /var/local/verb/repo/wp.${NAME}.zip themes
+zip -r /opt/verb/repo/wp.${NAME}.zip plugins
+zip -r /opt/verb/repo/wp.${NAME}.zip themes
 fi
 

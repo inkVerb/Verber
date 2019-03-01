@@ -37,7 +37,7 @@
 
 
 # Include config
-. /var/local/verb/configs/inkcert/csr-inf/csr.${INFPROFILE}.inf
+. /opt/verb/conf/inkcert/csr-inf/csr.${INFPROFILE}.inf
 
 DOMAIN=$1
 COMMONNAME=$2
@@ -45,7 +45,7 @@ INFPROFILE=$3
 PASSPHRASE=$(pwgen -s -1 105)
 
 # Verify that the domain is installed
-if [ ! -f /var/local/verb/configs/inkcert/csr-inf/siteinkcert-${DOMAIN} ]; then
+if [ ! -f /opt/verb/conf/inkcert/csr-inf/siteinkcert-${DOMAIN} ]; then
 echo "Sorry, Bucko. ${DOMAIN} is not installed yet.
 
 Do that first, then get back to me.

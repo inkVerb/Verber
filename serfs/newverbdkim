@@ -14,7 +14,7 @@
 
 
 # Include the config
-. /var/local/verb/configs/sitenameip
+. /opt/verb/conf/sitenameip
 
 VERBDOMAIN=$1
 

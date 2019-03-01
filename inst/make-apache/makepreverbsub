@@ -19,8 +19,8 @@ TLD=$1
 SUBDOMAIN=$2
 
 # Include the config file
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
 
 # Prepare the dir
 mkdir -p sites-available

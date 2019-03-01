@@ -15,12 +15,12 @@
 
 
 # Include the config file
-. /var/local/verb/configs/sitenameip
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/sitenameip
+. /opt/verb/conf/siteurilist
 
 SITEON=$1
 
-sed -i "s/VERB${SITEON}=.*/VERB${SITEON}=true/g" /var/local/verb/configs/sitetldstatus
+sed -i "s/VERB${SITEON}=.*/VERB${SITEON}=true/g" /opt/verb/conf/sitetldstatus
 
 if [ "${SITEON}" = "email" ]
 then
@@ -58,7 +58,7 @@ fi
 
 if [ "${SITEON}" = "blue" ]
 then
-    a2ensite ${blueURI} blue.${blueURI} nextcloud.${blueURI} owncloud.${blueURI} pydio.${blueURI} seafile.${blueURI}
+    a2ensite ${blueURI} blue.${blueURI} nc.${blueURI} owncloud.${blueURI} seafile.${blueURI}
     echo "Done."
 exit 0
 fi
@@ -103,15 +103,6 @@ fi
 if [ "${SITEON}" = "rocks" ]
 then
     a2ensite ${rocksURI} rocks.${rocksURI}
-    apache2ctl graceful
-    echo "Done."
-exit 0
-fi
-
-
-if [ "${SITEON}" = "uno" ]
-then
-    a2ensite ${unoURI} uno.${unoURI}
     apache2ctl graceful
     echo "Done."
 exit 0

@@ -14,7 +14,7 @@
 
 
 # Check if CA
-if [ ! -f /var/local/verb/configs/inknet/ca.verber.cnf ]; then
+if [ ! -f /opt/verb/conf/inknet/ca.verber.cnf ]; then
 echo "Out of order. This is not a CA Verber yet.
 
 First run inknetinstallca
@@ -22,7 +22,7 @@ First run inknetinstallca
 exit 8; fi
 
 # Include the config
-. /var/local/verb/configs/inknet/ca.verber.cnf
+. /opt/verb/conf/inknet/ca.verber.cnf
 
 # Verber Keys (on the same CA server)
 ## Create the inkNet host keys for Verber

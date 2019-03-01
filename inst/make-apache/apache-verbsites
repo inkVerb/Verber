@@ -19,9 +19,8 @@
 ## pink pink.pink
 ## red red.red
 ## rocks rocks.rocks
-## uno uno.uno
 
-sh ./makepreverbsub blue seafile
+sh ./makepreverbsub blue nc
 sh ./makepreverbsub ink ask
 sh ./makepreverbsub ink bb
 sh ./makepreverbsub ink blog

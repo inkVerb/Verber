@@ -14,13 +14,13 @@
 KILLDOMSHELL=$1
 
 # Remove inkCert (including Letsencrypt) configs
-/var/local/verb/serfs/inkcertkilldomain ${KILLDOMAIN}; wait
+/opt/verb/serfs/inkcertkilldomain ${KILLDOMAIN}; wait
 
 # Remove inkDNS zone file
-/var/local/verb/serfs/inkdnskilldomain ${KILLDOMAIN}; wait
+/opt/verb/serfs/inkdnskilldomain ${KILLDOMAIN}; wait
 
 # Remove inkDKIM entries
-/var/local/verb/serfs/killinkdkim ${KILLDOMSHELL}; wait
+/opt/verb/serfs/killinkdkim ${KILLDOMSHELL}; wait
 
 # Finish
 echo "No more papers...

@@ -8,8 +8,8 @@
 ## ./updatewprepo
 
 # Include the config
-. /var/local/verb/donjon/wpaddsites/wpaddrepo.cnf
-. /var/local/verb/donjon/wpaddsites/wpadd.list
+. /opt/verb/donjon/wpaddsites/wpaddrepo.cnf
+. /opt/verb/donjon/wpaddsites/wpadd.list
 
 # Update sites individually
 ## Each line below is added/removed by wpaddaddsite/wpaddkillsite

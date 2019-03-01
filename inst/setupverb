@@ -21,6 +21,14 @@
 ## Eg: joesbigasphalttrucking.verb.ink = joe1ink OR joesbigasphalttrucking.verb.email joeemail
 
 # Timezone list: http://php.net/manual/en/timezones.php
+# Common locations:
+# Europe Berlin
+# Asia Hong_Kong
+# Asia Singapore
+# America New_York
+# America Chicago
+# America Phoenix
+# America Los_Angeles
 
 # Eg:
 ## ./setupverb johnny johnny ink email 56.22.108.77 IPv6NA letsencrypt-messages@emaildomain.com 100 1000 Asia Singapore 22 boss bosspassword
@@ -86,46 +94,34 @@ chmod 600 /etc/ssl/private/dhparams.pem
 
 # Site settings
 ## Configs
-cp -R /var/local/verb/inst/configs /var/local/verb/configs
-mv /var/local/verb/inst/mysqlrootpassword /var/local/verb/configs/
-mv /var/local/verb/inst/mysqlboss.cnf /var/local/verb/configs/
-mv /var/local/verb/configs/sitenameip286 /var/local/verb/configs/sitenameip
-mv /var/local/verb/configs/siteport286 /var/local/verb/configs/siteport
-mv /var/local/verb/configs/siteinkget286 /var/local/verb/configs/siteinkget
-mv /var/local/verb/configs/sitemailpath286 /var/local/verb/configs/sitemailpath
-mv /var/local/verb/configs/sitetldstatus286 /var/local/verb/configs/sitetldstatus
-mv /var/local/verb/configs/siteinstallstatus286 /var/local/verb/configs/siteinstallstatus
+cp -R /opt/verb/inst/conf /opt/verb/conf
+mv /opt/verb/inst/mysqlrootpassword /opt/verb/conf/
+mv /opt/verb/inst/mysqlboss.cnf /opt/verb/conf/
+mv /opt/verb/conf/sitenameip286 /opt/verb/conf/sitenameip
+mv /opt/verb/conf/siteport286 /opt/verb/conf/siteport
+mv /opt/verb/conf/siteinkget286 /opt/verb/conf/siteinkget
+mv /opt/verb/conf/sitemailpath286 /opt/verb/conf/sitemailpath
+mv /opt/verb/conf/sitetldstatus286 /opt/verb/conf/sitetldstatus
+mv /opt/verb/conf/siteinstallstatus286 /opt/verb/conf/siteinstallstatus
 ## Ensure scripts are executable
-chmod 750 /var/local/verb/configs/inkcert/*.sh
-chmod 750 /var/local/verb/serfs/*
-chmod 750 /var/local/verb/donjon/*
-chmod 750 /var/local/verb/donjon/repoupdate/*
-chmod 750 /var/local/verb/donjon/wpaddsites/*.wpsh
+chmod 750 /opt/verb/conf/inkcert/*.sh
+chmod 750 /opt/verb/conf/inkdns/*.sh
+chmod 750 /opt/verb/serfs/*
+chmod 750 /opt/verb/donjon/*
+chmod 750 /opt/verb/donjon/repoupdate/*
+chmod 750 /opt/verb/donjon/wpaddsites/*.wpsh
 
 ## Domain Mod?
-if [ -f "/var/local/verb/inst/domain.mod.conf" ]; then
-sed -i "s/name286/\"DOMAIN_MOD-${baseDOM}\"/g" /var/local/verb/configs/sitenameip
+if [ -f "/opt/verb/inst/domain.mod.conf" ]; then
+sed -i "s/name286/\"DOMAIN_MOD-${baseDOM}\"/" /opt/verb/conf/sitenameip
 else
-sed -i "s/name286/${VNAME}/g" /var/local/verb/configs/sitenameip
+sed -i "s/name286/${VNAME}/" /opt/verb/conf/sitenameip
 fi
-## Common settings
-sed -i "s/host286/${HNAME}/g" /var/local/verb/configs/sitenameip
-sed -i "s/tld286/${SERVERTLD}/g" /var/local/verb/configs/sitenameip
-sed -i "s/ip286/${SERVERIP}/g" /var/local/verb/configs/sitenameip
-sed -i "s/ipv6286/${SERVERIPV6}/g" /var/local/verb/configs/sitenameip
-sed -i "s/timeregion286/${PHPREGION}/g" /var/local/verb/configs/sitenameip
-sed -i "s/timecity286/${PHPCITY}/g" /var/local/verb/configs/sitenameip
-sed -i "s/updaterepo286/${VUPREPO}/g" /var/local/verb/configs/sitenameip
-sed -i "s/SITEEMAILTLD=.*/SITEEMAILTLD=${SVMAILTLD}/g" /var/local/verb/configs/sitemailpath
-sed -i "s/inkcertemail286/${SSLEMAIL}/g" /var/local/verb/configs/inkcert/inkcertstatus
-## Copy other config files with pre-install status
-mv /var/local/verb/configs/sitemailpass286 /var/local/verb/configs/sitemailpass
-mv /var/local/verb/configs/siteufwip286 /var/local/verb/configs/siteufwip
 
 # Site URI List
 ## domain.mod?
-if [ -f "/var/local/verb/inst/domain.mod.conf" ]; then
-. /var/local/verb/inst/domain.mod.conf
+if [ -f "/opt/verb/inst/domain.mod.conf" ]; then
+. /opt/verb/inst/domain.mod.conf
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
 # Site URI List, whether they are active or not
@@ -133,6 +129,7 @@ echo "#!/bin/sh
 baseDOM=\"${DMODBASE}\"
 nameURI=\"${SERVERTLD}.${DMODBASE}\"
 hostURI=\"${HNAME}.${SERVERTLD}.${DMODBASE}\"
+serveURI=\"serve.${SERVERTLD}.${DMODBASE}\"
 emailTLDURI=\"${SVMAILTLD}.${DMODBASE}\"
 emailURI=\"email.${DMODBASE}\"
 cityURI=\"city.${DMODBASE}\"
@@ -141,11 +138,11 @@ inkURI=\"ink.${DMODBASE}\"
 blueURI=\"blue.${DMODBASE}\"
 vipURI=\"vip.${DMODBASE}\"
 kiwiURI=\"kiwi.${DMODBASE}\"
+cashURI=\"cash.${DMODBASE}\"
 pinkURI=\"pink.${DMODBASE}\"
 redURI=\"red.${DMODBASE}\"
 rocksURI=\"rocks.${DMODBASE}\"
-unoURI=\"uno.${DMODBASE}\"
-" > /var/local/verb/configs/siteurilist
+" > /opt/verb/conf/siteurilist
 ## Normal verb domains
 else
 echo "#!/bin/sh
@@ -154,6 +151,7 @@ echo "#!/bin/sh
 
 nameURI=\"${VNAME}.verb.${SERVERTLD}\"
 hostURI=\"${HNAME}.${VNAME}.verb.${SERVERTLD}\"
+serveURI=\"serve.${VNAME}.verb.${SERVERTLD}\"
 emailTLDURI=\"${VNAME}.verb.${SVMAILTLD}\"
 emailURI=\"${VNAME}.verb.email\"
 cityURI=\"${VNAME}.verb.city\"
@@ -162,33 +160,53 @@ inkURI=\"${VNAME}.verb.ink\"
 blueURI=\"${VNAME}.verb.blue\"
 vipURI=\"${VNAME}.verb.vip\"
 kiwiURI=\"${VNAME}.verb.kiwi\"
+cashURI=\"${VNAME}.verb.cash\"
 pinkURI=\"${VNAME}.verb.pink\"
 redURI=\"${VNAME}.verb.red\"
 rocksURI=\"${VNAME}.verb.rocks\"
-unoURI=\"${VNAME}.verb.uno\"
-" > /var/local/verb/configs/siteurilist
+" > /opt/verb/conf/siteurilist
 fi
-. /var/local/verb/configs/siteurilist
+. /opt/verb/conf/siteurilist
+
+# Site name & IP
+serveDIR="$(pwgen -s -1 6)"
+sed -i "s/host286/${HNAME}/" /opt/verb/conf/sitenameip
+sed -i "s/tld286/${SERVERTLD}/" /opt/verb/conf/sitenameip
+sed -i "s/stld286/${SERVERTLD}/" /opt/verb/conf/sitenameip
+sed -i "s/servedir286/${serveDIR}/" /opt/verb/conf/sitenameip
+sed -i "s/serveuri286/${serveURI}/" /opt/verb/conf/sitenameip
+sed -i "s/ip286/${SERVERIP}/" /opt/verb/conf/sitenameip
+sed -i "s/ipv6286/${SERVERIPV6}/" /opt/verb/conf/sitenameip
+sed -i "s/timeregion286/${PHPREGION}/" /opt/verb/conf/sitenameip
+sed -i "s/timecity286/${PHPCITY}/" /opt/verb/conf/sitenameip
+sed -i "s/updaterepo286/${VUPREPO}/" /opt/verb/conf/sitenameip
+sed -i "s/SITEEMAILTLD=.*/SITEEMAILTLD=\"${SVMAILTLD}\"/" /opt/verb/conf/sitemailpath
+sed -i "s/inkcertemail286/${SSLEMAIL}/" /opt/verb/conf/inkcert/inkcertstatus
+## Copy other config files with pre-install status
+mv /opt/verb/conf/sitemailpass286 /opt/verb/conf/sitemailpass
+mv /opt/verb/conf/siteufwip286 /opt/verb/conf/siteufwip
 
 # PHP ini file
-mv /var/local/verb/configs/php.name286.ini /var/local/verb/configs/php.${VNAME}.ini
-sed -i "s/phplimit286/${PHPLIMIT}/g" /var/local/verb/configs/php.${VNAME}.ini
-sed -i "s/phpsize286M/${PHPSIZE}M/g" /var/local/verb/configs/php.${VNAME}.ini
-sed -i "s/phptimeregion286/${PHPREGION}/g" /var/local/verb/configs/php.${VNAME}.ini
-sed -i "s/phptimecity286/${PHPCITY}/g" /var/local/verb/configs/php.${VNAME}.ini
-sed -i "s/name286/${VNAME}/g" /var/local/verb/configs/php.${VNAME}.ini
+mv /opt/verb/conf/php.name286.ini /opt/verb/conf/php.${VNAME}.ini
+sed -i "s/phplimit286/${PHPLIMIT}/g" /opt/verb/conf/php.${VNAME}.ini
+sed -i "s/phpsize286M/${PHPSIZE}M/g" /opt/verb/conf/php.${VNAME}.ini
+sed -i "s/phptimeregion286/${PHPREGION}/g" /opt/verb/conf/php.${VNAME}.ini
+sed -i "s/phptimecity286/${PHPCITY}/g" /opt/verb/conf/php.${VNAME}.ini
+sed -i "s/name286/${VNAME}/g" /opt/verb/conf/php.${VNAME}.ini
 # Get the current PHP version & set php.ini
-phpNum=$(/var/local/verb/serfs/phpver)
+phpNum=$(/opt/verb/serfs/phpver)
 mv /etc/php/${phpNum}/apache2/php.ini /etc/php/${phpNum}/apache2/php.original.ini
-ln -sfn /var/local/verb/configs/php.${VNAME}.ini /etc/php/${phpNum}/apache2/php.ini
+ln -sfn /opt/verb/conf/php.${VNAME}.ini /etc/php/${phpNum}/apache2/php.ini
 
 # sites-available
 ## Directories
-chmod -R 750 /var/local/verb/configs/site-files/newdomain.tld
-chmod -R 750 /var/local/verb/configs/site-files/newvipsubdir
-chmod -R 750 /var/local/verb/configs/site-files/newonesubdir
+chmod -R 750 /opt/verb/conf/site-files/newdomain.tld
+chmod -R 750 /opt/verb/conf/site-files/newvipsubdir
+chmod -R 750 /opt/verb/conf/site-files/newonesubdir
+## Serve URI
+/opt/verb/serfs/setserve
 ## Replace
-cp /var/local/verb/inst/config/etc/apache2/sites-available/* /etc/apache2/sites-available/
+cp /opt/verb/inst/root-config/etc/apache2/sites-available/* /etc/apache2/sites-available/
 sed -i "s/pinkURI286/${pinkURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/emailURI286/${emailURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/cityURI286/${cityURI}/g" /etc/apache2/sites-available/*.conf
@@ -197,9 +215,9 @@ sed -i "s/inkURI286/${inkURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/blueURI286/${blueURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/vipURI286/${vipURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/kiwiURI286/${kiwiURI}/g" /etc/apache2/sites-available/*.conf
+sed -i "s/cashURI286/${cashURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/redURI286/${redURI}/g" /etc/apache2/sites-available/*.conf
 sed -i "s/rocksURI286/${rocksURI}/g" /etc/apache2/sites-available/*.conf
-sed -i "s/unoURI286/${unoURI}/g" /etc/apache2/sites-available/*.conf
 ## Rename
 rename "s/pinkURI286/${pinkURI}/" /etc/apache2/sites-available/*.conf
 rename "s/emailURI286/${emailURI}/" /etc/apache2/sites-available/*.conf
@@ -209,74 +227,74 @@ rename "s/inkURI286/${inkURI}/" /etc/apache2/sites-available/*.conf
 rename "s/blueURI286/${blueURI}/" /etc/apache2/sites-available/*.conf
 rename "s/vipURI286/${vipURI}/" /etc/apache2/sites-available/*.conf
 rename "s/kiwiURI286/${kiwiURI}/" /etc/apache2/sites-available/*.conf
+rename "s/cashURI286/${cashURI}/" /etc/apache2/sites-available/*.conf
 rename "s/redURI286/${redURI}/" /etc/apache2/sites-available/*.conf
 rename "s/rocksURI286/${rocksURI}/" /etc/apache2/sites-available/*.conf
-rename "s/unoURI286/${unoURI}/" /etc/apache2/sites-available/*.conf
 
 # New site-files
 ## Replace
-sed -i "s/pinkURI286/${pinkURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/emailURI286/${emailURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/cityURI286/${cityURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/oneURI286/${oneURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/inkURI286/${inkURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/blueURI286/${blueURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/vipURI286/${vipURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/kiwiURI286/${kiwiURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/redURI286/${redURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/rocksURI286/${rocksURI}/g" /var/local/verb/configs/site-files/conf/*
-sed -i "s/unoURI286/${unoURI}/g" /var/local/verb/configs/site-files/conf/*
+sed -i "s/pinkURI286/${pinkURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/emailURI286/${emailURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/cityURI286/${cityURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/oneURI286/${oneURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/inkURI286/${inkURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/blueURI286/${blueURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/vipURI286/${vipURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/kiwiURI286/${kiwiURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/cashURI286/${cashURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/redURI286/${redURI}/g" /opt/verb/conf/site-files/conf/*
+sed -i "s/rocksURI286/${rocksURI}/g" /opt/verb/conf/site-files/conf/*
 ## Rename
-rename "s/pinkURI286/${pinkURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/emailURI286/${emailURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/cityURI286/${cityURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/oneURI286/${oneURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/inkURI286/${inkURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/blueURI286/${blueURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/vipURI286/${vipURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/kiwiURI286/${kiwiURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/redURI286/${redURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/rocksURI286/${rocksURI}/" /var/local/verb/configs/site-files/conf/*
-rename "s/unoURI286/${unoURI}/" /var/local/verb/configs/site-files/conf/*
+rename "s/pinkURI286/${pinkURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/emailURI286/${emailURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/cityURI286/${cityURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/oneURI286/${oneURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/inkURI286/${inkURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/blueURI286/${blueURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/vipURI286/${vipURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/kiwiURI286/${kiwiURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/cashURI286/${cashURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/redURI286/${redURI}/" /opt/verb/conf/site-files/conf/*
+rename "s/rocksURI286/${rocksURI}/" /opt/verb/conf/site-files/conf/*
 
 # inkCert ini and cron files
 ## Replace
-sed -i "s/pinkURI286/${pinkURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/sslemail286/${SSLEMAIL}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/nameURI286/${nameURI}/g" /var/local/verb/configs/inkcert/verber-openssl.cnf
-sed -i "s/emailURI286/${emailURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/cityURI286/${cityURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/oneURI286/${oneURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/inkURI286/${inkURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/blueURI286/${blueURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/vipURI286/${vipURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/kiwiURI286/${kiwiURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/redURI286/${redURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/rocksURI286/${rocksURI}/g" //var/local/verb/configs/inkcert/cli-ini/*
-sed -i "s/unoURI286/${unoURI}/g" /var/local/verb/configs/inkcert/cli-ini/*
+sed -i "s/pinkURI286/${pinkURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/sslemail286/${SSLEMAIL}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/nameURI286/${nameURI}/g" /opt/verb/conf/inkcert/verber-openssl.cnf
+sed -i "s/emailURI286/${emailURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/cityURI286/${cityURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/oneURI286/${oneURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/inkURI286/${inkURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/blueURI286/${blueURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/vipURI286/${vipURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/kiwiURI286/${kiwiURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/cashURI286/${cashURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/redURI286/${redURI}/g" /opt/verb/conf/inkcert/cli-ini/*
+sed -i "s/rocksURI286/${rocksURI}/g" //opt/verb/conf/inkcert/cli-ini/*
 ## Rename
-rename "s/pinkURI286/${pinkURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/emailURI286/${emailURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/cityURI286/${cityURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/oneURI286/${oneURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/inkURI286/${inkURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/blueURI286/${blueURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/vipURI286/${vipURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/kiwiURI286/${kiwiURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/redURI286/${redURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/rocksURI286/${rocksURI}/" /var/local/verb/configs/inkcert/cli-ini/*
-rename "s/unoURI286/${unoURI}/" /var/local/verb/configs/inkcert/cli-ini/*
+rename "s/pinkURI286/${pinkURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/emailURI286/${emailURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/cityURI286/${cityURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/oneURI286/${oneURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/inkURI286/${inkURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/blueURI286/${blueURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/vipURI286/${vipURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/kiwiURI286/${kiwiURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/cashURI286/${cashURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/redURI286/${redURI}/" /opt/verb/conf/inkcert/cli-ini/*
+rename "s/rocksURI286/${rocksURI}/" /opt/verb/conf/inkcert/cli-ini/*
 
 # www start indexes
-/var/local/verb/serfs/updatehtmlverbs; wait
+/opt/verb/serfs/updatehtmlverbs; wait
 
 # Enable sites
-. /var/local/verb/configs/sitetldstatus
+. /opt/verb/conf/sitetldstatus
 if [ ${VERBemail}=true ]; then
 a2ensite ${emailURI} email.${emailURI}
 fi
 if [ ${VERBcity}=true ]; then
-a2ensite ${cityURI} city.${cityURI} center.${cityURI}
+a2ensite ${cityURI} city.${cityURI} center.${cityURI} console.${cityURI} ctr.${cityURI} cnl.${cityURI}
 fi
 if [ ${VERBone}=true ]; then
 a2ensite ${oneURI} one.${oneURI}
@@ -285,13 +303,16 @@ if [ ${VERBink}=true ]; then
 a2ensite ${inkURI} ink.${inkURI} ask.${inkURI} bb.${inkURI} blog.${inkURI} code.${inkURI} home.${inkURI} pen.${inkURI} shop.${inkURI} sn.${inkURI} wiki.${inkURI}
 fi
 if [ ${VERBblue}=true ]; then
-a2ensite ${blueURI} blue.${blueURI} caldav.${blueURI} carddav.${blueURI} chat.${blueURI} collabora.${blueURI} dav.${blueURI} nextcloud.${blueURI} owncloud.${blueURI} pydio.${blueURI} seafile.${blueURI} webdav.${blueURI} xmpp.${blueURI}
+a2ensite ${blueURI} blue.${blueURI} caldav.${blueURI} carddav.${blueURI} chat.${blueURI} collabora.${blueURI} dav.${blueURI} nc.${blueURI} owncloud.${blueURI} seafile.${blueURI} webdav.${blueURI} xmpp.${blueURI}
 fi
 if [ ${VERBvip}=true ]; then
 a2ensite ${vipURI} vip.${vipURI} cgi.${vipURI} ftp.${vipURI} files.${vipURI} fossil.${vipURI} ldap.${vipURI} net2ftp.${vipURI} repo.${vipURI} sql.${vipURI}
 fi
 if [ ${VERBkiwi}=true ]; then
 a2ensite ${kiwiURI} kiwi.${kiwiURI} ampache.${kiwiURI} art.${kiwiURI} ejabberd.${kiwiURI} gallery.${kiwiURI} media.${kiwiURI} podcast.${kiwiURI} prosody.${kiwiURI} studio.${kiwiURI} voip.${kiwiURI} webrtc.${kiwiURI}
+fi
+if [ ${VERBcash}=true ]; then
+a2ensite ${cashURI} cash.${cashURI}
 fi
 if [ ${VERBpink}=true ]; then
 a2ensite ${pinkURI} pink.${pinkURI}
@@ -302,9 +323,6 @@ fi
 if [ ${VERBrocks}=true ]; then
 a2ensite ${rocksURI} rocks.${rocksURI}
 fi
-if [ ${VERBuno}=true ]; then
-a2ensite ${unoURI} uno.${unoURI}
-fi
 systemctl reload apache2
 
 # Create the new boss user
@@ -312,13 +330,13 @@ adduser ${NEWBOSS} --gecos ",,," --disabled-password
 echo "${NEWBOSS}:${NEWBOSSPASS}" | chpasswd
 usermod -a -G sudo ${NEWBOSS}
 usermod -a -G www-data ${NEWBOSS}
-ln -sfn /var/local/verb/boss /home/${NEWBOSS}/
+ln -sfn /opt/verb/boss /home/${NEWBOSS}/
 ## User privilege specification
 echo '# Added in inkVerb preserver setup' >> /etc/sudoers
 echo '${NEWBOSS}  ALL=(ALL:ALL) ALL' >> /etc/sudoers
 
 # New Boss MySQL root password
-mysql --defaults-extra-file=/var/local/verb/configs/mysqlboss.cnf -e "
+mysql --defaults-extra-file=/opt/verb/conf/mysqlboss.cnf -e "
 CREATE USER ${NEWBOSS}@localhost;
 SET PASSWORD FOR ${NEWBOSS}@localhost=PASSWORD('${NEWBOSSPASS}');
 GRANT ALL PRIVILEGES ON *.* TO '${NEWBOSS}'@'localhost' IDENTIFIED BY '${NEWBOSSPASS}' WITH GRANT OPTION;
@@ -330,63 +348,105 @@ hostnamectl set-hostname ${HNAME}
 ##DEV this restart causes an "is masked" error and may not be necessary with the mandatory reboot after setupverb
 #systemctl restart hostname
 ## Set /etc/hostname
-echo "${HNAME}" > /etc/hostname
+echo "${hostURI}" > /etc/hostname
 ## Set /etc/hosts
 sed -i "s/127\.0\.1\.1.*/127\.0\.1\.1 ${hostURI} ${HNAME}\n${SERVERIP} ${hostURI} ${HNAME}/g" /etc/hosts
 sed -i "s/127\.0\.0\.1.*/127\.0\.0\.1 localhost.localdomain localhost/g" /etc/hosts
+echo "
+## inkVerb IPv6 ##
+${SERVERIPV6} ${hostURI} ${HNAME}" >> /etc/hosts
+
+# ARPA & inverse IP
+/opt/verb/serfs/setip4 ${SITEIP}
+/opt/verb/serfs/setip6 ${SITEIPV6}
 
 # Verber DNS records
 ## Include config
-. /var/local/verb/configs/sitenameip
+. /opt/verb/conf/sitenameip
 ## Set the namespace, TLD, and IP values
-sed -i "s/hostip286/${SITEIP}/g" /var/local/verb/configs/inkdns/zones/*.db
-sed -i "s/hostip286/${SITEIP}/g" /var/local/verb/configs/inkdns/*.db
-sed -i "s/hostipv6286/${SITEIPV6}/g" /var/local/verb/configs/inkdns/zones/*.db
-sed -i "s/hostipv6286/${SITEIPV6}/g" /var/local/verb/configs/inkdns/*.db
-sed -i "s/sitename286/${SITENAME}/g" /var/local/verb/configs/inkdns/zones/*.db
-sed -i "s/sitename286/${SITENAME}/g" /var/local/verb/configs/inkdns/*.db
-sed -i "s/sitetld286/${SITETLD}/g" /var/local/verb/configs/inkdns/zones/*.db
-sed -i "s/sitetld286/${SITETLD}/g" /var/local/verb/configs/inkdns/*.db
-sed -i "s/nameURI286/${nameURI}/g" /var/local/verb/configs/inkdns/zones/*.db
-sed -i "s/nameURI286/${nameURI}/g" /var/local/verb/configs/inkdns/*.db
-sed -i "s/mailURI286/${nameURI}/g" /var/local/verb/configs/inkdns/*.db
-sed -i "s/mailURI286/${nameURI}/g" /var/local/verb/configs/inkdns/zones/*.db
+### db.*
+sed -i "s/hostip286/${SITEIP}/g" /opt/verb/conf/inkdns/zones/db.*
+sed -i "s/hostip286/${SITEIP}/g" /opt/verb/conf/inkdns/db.*
+sed -i "s/hostipv6286/${SITEIPV6}/g" /opt/verb/conf/inkdns/zones/db.*
+sed -i "s/hostipv6286/${SITEIPV6}/g" /opt/verb/conf/inkdns/db.*
+sed -i "s/sitename286/${SITENAME}/g" /opt/verb/conf/inkdns/zones/db.*
+sed -i "s/sitename286/${SITENAME}/g" /opt/verb/conf/inkdns/db.*
+sed -i "s/sitetld286/${SITETLD}/g" /opt/verb/conf/inkdns/zones/db.*
+sed -i "s/sitetld286/${SITETLD}/g" /opt/verb/conf/inkdns/db.*
+sed -i "s/nameURI286/${nameURI}/g" /opt/verb/conf/inkdns/zones/db.*
+sed -i "s/nameURI286/${nameURI}/g" /opt/verb/conf/inkdns/db.*
+sed -i "s/mailURI286/${hostURI}/g" /opt/verb/conf/inkdns/zones/db.*
+sed -i "s/mailURI286/${hostURI}/g" /opt/verb/conf/inkdns/db.*
+### nv.*
+sed -i "s/hostarpaip286/${SITEARPAIP4}/g" /opt/verb/conf/inkdns/zones/nv.*
+sed -i "s/hostarpaip286/${SITEARPAIP4}/g" /opt/verb/conf/inkdns/nv.*
+sed -i "s/hostarpaipv6286/${SITEARPAIP6}/g" /opt/verb/conf/inkdns/zones/nv.*
+sed -i "s/hostarpaipv6286/${SITEARPAIP6}/g" /opt/verb/conf/inkdns/nv.*
+sed -i "s/sitename286/${SITENAME}/g" /opt/verb/conf/inkdns/zones/nv.*
+sed -i "s/sitename286/${SITENAME}/g" /opt/verb/conf/inkdns/nv.*
+sed -i "s/sitetld286/${SITETLD}/g" /opt/verb/conf/inkdns/zones/nv.*
+sed -i "s/sitetld286/${SITETLD}/g" /opt/verb/conf/inkdns/nv.*
+sed -i "s/nameURI286/${nameURI}/g" /opt/verb/conf/inkdns/zones/nv.*
+sed -i "s/nameURI286/${nameURI}/g" /opt/verb/conf/inkdns/nv.*
+sed -i "s/mailURI286/${hostURI}/g" /opt/verb/conf/inkdns/zones/nv.*
+sed -i "s/mailURI286/${hostURI}/g" /opt/verb/conf/inkdns/nv.*
 
 ## Set the FQDN host
 echo "; FQDN Host A Records
 ${hostURI}.	IN  A		hostip286
 ${hostURI}.	IN  AAAA	hostipv6286
-" >> /var/local/verb/configs/inkdns/zones/${SITETLD}.db
+" >> /opt/verb/conf/inkdns/zones/db.${SITETLD}
 ## Populate the Verber domains
-sed -i "s/hostdomain286/${pinkURI}/g" /var/local/verb/configs/inkdns/zones/pink.db
-sed -i "s/hostdomain286/${emailURI}/g" /var/local/verb/configs/inkdns/zones/email.db
-sed -i "s/hostdomain286/${cityURI}/g" /var/local/verb/configs/inkdns/zones/city.db
-sed -i "s/hostdomain286/${oneURI}/g" /var/local/verb/configs/inkdns/zones/one.db
-sed -i "s/hostdomain286/${inkURI}/g" /var/local/verb/configs/inkdns/zones/ink.db
-sed -i "s/hostdomain286/${blueURI}/g" /var/local/verb/configs/inkdns/zones/blue.db
-sed -i "s/hostdomain286/${vipURI}/g" /var/local/verb/configs/inkdns/zones/vip.db
-sed -i "s/hostdomain286/${kiwiURI}/g" /var/local/verb/configs/inkdns/zones/kiwi.db
-sed -i "s/hostdomain286/${redURI}/g" /var/local/verb/configs/inkdns/zones/red.db
-sed -i "s/hostdomain286/${rocksURI}/g" /var/local/verb/configs/inkdns/zones/rocks.db
-sed -i "s/hostdomain286/${unoURI}/g" /var/local/verb/configs/inkdns/zones/uno.db
+sed -i "s/hostdomain286/${pinkURI}/g" /opt/verb/conf/inkdns/zones/db.pink
+sed -i "s/hostdomain286/${emailURI}/g" /opt/verb/conf/inkdns/zones/db.email
+sed -i "s/hostdomain286/${cityURI}/g" /opt/verb/conf/inkdns/zones/db.city
+sed -i "s/hostdomain286/${oneURI}/g" /opt/verb/conf/inkdns/zones/db.one
+sed -i "s/hostdomain286/${inkURI}/g" /opt/verb/conf/inkdns/zones/db.ink
+sed -i "s/hostdomain286/${blueURI}/g" /opt/verb/conf/inkdns/zones/db.blue
+sed -i "s/hostdomain286/${vipURI}/g" /opt/verb/conf/inkdns/zones/db.vip
+sed -i "s/hostdomain286/${kiwiURI}/g" /opt/verb/conf/inkdns/zones/db.kiwi
+sed -i "s/hostdomain286/${cashURI}/g" /opt/verb/conf/inkdns/zones/db.cash
+sed -i "s/hostdomain286/${redURI}/g" /opt/verb/conf/inkdns/zones/db.red
+sed -i "s/hostdomain286/${rocksURI}/g" /opt/verb/conf/inkdns/zones/db.rocks
+sed -i "s/hostdomain286/${pinkURI}/g" /opt/verb/conf/inkdns/zones/nv.pink
+sed -i "s/hostdomain286/${emailURI}/g" /opt/verb/conf/inkdns/zones/nv.email
+sed -i "s/hostdomain286/${cityURI}/g" /opt/verb/conf/inkdns/zones/nv.city
+sed -i "s/hostdomain286/${oneURI}/g" /opt/verb/conf/inkdns/zones/nv.one
+sed -i "s/hostdomain286/${inkURI}/g" /opt/verb/conf/inkdns/zones/nv.ink
+sed -i "s/hostdomain286/${blueURI}/g" /opt/verb/conf/inkdns/zones/nv.blue
+sed -i "s/hostdomain286/${vipURI}/g" /opt/verb/conf/inkdns/zones/nv.vip
+sed -i "s/hostdomain286/${kiwiURI}/g" /opt/verb/conf/inkdns/zones/nv.kiwi
+sed -i "s/hostdomain286/${cashURI}/g" /opt/verb/conf/inkdns/zones/nv.cash
+sed -i "s/hostdomain286/${redURI}/g" /opt/verb/conf/inkdns/zones/nv.red
+sed -i "s/hostdomain286/${rocksURI}/g" /opt/verb/conf/inkdns/zones/nv.rocks
 ## Set the URI names
-mv /var/local/verb/configs/inkdns/zones/pink.db /var/local/verb/configs/inkdns/zones/${pinkURI}.db
-mv /var/local/verb/configs/inkdns/zones/email.db /var/local/verb/configs/inkdns/zones/${emailURI}.db
-mv /var/local/verb/configs/inkdns/zones/city.db /var/local/verb/configs/inkdns/zones/${cityURI}.db
-mv /var/local/verb/configs/inkdns/zones/one.db /var/local/verb/configs/inkdns/zones/${oneURI}.db
-mv /var/local/verb/configs/inkdns/zones/ink.db /var/local/verb/configs/inkdns/zones/${inkURI}.db
-mv /var/local/verb/configs/inkdns/zones/blue.db /var/local/verb/configs/inkdns/zones/${blueURI}.db
-mv /var/local/verb/configs/inkdns/zones/vip.db /var/local/verb/configs/inkdns/zones/${vipURI}.db
-mv /var/local/verb/configs/inkdns/zones/kiwi.db /var/local/verb/configs/inkdns/zones/${kiwiURI}.db
-mv /var/local/verb/configs/inkdns/zones/red.db /var/local/verb/configs/inkdns/zones/${redURI}.db
-mv /var/local/verb/configs/inkdns/zones/rocks.db /var/local/verb/configs/inkdns/zones/${rocksURI}.db
-mv /var/local/verb/configs/inkdns/zones/uno.db /var/local/verb/configs/inkdns/zones/${unoURI}.db
+mv /opt/verb/conf/inkdns/zones/db.pink /opt/verb/conf/inkdns/zones/db.${pinkURI}
+mv /opt/verb/conf/inkdns/zones/db.email /opt/verb/conf/inkdns/zones/db.${emailURI}
+mv /opt/verb/conf/inkdns/zones/db.city /opt/verb/conf/inkdns/zones/db.${cityURI}
+mv /opt/verb/conf/inkdns/zones/db.one /opt/verb/conf/inkdns/zones/db.${oneURI}
+mv /opt/verb/conf/inkdns/zones/db.ink /opt/verb/conf/inkdns/zones/db.${inkURI}
+mv /opt/verb/conf/inkdns/zones/db.blue /opt/verb/conf/inkdns/zones/db.${blueURI}
+mv /opt/verb/conf/inkdns/zones/db.vip /opt/verb/conf/inkdns/zones/db.${vipURI}
+mv /opt/verb/conf/inkdns/zones/db.kiwi /opt/verb/conf/inkdns/zones/db.${kiwiURI}
+mv /opt/verb/conf/inkdns/zones/db.cash /opt/verb/conf/inkdns/zones/db.${cashURI}
+mv /opt/verb/conf/inkdns/zones/db.red /opt/verb/conf/inkdns/zones/db.${redURI}
+mv /opt/verb/conf/inkdns/zones/db.rocks /opt/verb/conf/inkdns/zones/db.${rocksURI}
+mv /opt/verb/conf/inkdns/zones/nv.pink /opt/verb/conf/inkdns/zones/nv.${pinkURI}
+mv /opt/verb/conf/inkdns/zones/nv.email /opt/verb/conf/inkdns/zones/nv.${emailURI}
+mv /opt/verb/conf/inkdns/zones/nv.city /opt/verb/conf/inkdns/zones/nv.${cityURI}
+mv /opt/verb/conf/inkdns/zones/nv.one /opt/verb/conf/inkdns/zones/nv.${oneURI}
+mv /opt/verb/conf/inkdns/zones/nv.ink /opt/verb/conf/inkdns/zones/nv.${inkURI}
+mv /opt/verb/conf/inkdns/zones/nv.blue /opt/verb/conf/inkdns/zones/nv.${blueURI}
+mv /opt/verb/conf/inkdns/zones/nv.vip /opt/verb/conf/inkdns/zones/nv.${vipURI}
+mv /opt/verb/conf/inkdns/zones/nv.kiwi /opt/verb/conf/inkdns/zones/nv.${kiwiURI}
+mv /opt/verb/conf/inkdns/zones/nv.cash /opt/verb/conf/inkdns/zones/nv.${cashURI}
+mv /opt/verb/conf/inkdns/zones/nv.red /opt/verb/conf/inkdns/zones/nv.${redURI}
+mv /opt/verb/conf/inkdns/zones/nv.rocks /opt/verb/conf/inkdns/zones/nv.${rocksURI}
 ## Serial Nos
-### Notify the user that this takes a moment...
-echo "This takes a few moments on purpose, about 1 second per domain. Don't be alarmed at all..."
-cd /var/local/verb/configs/inkdns/zones
-for f in *.db; do
-/var/local/verb/serfs/inkdnsserial ${f%.db}
+cd /opt/verb/conf/inkdns/zones
+for inkZoneDB in db.*; do
+inkZone="$(echo ${inkZoneDB} | sed 's/db\.//' )"
+/opt/verb/serfs/inkdnsserial ${inkZone}
 done
 
 # Firewall
@@ -396,7 +456,7 @@ sed -i "s/IPV6=.*/IPV6=yes/g" /etc/default/ufw
 ## Port (set to something to avoid attacks)
 sed -i "/Port.*/ c\Port ${NEWPORT}" /etc/ssh/sshd_config
 ufw allow ${NEWPORT}
-sed -i "/SITEPORT.*/ c\SITEPORT=${NEWPORT}" /var/local/verb/configs/siteport
+sed -i "/SITEPORT.*/ c\SITEPORT=${NEWPORT}" /opt/verb/conf/siteport
 ## Reset settings
 ufw allow ssh
 ufw allow http
@@ -404,13 +464,13 @@ ufw allow https
 ufw allow ftp
 
 # File permissions for configs
-chmod o-rwx -R /var/local/verb/configs
+chmod 660 -R /opt/verb/conf
 
 # Instructions
 ######################### FIX inkCert instructions #########################
 echo "After 1. setting up any extra domains and subdomains, 2. turning off any unused verb domains and changing the email server setting if you choose,"
 ## Domain Mod?
-if grep -Fq "SITENAME=DOMAIN_MOD-" /var/local/verb/configs/sitenameip; then
+if grep -Fq "SITENAME=DOMAIN_MOD-" /opt/verb/conf/sitenameip; then
 echo "- Run for Letsencrypt: inkcertdole-all-verbs (or inkcertdole ${nameURI} if not using a single server)"
 else
 echo "- Run for Letsencrypt: inkcertdole-all-verbs (or inkcertdole ${nameURI} if not using a single server)"
@@ -434,11 +494,10 @@ login using: 'ssh ${NEWBOSS}@${SERVERIP} -p ${NEWPORT}'
 "
 
 # Cleanup
-rm -f /var/local/verb/serfs/setupverb
-rm -f /var/local/verb/inst/setupverb
-rm -f /var/local/verb/inst/preverboff
-rm -f /var/local/verb/inst/preverbon
-rm -f /var/local/verb/inst/make-dommod
+rm -f /opt/verb/serfs/setupverb
+rm -f /opt/verb/inst/setupverb
+rm -f /opt/verb/inst/preverboff
+rm -f /opt/verb/inst/preverbon
+rm -f /opt/verb/inst/make-dommod
 ufw --force enable
 systemctl restart sshd
-

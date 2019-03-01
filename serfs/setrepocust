@@ -8,5 +8,5 @@
 ## ./setrepocust
 
 
-sed -i "s/INKGET_LIST=.*/INKGET_LIST=\"CUSTOM\"/g" /var/local/verb/configs/siteinkget
+sed -i "s/INKGET_LIST=.*/INKGET_LIST=\"CUSTOM\"/g" /opt/verb/conf/siteinkget
 
