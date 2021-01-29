@@ -7,7 +7,7 @@ Plugin Name: inkVerb Auto-Update
 Plugin URI: http://verb.ink/
 Description: This auto-updates core, plugins, and themes. It has been added via the inkVerb control interface.
 Author: inkVerb
-Version: 1.1
+Version: 1.0
 Author URI: http://verb.ink/
 */
 /*

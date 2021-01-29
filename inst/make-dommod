@@ -12,15 +12,15 @@
 
 # Check variables
 if [ -z "$1" ]; then
-echo "Set the domain, genius. That's the whole point."
+/bin/echo "Set the domain, genius. That's the whole point."
 exit 8; fi
 
 DOMMODBASE=$1
 
-echo "#!/bin/sh
+/bin/echo "#!/bin/sh
 #inkVerbMaker! domain.mod
 
-# This is the mod domain that will be used on this Verber once it is set.
+# This is the mod domain that will be u/bin/sed on this Verber once it is set.
 
 # To change this, run make-dommod again.
 

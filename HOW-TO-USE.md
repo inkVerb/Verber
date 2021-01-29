@@ -31,6 +31,62 @@ To do any of this Vrk-Verber connecting, next install inkNet (an inkVerb product
 Installing "Ink" to make a "Verber" into an "Inker" is optional if you are connecting to an Inker someone else manages.
 
 # Install Verb
+On a fresh Ubuntu VPS with ssh keys already installed...
+
+## 0. Set up the Verber
+
+`ssh root@YOUR_IP_ADDRESS`
+
+`apt-get update && apt-get upgrade -y`
+
+`apt-get install git`
+
+`cd /opt && git clone https://github.com/inkverb/verb-u18`
+
+`mv verb-u18 verb && cd verb/inst`
+
+`./make-verber-preserver`
+
+`reboot`
+
+`ssh root@YOUR_IP_ADDRESS`
+
+`cd verb/inst`
+
+`./make-verber 4` (or other number for swap size in GB: 1, 2, 4, 8, 16, 32, 64)
+
+*(There is an additional option in `./make-verber` to set the mysql root password, but it is best for that to be automated because you don't need it unless you have some preexisting reason)*
+
+This: `./setupverb [host] [namespace] [tld] [email] [serverIPv4] [serverIPv6 - if none use IPv6NA ] [SSLemail] [php.file-limit] [php.up-size] [php.city] [new-port] [new-boss] [boss-pass] [update-repo - optional]`...
+
+Eg: `./setupverb johnny johnny ink email 56.22.108.77 IPv6NA letsencrypt-messages@example.com 100 1000 America/New_York 22 boss bosspassword verb-u18-update`
+
+`reboot`
+
+`ssh root@YOUR_IP_ADDRESS`
+
+`cd ~/verb/serfs`
+
+...Now you're ready to work...
+
+## 1. Certbot
+
+`./inkcertinstall YOUR_DIGITALOCEAN_API_KEY`
+
+`apt-get update && apt-get upgrade -y`
+
+`./inkcertdocbdigoc-all-verbs`
+
+## 2. Vmail
+
+`./installvmail YOUR_SECRET`
+
+## 3. Start adding your domains
+
+`./inkcertdocbdigoc EACH_HOSTED_DOMAIN`
+
+
+All done!
 
 # Install Ink (optional)
 
@@ -143,4 +199,3 @@ Eg:
 Now, the Client and CA have been connected on inkNet.
 
 From this point forward, you won't see evidence of inkNet in use, but it will allow your Vrk Stations and Verbers to talk to each other when they need to, such as for updates, SSH login from the Vrk Station, or chances in settings.
-

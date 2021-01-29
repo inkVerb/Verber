@@ -1,9 +1,21 @@
+# Legacy version, no longer in development
+
+This is a legacy version meant to run on Ubuntu 18.04. Development did not continue in Ubuntu 20.04 where `snap` was overriding `apt` and `apt-get` installer package commands. In January 2021, development moved to Arch and Manjaro frameworks. That project is available at the former repo for this original project: [inkVerb/verb](https://github.com/inkVerb/verb).
+
+___
+
 # Installation and information for inkVerb's "Verber" web server
-## verb-dev
+## verb-u18
+
+For installation, see: [HOW-TO-USE.md](https://github.com/inkVerb/verb-u18/blob/master/HOW-TO-USE.md)
+
+### Notes
 DEV version numbers have an extra digit and never end in 0, skipping it. This reserves the final number of the stable channel for vital patches.
 eg:
 stable version: 1.04.00 (main release), 1.04.01 (vital update, no new features), 1.04.02 (vital update, no new features)
 develp version: 1.04.19, (NEVER 1.04.20), 1.04.21, 1.04.22
+
+IMPORTANT: As of v0.86.00, serfs are being integrated into the "yeo" tool in the inkverb/yeo repo. This will manage the serfs by providing validation, help, and making them somewhat "mistake-proof". This is a work in progress, but will make this software ready for early beta testing.
 
 ### Sales-pitch: skip if you're already convinced :-)
 #### Verber is for DIY entrepreneurs and copywriters and/or web geeks with many small-business clients.
@@ -65,21 +77,28 @@ This has a few advantages to the webmaster, saves money, and pays the bills.
 		* Now the server is a standard out-of-box inkVerb, ready to setup, can be copied as-is
 	iii. `./setupverb [ long list of settings, see instructions inside the file ]`    # sets hostnames, IP, inkVerb namespace, and other settings across the server and the site goes live
 		* Follow in-file instructions, requires parameters
-At this point you can install the mail server...
-	`cd ~/verb/serfs`
-	iv. `installemail` (unless skipping number 4)
+
+4. SSL certs: keys, certbot, email
+	i. `setinkcertcbdigoc LONGKEY` add the key from DigitalOcean (if using a DigitalOcean droplet)
+	ii. `inkcertdocbdigoc-all-verbs` add certs for all verb.tld domains
+	iii. `installvmail SECPATH` install the webmail and postfix vmail server
+	iii. `inkcertdoemail` apply it to the email server
 
 4. Setup PostFixAdmin and RoundCube
 	i. pfa.NAME.verb.email/setup.php
-	ii. Login to pfa.NAME.verb.email
+	ii. Login to pfa.NAME.verb.email/SECPATH
 		* Add NAME.verb.ink domain (no other verb domains will work if ink is the main server)
 		* Create at least one email inbox for RoundCube installation
 	iii. rc.NAME.verb.email/installer
 		* After, removed the "installer", run: postinstallrc
 	iv. Finish check
-		* Login at rc.NAME.verb.email
+		* Login at rc.NAME.verb.email/SECPATH
 
-5. Finished. Smile and remember, Ink Is A Verb™. So, ink.
+6. Adding and securing a domain, wordpress
+	i. `adddomain DOMAIN.TLD` add the domain
+	ii. `inkcertdocbdigoc DOMAIN.TLD` add certs
+	iii. `fixhttps DOMAIN.TLD` make it point to https (can also do after `installwp`)
+	iv. `installwp DOMAIN.TLD` install WordPress
 
 6. You may make an optional separate server for any or only one verb domain
 	i. Point the/each verb domain to the IP address to host it
@@ -219,7 +238,7 @@ VII. Special user services and folders
 	B. Jailkit
 		1. Jailkit is considered part of inkNet, with two Serfs: inknetinstalljailkit and inknetaddjailkituser (used by inknetadd Vrk/Verber serfs)
 		2. Jailkit's Serfs can operate and create users that operate independently of inkNet, but it is only used by inkVerb for inkNet intra-verber communication
-		3. Jailkit users have access to "tools", 
+		3. Jailkit users have access to "tools",
 		4. Jailkit's jail is in the srv/vip/ folder, giving Filevips access to all Jailkit users, as well as the boss
 	C. VSFTP
 		1. VSFTP creates "files", "filevips", and "ftpusers". See: newftpfiler, newftpvip, and newftpuser for details
@@ -267,5 +286,3 @@ IX. Other notes
 		2. Many "if" checks and "usage" messages could be included in serfs, but are not because the user should more or less know what he is doing. Such errors will be in yoemen for easier command line use and a GUI.
 		3. The main purpose of "if" checks is for complex situations or to provide contingency alternatives for factors outside of the Verber, such as failing to download a webapp for installation.
 		4. Generally, failed "plugins" won't break an entire script; failing to download the core webapp will exit 44 and the webapp won't be installed at all.
-		
-
